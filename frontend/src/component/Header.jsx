@@ -1,6 +1,8 @@
 import React from "react";
 
 const Header = () => {
-  return <div>Temro Tauko</div>;
+  return <div>
+    Header
+  </div>;
 };
 export default Header;
