@@ -7,6 +7,8 @@
 // import Adopt from "./pages/Adopt";
 import PetDesc from "./pages/PetDesc";
 // import Home from "./pages/Home";
+// import MyRoutes from "./MyRoutes";
+// import Header from "./component/Header";
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
       <PetDesc/>
       {/* <Login/> */}
       {/* <Register/> */}
+      {/* <MyRoutes/> */}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -23,6 +24,8 @@ const Login = () => {
             <input type="password" className="w-full border-2 py-1 mt-1 pl-2" placeholder="Password"/><br />
             <button className="w-full mt-5 bg-gray-700 text-white py-2 rounded-lg">Login</button>
         </form>
+        <h1 className="italic text-center text-gray-500"><Link >Forget Password? Click to reset</Link></h1>
+        <p className="pl-5 sm:pl-10 py-5">Don't have an account? <Link to='/register' className="italic text-gray-500">Register</Link></p>
       </div>
     </div>
   );

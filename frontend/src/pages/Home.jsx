@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../component/Header";
+// import Header from "../component/Header";
 import banner from "../images/banner3.png";
 import people from "../images/people with dog.jpg";
 import dnc from "../images/cat_and_dog_3.2.png";
@@ -7,7 +7,7 @@ import dnc from "../images/cat_and_dog_3.2.png";
 const Home = () => {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
 
       {/* Banner */}
       <div
@@ -136,3 +136,12 @@ const Home = () => {
 };
 
 export default Home;
+// import React from 'react'
+
+// const Home = () => {
+//   return (
+//     <div>Home</div>
+//   )
+// }
+
+// export default Home
