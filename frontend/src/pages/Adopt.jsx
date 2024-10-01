@@ -30,7 +30,7 @@ const Adopt = () => {
             <input type="text" className="border-2 rounded-md"/>
         </div>
         <div className="flex flex-col justify-center mt-3">
-            <button className="bg-gray-800 rounded-3xl text-white p-2">Find a friend</button>
+            <button className="bg-gray-700 rounded-3xl text-white py-2 px-5">Find a friend</button>
         </div>
       </div>
 
