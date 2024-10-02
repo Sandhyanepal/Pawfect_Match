@@ -3,7 +3,7 @@ import about from "../images/about2.jpg";
 
 const About = () => {
   return (
-    <div className="w-4/5 mx-auto pt-5 mb-20">
+    <div className="w-4/5 mx-auto pt-2 mb-20" id="about">
       <h1
         className="text-3xl pt-9 font-semibold"
         style={{ fontFamily: "lato" }}

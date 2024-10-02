@@ -1,13 +1,16 @@
 import React from "react";
-// import Header from "../component/Header";
+import Header from "../component/Header";
 import banner from "../images/banner3.png";
 import people from "../images/people with dog.jpg";
 import dnc from "../images/cat_and_dog_3.2.png";
 import About from "../component/About";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div>
+      <Header title="home" />
+
       {/* Banner */}
       <div
         className="home-banner w-full sm:flex pb-8"
@@ -19,19 +22,21 @@ const Home = () => {
         </div>
         <div className="w-full md:w-1/2 md:flex flex-col justify-center">
           <h1
-            className="banner-text w-3/5 md:text-5xl text-3xl font-semibold py-5 md:text-left text-center"
+            className="banner-text w-3/5 mx-auto sm:mx-0 md:text-4xl text-3xl font-semibold py-5 md:text-left text-center"
             style={{ fontFamily: "lato" }}
           >
             You can't buy love, but you can rescue it!
           </h1>
-          <button className="w-32 text-white px-4 py-2 rounded-3xl text-start text-lg bg-gray-700">
-            Adopt a pet
-          </button>
+          <div className="flex justify-center sm:flex sm:flex-col">
+            <Link to='/adopt' className="w-32 text-white px-4 py-2 rounded-3xl text-lg bg-gray-700 ">
+              Adopt a pet
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Filter space */}
-      <div className="sm:flex flex-wrap justify-evenly my-14 w-4/5 m-auto">
+      <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-12 w-4/5 m-auto">
         <div className="flex gap-5 justify-center">
           <div className="p-2 flex flex-col items-center justify-center">
             <i class="fa-solid fa-dog text-xl"></i>
@@ -133,13 +138,12 @@ const Home = () => {
           </div>
           <div className="w-full md:w-1/2">
             <img src={dnc} alt="" className="w-full " />
-            {/* <img src={banner} alt="" srcset="" className="w-4/5 m-auto" /> */}
           </div>
         </div>
       </div>
 
       {/* Next Contact */}
-      <div className="w-3/4 mx-auto my-16">
+      <div id="contact" className="w-3/4 mx-auto my-16">
         <div className="border relative">
           <section className="pl-12 mt-16">
             <h1
@@ -198,7 +202,7 @@ const Home = () => {
             className="py-6 pl-5 text-3xl font-bold bg-gray-300 flex gap-2"
             style={{ fontFamily: "lato" }}
           >
-            <i class="fa-solid fa-paw"></i>
+            <i className="fa-solid fa-paw font-bold text-3xl -rotate-45"></i>
             Pawfect Match
           </h1>
         </div>

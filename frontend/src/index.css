@@ -4,6 +4,9 @@
 
 
 
+html {
+  scroll-behavior: smooth;
+}
 
 
 body {
@@ -20,9 +23,9 @@ code {
     monospace;
 }
 
-.nav-bar{
+/* .nav-bar{
   background: linear-gradient(89deg, rgba(255,255,255,1) 0%, rgba(199,189,182,1) 100%);
-}
+} */
 
 .home-banner{
   background: linear-gradient(89deg, rgba(255,255,255,1) 0%, rgba(199,189,182,1) 100%);
