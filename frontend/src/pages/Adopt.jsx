@@ -25,10 +25,10 @@ const Adopt = () => {
 
   return (
     <>
-    <Header title='adopt'/>
+    <Header title='Adopt' color={'text-white'}/>
 
 
-      <div className="w-4/5 m-auto">
+      <div className="w-4/5 mx-auto my-10">
         <h1 className="text-3xl font-semibold my-10">Find 🙲 Adopt</h1>
 
         {/* Filter space */}

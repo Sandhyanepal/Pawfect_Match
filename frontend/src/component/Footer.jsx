@@ -15,23 +15,23 @@ const Footer = () => {
             <div className="list-none px-10 pt-3 text-start">
               <h2 className="font-bold mb-2">TOPICS</h2>
               <li className="pb-2">
-                <Link to="">Home</Link>
+                <Link to="/">Home</Link>
               </li>
               <li className="pb-2">
-                <Link to="/about">About</Link>
+                <Link to="/">About</Link>
               </li>
               <li className="pb-2">
-                <Link to="/contact">Contact</Link>
+                <Link to="/">Contact</Link>
               </li>
             </div>
 
             <div className="list-none px-10 pt-3 text-start">
               <h2 className="font-bold mb-2 text-xl">Quick Links</h2>
               <li className="pb-2">
-                <Link to="/faq">FAQ</Link>
+                <Link to="">FAQ</Link>
               </li>
               <li className="pb-2">
-                <Link to="/privacy">Privacy</Link>
+                <Link to="">Privacy</Link>
               </li>
             </div>
           </div>
@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
         </div>
         <hr className="w-11/12 m-auto mt-6" />
-        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto">
+        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center">
           Copyright &copy; 2024.
         </div>
       </footer>

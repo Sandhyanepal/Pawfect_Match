@@ -1,7 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Header = ({ title }) => {
+const Header = ({ title,color }) => {
+  let backgroundStyle;
+  // let text;
+  if(title ==="Adopt")
+  {
+    backgroundStyle ="#374151"
+  }
+  else if(title ==="Login")
+  {
+    backgroundStyle ="#374151"
+  }
+  else 
+  {
+    backgroundStyle="linear-gradient(89deg, rgba(255,255,255,1) 0%, rgba(199,189,182,1) 100%)";
+  }
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -11,8 +25,8 @@ const Header = ({ title }) => {
 
   return (
     <nav
-      className="nav-bar flex justify-between items-center px-5 pt-6 pb-3 w-full sticky"
-      // style={{ backgroundColor }}
+      className={`nav-bar flex justify-between items-center px-5 pt-5 pb-5 w-full sticky ${color} `}
+      style={{ background: backgroundStyle}}
     >
       <div className="w-2/5 ">
         <Link to="/" className="text-xl font-bold flex justify-center items-center gap-2">

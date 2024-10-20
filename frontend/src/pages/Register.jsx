@@ -53,7 +53,7 @@ const Register = () => {
 
   return (
     <>
-    <Header/>
+    <Header title='Login' color={'text-white'}/>
       <div
         className="w-full bg-gray-100 flex items-center"
         style={{ height: "100vh" }}

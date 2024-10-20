@@ -85,7 +85,7 @@ const Home = () => {
         {/* </div> */}
         <div
           className="w-full sm:w-2/3 p-20"
-          style={{ boxShadow: "0 10px 6px -6px #777" }}
+          // style={{ boxShadow: "0 10px 6px -6px #777" }}
         >
           <h1 className="text-4xl font-bold" style={{ fontFamily: "lato" }}>
             How adoption works

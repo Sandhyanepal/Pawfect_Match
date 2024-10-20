@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 // import pet1 from "../images/pet1.jpg";
 // import pet2 from "../images/pet2.2.jpg";
 // import pet3 from "../images/pet3.2.jpg";
@@ -266,7 +267,7 @@ const Card = ({ pet }) => {
 
 
       {/* <div className="flex flex-wrap gap-14  justify-evenly pt-10"> */}
-        <section>
+        <Link to='/petdesc'>
           <img
             src={pet.image}
             alt=""
@@ -292,7 +293,7 @@ const Card = ({ pet }) => {
               </span>
             </div>
           </div>
-        </section>
+        </Link>
       {/* </div> */}
 
     </div>
