@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
         </div>
         <hr className="w-11/12 m-auto mt-6" />
-        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center">
+        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center`">
           Copyright &copy; 2024.
         </div>
       </footer>

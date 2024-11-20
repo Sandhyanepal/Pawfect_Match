@@ -2,17 +2,31 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 var userSchema = new mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
-  },
+  // firstname: {
+  //   type: String,
+  //   required: true,
+  // },
+  // lastname: {
+  //   type: String,
+  //   required: true,
+  // },
+  // email: {
+  //   type: String,
+  //   required: true,
+  // },
+  // password: {
+  //   type: String,
+  //   required: true,
+  // },
+  // role: {
+  //   type: String,
+  //   default: "user",
+  // },
+
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -20,7 +34,8 @@ var userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "user",
+    required: true,
+    enum: ["Individual", "Organization"], // Only these two roles are allowed
   },
 });
 

@@ -7,17 +7,24 @@ const connect = require("./config/dbconnet");
 const app = express();
 const port = process.env.PORT;
 
-const userrouts = require("./routes/userroute");
-const petroute = require("./routes/petroute");
+const userRoute = require("./routes/userroute");
+const petRoute = require("./routes/petroute");
+const categoryRoute = require('./routes/categoryRoute');
+const meetformRoute = require('./routes/meetformRoute')
 
 app.use(cors());
 app.use(express.static("uploads"));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json()); // Parse JSON bodies
 
 connect();
 
-app.use("/api/user", userrouts);
-app.use("/api/pet", petroute);
+// app.use("/api/user", userrouts);
+// app.use("/api/pet", petroute);
+app.use(userRoute);
+app.use(petRoute);
+app.use(categoryRoute)
+app.use(meetformRoute)
 
 app.get("/hello", (req, res) => {
   return res.send("hello");
