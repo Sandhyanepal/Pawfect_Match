@@ -1,7 +1,7 @@
-const { generateToken } = require("../config/jwtToken")
-const { Individual, Organization, User } = require("../model")
+const { generateToken } = require("../config/jwtToken");
+const { Individual, Organization, User } = require("../model");
 // const User = require("../model/usermodel");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
 // Register User
 const register = async (req, res) => {
@@ -14,25 +14,26 @@ const register = async (req, res) => {
     phone,
     orgName,
     licenseNumber,
-  } = req.body
+  } = req.body;
 
   try {
     // Check if the email is already registered
-    const existingUser = await User.findOne({ email })
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email is already registered" })
+      return res.status(400).json({ message: "Email is already registered" });
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10)
+    // const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user document in the User collection
     const newUser = new User({
+      fullName,
       email,
-      password: hashedPassword,
+      password,
       role,
-    })
-    const savedUser = await newUser.save()
+    });
+    const savedUser = await newUser.save();
 
     // Create additional details based on role
     if (role === "Individual") {
@@ -42,29 +43,29 @@ const register = async (req, res) => {
         fullName,
         address,
         phone,
-      })
-      await individual.save()
+      });
+      await individual.save();
     } else if (role === "Organization") {
       // Save Organization details
       const organization = new Organization({
         userId: savedUser._id,
         orgName,
         licenseNumber,
-      })
-      await organization.save()
+      });
+      await organization.save();
     } else {
-      return res.status(400).json({ message: "Invalid role provided" })
+      return res.status(400).json({ message: "Invalid role provided" });
     }
 
     // Respond with success
-    res.status(201).json({ message: "User registered successfully" })
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res
       .status(500)
-      .json({ message: "An error occurred during registration", error })
+      .json({ message: "An error occurred during registration", error });
   }
-}
+};
 
 //Create a User
 // const createUser = async (req, res) => {
@@ -81,35 +82,36 @@ const register = async (req, res) => {
 // };
 
 // Login User
-// const loginUserCtrl = async (req, res) => {
-//   const { email, password } = req.body;
-//   const findUser = await User.findOne({ email });
-//   if (findUser && (await findUser.isPasswordMatched(password))) {
-//     res.send({
-//       _id: findUser?._id,
-//       firstname: findUser?.firstname,
-//       lastname: findUser?.lastname,
-//       email: findUser?.email,
-//       password: findUser?.password,
-//       token: generateToken(findUser?._id),
-//     });
-//     // console.log(findUser);
-//   } else {
-//     res.json({ msg: "Invalid Credentails" });
-//   }
-// };
+const loginUserCtrl = async (req, res) => {
+  const { email, password } = req.body;
+  const findUser = await User.findOne({ email });
+  if (findUser && (await findUser.isPasswordMatched(password))) {
+    return res.status(200).send({
+      _id: findUser?._id,
+      firstname: findUser?.firstname,
+      lastname: findUser?.lastname,
+      email: findUser?.email,
+      password: findUser?.password,
+      token: generateToken(findUser?._id),
+    });
+    // console.log(findUser);
+  } else {
+    res.status(401).json({ msg: "Invalid Credentails" });
+  }
+};
 
-//Get a single User
-// const getAUser = async (req, res) => {
-//   try {
-//     const getUser = await User.findById(req.body.userId).select(
-//       "-password -email"
-//     );
-//     res.json({ success: true, data: getUser });
-//   } catch (err) {
-//     res.send(err);
-//   }
-// };
+// Get a single User
+const getAUser = async (req, res) => {
+  try {
+    const getUser = await User.findById(req.body.userId).select("-password ");
+    if (getUser) {
+      return res.status(200).json({ data: getUser, success: true });
+    }
+    return res.status(401).json({ success: false, msg: "Unsuccessful" });
+  } catch (err) {
+    res.send(err);
+  }
+};
 
 // //Deleta a user
 // const deleteAUser = async (req, res) => {
@@ -146,8 +148,8 @@ const register = async (req, res) => {
 module.exports = {
   register,
   // createUser,
-  // loginUserCtrl,
-  // getAUser,
+  loginUserCtrl,
+  getAUser,
   // deleteAUser,
   // updateUser,
-}
+};

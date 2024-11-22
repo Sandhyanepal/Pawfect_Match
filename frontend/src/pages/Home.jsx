@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../component/Header";
 import banner from "../images/banner3.png";
 import people from "../images/people with dog.jpg";
@@ -7,6 +7,7 @@ import About from "../component/About";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+
   return (
     <div>
       <Header title="home" />
@@ -28,7 +29,10 @@ const Home = () => {
             You can't buy love, but you can rescue it!
           </h1>
           <div className="flex justify-center sm:flex sm:flex-col">
-            <Link to='/adopt' className="w-32 text-white px-4 py-2 rounded-3xl text-lg bg-gray-700 ">
+            <Link
+              to="/adopt"
+              className="w-32 text-white px-4 py-2 rounded-3xl text-lg bg-gray-700 "
+            >
               Adopt a pet
             </Link>
           </div>

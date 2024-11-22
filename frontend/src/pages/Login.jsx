@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../component/Header";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setLoggedIn } from "../store/slice/loginStatusSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -23,15 +28,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/login",
-        data
-      );
+      const response = await axios.post("http://localhost:5000/login", data);
 
       if (response.status === 200) {
         const { token } = response.data;
         localStorage.setItem("authToken", token);
-        setMessage("Login successful!");
+        toast.success("Login Successful");
+        navigate("/");
+        dispatch(setLoggedIn(true));
+        // setMessage("Login successful!");
       } else {
         setMessage(response.data.message || "Login failed!");
       }
@@ -48,7 +53,7 @@ const Login = () => {
 
   return (
     <>
-      <Header title='Login' color={"text-white"} />
+      <Header title="Login" color={"text-white"} />
       <div
         className="w-full bg-gray-100 flex items-center"
         style={{ height: "100vh" }}

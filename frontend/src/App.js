@@ -5,6 +5,7 @@
 // import Login from "./pages/Login";
 
 // import Adopt from "./pages/Adopt";
+
 import PetDesc from "./pages/PetDesc";
 // import Home from "./pages/Home";
 // import MyRoutes from "./MyRoutes";
@@ -15,7 +16,7 @@ function App() {
     <div className="App">
       {/* <Home/> */}
       {/* <Adopt/> */}
-      <PetDesc/>
+      <PetDesc />
       {/* <Login/> */}
       {/* <Register/> */}
       {/* <MyRoutes/> */}
