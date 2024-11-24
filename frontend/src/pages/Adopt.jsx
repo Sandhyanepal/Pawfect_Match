@@ -11,7 +11,7 @@ const Adopt = () => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/getallpets"
+            `${import.meta.env.VITE_BACKEND_URL}/getallpets`
         );
         if (response?.data?.success) {
           setPets(response?.data?.data);

@@ -19,7 +19,7 @@ const petSchema = new mongoose.Schema(
     owner: {
       type: ObjectId,
       required: true,
-      ref: "Organization",
+      enum: ["Organization", "Individual"],
       trim: true,
     },
     // 4
@@ -61,6 +61,9 @@ const petSchema = new mongoose.Schema(
     },
     // 11
     medication: {
+      type: String,
+    },
+    description: {
       type: String,
     },
   },

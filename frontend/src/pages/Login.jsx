@@ -4,7 +4,7 @@ import axios from "axios";
 import Header from "../component/Header";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setLoggedIn } from "../store/slice/loginStatusSlice";
+import { setLoggedIn, setUserDetail } from "../store/slice/loginStatusSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -28,15 +28,14 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/login", data);
-
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, data);
       if (response.status === 200) {
         const { token } = response.data;
         localStorage.setItem("authToken", token);
         toast.success("Login Successful");
         navigate("/");
+        dispatch(setUserDetail(response.data))
         dispatch(setLoggedIn(true));
-        // setMessage("Login successful!");
       } else {
         setMessage(response.data.message || "Login failed!");
       }

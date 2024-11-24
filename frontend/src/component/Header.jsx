@@ -11,7 +11,8 @@ const Header = ({ title, color }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handelLogOut = () => {
-    dispatch(setUserDetail(null));
+    localStorage.removeItem('authToken')
+    dispatch(setUserDetail({}));
     dispatch(setLoggedIn(false));
     navigate("/");
     toast.success("Logged Out Successfully");
@@ -66,7 +67,7 @@ const Header = ({ title, color }) => {
               className="h-10 w-10 grid place-items-center bg-white rounded-full text-slate-700 font-bold cursor-pointer"
               onClick={toggleDropdown}
             >
-              {userDetail?.fullName.split("")[0].toUpperCase()}
+              {userDetail?.fullName?.split("")[0]?.toUpperCase()}
             </div>
             {showDropdown && (
               <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-48">

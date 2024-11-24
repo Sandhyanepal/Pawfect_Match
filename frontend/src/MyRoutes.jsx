@@ -19,6 +19,9 @@ const MyRoutes = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("authToken");
+      if(!token){
+        return ;
+      }
       const response = await axios(
         `${import.meta.env.VITE_BACKEND_URL}/get-user-by-id`,
         {
@@ -41,7 +44,7 @@ const MyRoutes = () => {
           {/* <Route path='/shelter' element={<Shelter/>} /> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/adopt" element={<Adopt />} />
-          <Route path="/petdesc" element={<PetDesc />} />
+          <Route path="/pet/:id" element={<PetDesc />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
