@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const meetformSchema = new mongoose.Schema({
   fullName: {
@@ -41,21 +41,24 @@ const meetformSchema = new mongoose.Schema({
     {
       species: {
         type: String,
-        required: true,
+        // required: true,
       },
       breed: {
         type: String,
-        required: true,
+        // required: true,
       },
-      age: { type: Number, required: true },
+      age: {
+        type: Number,
+        // required: true,
+      },
       gender: {
         type: String,
         enum: ["Male", "Female"],
-        required: true,
+        // required: true,
       },
       vaccinated: {
         type: Boolean,
-        required: true,
+        // required: true,
       },
     },
   ],
@@ -67,6 +70,6 @@ const meetformSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-module.exports = mongoose.model("Meetform", meetformSchema);
+module.exports = mongoose.model("Meetform", meetformSchema)

@@ -1,12 +1,13 @@
-import React from "react";
-import pet from "../images/pet5.2.jpg";
-import pet2 from "../images/pet1.jpg";
-import Header from "../component/Header";
+import React from "react"
+import pet from "../images/pet5.2.jpg"
+import pet2 from "../images/pet1.jpg"
+import Header from "../component/Header"
+import { Link } from "react-router-dom"
 
 const PetDesc = () => {
   return (
     <>
-    <Header title='Login' color={"text-white"}/>
+      <Header title="Login" color={"text-white"} />
       <div>
         <div className="flex w-4/5 m-auto px-7 py-12">
           <div className="w-3/5 flex justify-center">
@@ -31,24 +32,26 @@ const PetDesc = () => {
                 <br />
               </div>
               <div>
-                <i class="fa-solid fa-paw"></i>
+                <i className="fa-solid fa-paw"></i>
                 <span className="pl-2"> mix breed</span>
                 <br />
               </div>
               <div>
-                <i class="fa-solid fa-paw"></i>
+                <i className="fa-solid fa-paw"></i>
                 <span className="pl-2"> 8 years old</span>
                 <br />
               </div>
               <div>
-                <i class="fa-solid fa-paw"></i>
+                <i className="fa-solid fa-paw"></i>
                 <span className="pl-2">male</span>
                 <br />
               </div>
             </div>
-            <button className="mt-12 py-3 px-7 bg-gray-700 font-semibold text-white rounded-3xl">
-              Meet Me!
-            </button>
+            <Link to='/meetform'>
+              <button className="mt-12 py-3 px-7 bg-gray-700 font-semibold text-white rounded-3xl">
+                Meet Me!
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -71,12 +74,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -98,12 +101,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -125,12 +128,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -141,7 +144,7 @@ const PetDesc = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PetDesc;
+export default PetDesc
