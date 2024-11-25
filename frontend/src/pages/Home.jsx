@@ -74,17 +74,29 @@ const Home = () => {
         </div>
       </div>
 
+
+      {/* for Register */}
+      <div className="bg-gray-500 flex w-full my-7" style={{height:"150px"}}>
+        <div className="flex flex-col mt-8 ml-36">
+          <h2 className="text-3xl font-bold">Register for a Pawfect Match Account</h2>
+          <h3 className="text-lg pt-1">Create your free account and get ready to connect safely with thousands of adopters.</h3>
+        </div>
+        <div>
+          <button className="border-2 p-4 rounded-md ml-72 mt-10 w-52 bg-orange-100 border-none">Register</button>
+        </div>
+      </div>
+
       {/* About Us */}
       <About />
 
       {/* How Adoption works */}
-      <div className=" flex w-full flex-wrap ">
+      <div className=" flex w-full flex-wrap pb-14">
         {/* <div className="w-full "> */}
         <img
           src={people}
           alt=""
           srcset=""
-          className="w-full sm:w-1/3 object-cover"
+          className="w-full sm:w-1/3 object-cover pl-36"
         />
         {/* </div> */}
         <div
