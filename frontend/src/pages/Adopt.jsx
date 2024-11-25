@@ -92,3 +92,8 @@ const Adopt = () => {
 };
 
 export default Adopt;
+
+
+
+
+

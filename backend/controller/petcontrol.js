@@ -35,6 +35,7 @@ exports.addPet = async (req, res) => {
 // Get all pets
 exports.getAllPets = async (req, res) => {
   try {
+
     const pets = await Pet.find()
       .populate("owner", "orgName") // Populate owner with 'name' only
       .populate("category", "category_name");
@@ -83,16 +84,4 @@ exports.getSinglePet = async (req, res) => {
   }
 };
 
-//get all post
-// exports.getAllPets = async (req, res) => {
-//   let pets = await Pet.find()
-//   // .populate('userId').populate('category')
-//   if (!pets) {
-//       return res.status(400).json({ error: "Something went wrong" });
-//   }
-//   res.send(pets);
-// }
 
-// module. = {
-//   getAllPets,
-// };

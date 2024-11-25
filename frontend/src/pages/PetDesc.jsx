@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import pet from "../images/pet5.2.jpg";
 import pet2 from "../images/pet1.jpg";
 import Header from "../component/Header";
 import { useParams } from "react-router-dom";
@@ -153,12 +152,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -180,12 +179,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -207,12 +206,12 @@ const PetDesc = () => {
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw"></i>{" "}
+                  <i className="fa-solid fa-paw"></i>{" "}
                   <span className="pl-2"> years old</span>
                   <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-user"></i>{" "}
+                  <i className="fa-solid fa-user"></i>{" "}
                   <span className="pl-2">
                     Animal shelter: <span>Animal Paw</span>
                   </span>
@@ -223,7 +222,7 @@ const PetDesc = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PetDesc;
+export default PetDesc

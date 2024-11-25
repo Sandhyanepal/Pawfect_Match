@@ -18,7 +18,7 @@ var userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ["Individual", "Organization"], // Only these two roles are allowed
+    enum: ["Individual", "Organization", "Super Admin"], // Only these two roles are allowed
   },
 });
 
