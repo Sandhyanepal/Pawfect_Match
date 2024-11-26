@@ -4,6 +4,7 @@ const {
   getAllPets,
   addPet,
   getSinglePet,
+  deletePet,
 } = require("../controller/petcontrol");
 // const validateUser = require("../middleware/authToken");
 
@@ -12,5 +13,6 @@ const router = express.Router();
 router.post("/addpet", upload.single("image"), addPet);
 router.get("/getallpets", getAllPets);
 router.get("/pets/:id", getSinglePet);
+router.delete("/pet/:id", deletePet);
 
 module.exports = router;

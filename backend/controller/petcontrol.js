@@ -24,7 +24,7 @@ exports.addPet = async (req, res) => {
         .json({ error: "Something went wrong. Could not add pet." });
     }
     // Return the newly created pet as a response
-    res.send(pet);
+    res.status(200).json({ success: true, data: pet });
   } catch (err) {
     // Handle any errors that occur during the process
     console.error(err);
@@ -35,7 +35,6 @@ exports.addPet = async (req, res) => {
 // Get all pets
 exports.getAllPets = async (req, res) => {
   try {
-
     const pets = await Pet.find()
       .populate("owner", "orgName") // Populate owner with 'name' only
       .populate("category", "category_name");
@@ -53,6 +52,20 @@ exports.getAllPets = async (req, res) => {
   }
 };
 
+exports.deletePet = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Pet.findByIdAndDelete(id);
+    return res.json({ msg: "pet Delted Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+};
 // Get single pet by ID
 exports.getSinglePet = async (req, res) => {
   try {
@@ -83,5 +96,3 @@ exports.getSinglePet = async (req, res) => {
     });
   }
 };
-
-
