@@ -28,10 +28,13 @@ const Footer = () => {
             <div className="list-none px-10 pt-3 text-start">
               <h2 className="font-bold mb-2 text-xl">Quick Links</h2>
               <li className="pb-2">
-                <Link to="">FAQ</Link>
+                <Link to="/faq">FAQ</Link>
               </li>
               <li className="pb-2">
                 <Link to="">Privacy</Link>
+              </li>
+              <li className="pb-2">
+                <Link to="">Pet Care Information</Link>
               </li>
             </div>
           </div>
@@ -54,8 +57,8 @@ const Footer = () => {
           </div>
         </div>
         <hr className="w-11/12 m-auto mt-6" />
-        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center`">
-          Copyright &copy; 2024.
+        <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center">
+          &copy; 2024 Copyright - Pawfect Match
         </div>
       </footer>
     </>

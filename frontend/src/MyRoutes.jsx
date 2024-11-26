@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUserDetail } from "./store/slice/loginStatusSlice";
-import MeetForm from "./pages/MeetForm";
+import FAQ from "./pages/FAQ";
 
 const MyRoutes = () => {
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const MyRoutes = () => {
           <Route path="/pet/:id" element={<PetDesc />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/meetform" element={<MeetForm/>}/>
+          <Route path='faq' element={<FAQ/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
