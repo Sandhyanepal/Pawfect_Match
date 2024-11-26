@@ -14,6 +14,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUserDetail } from "./store/slice/loginStatusSlice";
 import FAQ from "./pages/FAQ";
+import MeetForm from "./pages/MeetForm";
 
 const MyRoutes = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const MyRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='faq' element={<FAQ/>}/>
+          <Route path="/meetform" element={<MeetForm/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
