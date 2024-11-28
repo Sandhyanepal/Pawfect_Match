@@ -66,6 +66,45 @@ exports.deletePet = async (req, res) => {
     });
   }
 };
+
+const path = require("path");
+const fs = require("fs");
+
+exports.editPet = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const existingPet = await Pet.findById(id);
+    if (!existingPet)
+      return res.status(404).json({ message: "Pet not found!" });
+
+    const updatedData = { ...req.body };
+
+    if (req.file) {
+      if (existingPet.image) {
+        const oldImagePath = path.join(__dirname, "../", existingPet.image);
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
+      }
+      updatedData.image = req.file.path;
+    } else {
+      updatedData.image = existingPet.image;
+    }
+
+    const updatedPet = await Pet.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    if (!updatedPet)
+      return res.status(400).json({ message: "Failed to update pet!" });
+
+    res
+      .status(200)
+      .json({ message: "Pet updated successfully!", data: updatedPet });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred!", error: error.message });
+  }
+};
+
 // Get single pet by ID
 exports.getSinglePet = async (req, res) => {
   try {

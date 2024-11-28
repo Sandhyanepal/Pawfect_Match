@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react"
-import pet2 from "../images/pet1.jpg"
-import Header from "../component/Header"
-import { Link, useParams } from "react-router-dom"
-import axios from "axios"
+import React, { useEffect, useState } from "react";
+import pet2 from "../images/pet1.jpg";
+import Header from "../component/Header";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 const PetDesc = () => {
-  const { id } = useParams()
-  const [petDetail, setPetDetail] = useState(null)
-  const [owner, setOwner] = useState(null)
+  const { id } = useParams();
+  const [petDetail, setPetDetail] = useState(null);
+  const [owner, setOwner] = useState(null);
   useEffect(() => {
     const fetchPetDesc = async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/pets/${id}`
-      )
-      console.log(response)
+      );
+      console.log(response);
       if (response.status === 200) {
-        setPetDetail(response.data.data)
+        setPetDetail(response.data.data);
         const ownerResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner`,
           {
             id: response?.data?.data?.owner,
           }
-        )
-        setOwner(ownerResponse.data.data)
+        );
+        setOwner(ownerResponse.data.data);
       }
-    }
-    fetchPetDesc()
-  }, [])
-  const [openDetail, setOpenDetail] = useState(false)
+    };
+    fetchPetDesc();
+  }, []);
+  const [openDetail, setOpenDetail] = useState(false);
   const handleToggle = () => {
-    setOpenDetail((prev) => !prev)
-  }
+    setOpenDetail((prev) => !prev);
+  };
   return (
     <>
       <Header title="Login" color={"text-white"} />
@@ -63,13 +63,7 @@ const PetDesc = () => {
 
           {!openDetail && (
             <div className="pt-5">
-              <p className="text-justify">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Impedit facilis blanditiis et, voluptatem quibusdam inventore
-                alias fuga odit architecto aut vitae odio, beatae, optio
-                temporibus repudiandae. Veniam maiores quisquam minima?
-                Laboriosam optio temporibus repellat doloribus.
-              </p>
+              <p className="text-justify">{petDetail?.description}</p>
               <div className="pt-5 flex items-center flex-wrap lg:gap-6 gap-10">
                 <div>
                   <i className="fa-solid fa-location-dot text-lg"></i>
@@ -118,7 +112,7 @@ const PetDesc = () => {
                 </div>
                 <div className="flex">
                   <span className="font-semibold flex-1 ">Health Issues:</span>
-                  <p className="flex-1">{petDetail?.medication}</p>
+                  <p className="flex-1">{petDetail?.health_issue}</p>
                 </div>
                 <div className="flex">
                   <span className="font-semibold flex-1 ">Medication:</span>
@@ -143,10 +137,10 @@ const PetDesc = () => {
           </button>
           <br />
           {/* form button */}
-          <Link to='/meetform'>
-          <button className="mt-5 py-2 bg-gray-700 font-semibold text-white rounded-3xl px-5">
-            Meet Me!
-          </button>
+          <Link to="/meetform">
+            <button className="mt-5 py-2 bg-gray-700 font-semibold text-white rounded-3xl px-5">
+              Meet Me!
+            </button>
           </Link>
         </div>
       </div>
@@ -240,7 +234,7 @@ const PetDesc = () => {
       </div>
       {/* </div> */}
     </>
-  )
-}
+  );
+};
 
-export default PetDesc
+export default PetDesc;

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 
 const MeetForm = () => {
   const [formData, setFormData] = useState({
@@ -21,32 +21,32 @@ const MeetForm = () => {
       },
     ],
     termsAndConditions: false,
-  })
+  });
 
   // Handle input changes for all form fields
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
-    }))
-  }
+    }));
+  };
 
   // Handle the dynamic pet fields
   const handlePetChange = (index, e) => {
-    const { name, value, type, checked } = e.target
-    const newPets = [...formData.currentPets]
+    const { name, value, type, checked } = e.target;
+    const newPets = [...formData.currentPets];
     if (type === "checkbox") {
-      newPets[index][name] = checked
+      newPets[index][name] = checked;
     } else {
-      newPets[index][name] = value
+      newPets[index][name] = value;
     }
     setFormData((prevData) => ({
       ...prevData,
       currentPets: newPets,
-    }))
-  }
+    }));
+  };
 
   // Add a new pet form entry
   const addPet = () => {
@@ -56,40 +56,45 @@ const MeetForm = () => {
         ...prevData.currentPets,
         { species: "", breed: "", age: "", gender: "Male", vaccinated: false },
       ],
-    }))
-  }
+    }));
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    // Exclude currentPets if hasPets is false
-  const formDataToSend = {
-    ...formData,
-    ...(formData.hasPets ? { currentPets: formData.currentPets.filter(pet => pet.species || pet.breed || pet.age || pet.vaccinated) } : {}), // Only include non-empty pets
-  };
+    const formDataToSend = {
+      ...formData,
+      ...(formData.hasPets
+        ? {
+            currentPets: formData.currentPets.filter(
+              (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
+            ),
+          }
+        : {}), // Only include non-empty pets
+    };
 
     try {
-      const response = await fetch("http://localhost:5000/submitform", {
+      const response = await fetch("http://localhost:5002/submitform", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formDataToSend),
-      })
+      });
 
       if (response.ok) {
-        const data = await response.json()
-        alert("Form submitted successfully!")
-        console.log(data)
+        const data = await response.json();
+        alert("Form submitted successfully!");
+        console.log(data);
       } else {
-        alert("Form submission failed!")
+        alert("Form submission failed!");
       }
     } catch (error) {
-      console.error("Error submitting form:", error)
-      alert("An error occurred. Please try again.")
+      console.error("Error submitting form:", error);
+      alert("An error occurred. Please try again.");
     }
-  }
+  };
 
   return (
     <div className="w-full bg-gray-100 flex items-center">
@@ -318,7 +323,7 @@ const MeetForm = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MeetForm
+export default MeetForm;
