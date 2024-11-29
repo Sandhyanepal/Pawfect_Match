@@ -6,12 +6,15 @@ import Header from "../component/Header";
 
 const Adopt = () => {
   const [pets, setPets] = useState([]);
+  const [filterProduct, setFilterProduct] = useState([]);
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/getallpets`
+          `${import.meta.env.VITE_BACKEND_URL}/getallpets`
         );
         if (response?.data?.success) {
           setPets(response?.data?.data);
@@ -24,60 +27,50 @@ const Adopt = () => {
     fetchPets();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchPets = async () => {
-  //     try {
-  //       const data = await getAllPets();
-  //       setPets(data);
-  //     } catch (error) {
-  //       console.error("Error fetching pets:", error);
-  //     }
-  //   };
-  // }, []);
+  const handelSearch = (e) => {
+    e.preventDefault();
+    // console.log(search);
+    const filteredPets = pets.filter(
+      (pet) =>
+        pet.name.toLowerCase().includes(search.toLowerCase()) ||
+        pet.breed.toLowerCase().includes(search.toLowerCase()) ||
+        pet?.description?.toLowerCase().includes(search.toLowerCase()) ||
+        pet.gender.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearch("");
+    if (filteredPets.length > 0) {
+      setError(false);
+      setFilterProduct(filteredPets);
+    } else {
+      setError(true);
+    }
+  };
 
+  const handelChange = (e) => {
+    const { name, value } = e.target;
+    setSearch(value);
+  };
   return (
     <>
       <Header title="Adopt" color={"text-white"} />
 
       <div className="w-4/5 mx-auto my-10">
         <h1 className="text-3xl font-semibold my-10">Find 🙲 Adopt</h1>
+        <form onSubmit={handelSearch}>
+          <input
+            type="text"
+            placeholder="Search"
+            onChange={handelChange}
+            // value={search}
+          />
+          <input type="submit" value="Submit" />
+        </form>
 
-        {/* Filter space */}
-        {/* <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-14 w-4/5 m-auto">
-          <div className="flex gap-5 justify-center">
-            <div className="p-2 flex flex-col items-center justify-center">
-              <i class="fa-solid fa-dog text-xl"></i>
-              <span>dog</span>
-            </div>
-            <div className="p-2 flex flex-col items-center justify-center">
-              <i class="fa-solid fa-cat text-xl"></i>
-              <span className="">cat</span>
-            </div>
-          </div>
-
-          <div className="p-2 flex flex-col">
-            <span className="pr-2 pb-1">City</span>
-            <input type="text" className="border-2 rounded-md" />
-          </div>
-
-          <div className="p-2 flex flex-col">
-            <span className="pr-2 pb-1">Size</span>
-            <input type="text" className="border-2 rounded-md" />
-          </div>
-
-          <div className="p-2 flex flex-col">
-            <span className="pr-2 pb-1">Age</span>
-            <input type="text" className="border-2 rounded-md" />
-          </div>
-
-          <div className="flex flex-col justify-center mt-3">
-            <button className="bg-gray-700 rounded-3xl text-white py-2 px-5">
-              Find a friend
-            </button>
-          </div>
-        </div> */}
-
-        {pets.length > 0 ? (
+        {error ? (
+          <p className="text-red-500 text-center text-2xl">No No pets found</p>
+        ) : filterProduct.length > 0 ? (
+          filterProduct.map((pet) => <Card key={pet._id} pet={pet} />)
+        ) : pets.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {pets.map((pet) => (
               <Card key={pet._id} pet={pet} />
@@ -92,8 +85,3 @@ const Adopt = () => {
 };
 
 export default Adopt;
-
-
-
-
-
