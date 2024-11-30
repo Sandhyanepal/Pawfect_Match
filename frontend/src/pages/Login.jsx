@@ -28,13 +28,16 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, data);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/login`,
+        data
+      );
       if (response.status === 200) {
         const { token } = response.data;
         localStorage.setItem("authToken", token);
         toast.success("Login Successful");
         navigate("/");
-        dispatch(setUserDetail(response.data))
+        dispatch(setUserDetail(response.data));
         dispatch(setLoggedIn(true));
       } else {
         setMessage(response.data.message || "Login failed!");

@@ -24,7 +24,7 @@ exports.addPet = async (req, res) => {
         .json({ error: "Something went wrong. Could not add pet." });
     }
     // Return the newly created pet as a response
-    res.send(pet);
+    res.status(200).json({ success: true, data: pet });
   } catch (err) {
     // Handle any errors that occur during the process
     console.error(err);
@@ -35,7 +35,6 @@ exports.addPet = async (req, res) => {
 // Get all pets
 exports.getAllPets = async (req, res) => {
   try {
-
     const pets = await Pet.find()
       .populate("owner", "orgName") // Populate owner with 'name' only
       .populate("category", "category_name");
@@ -50,6 +49,59 @@ exports.getAllPets = async (req, res) => {
       message: "Failed to fetch pets",
       error: error.message,
     });
+  }
+};
+
+exports.deletePet = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Pet.findByIdAndDelete(id);
+    return res.json({ msg: "pet Delted Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+};
+
+const path = require("path");
+const fs = require("fs");
+
+exports.editPet = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const existingPet = await Pet.findById(id);
+    if (!existingPet)
+      return res.status(404).json({ message: "Pet not found!" });
+
+    const updatedData = { ...req.body };
+
+    if (req.file) {
+      if (existingPet.image) {
+        const oldImagePath = path.join(__dirname, "../", existingPet.image);
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
+      }
+      updatedData.image = req.file.path;
+    } else {
+      updatedData.image = existingPet.image;
+    }
+
+    const updatedPet = await Pet.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    if (!updatedPet)
+      return res.status(400).json({ message: "Failed to update pet!" });
+
+    res
+      .status(200)
+      .json({ message: "Pet updated successfully!", data: updatedPet });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred!", error: error.message });
   }
 };
 
@@ -83,5 +135,3 @@ exports.getSinglePet = async (req, res) => {
     });
   }
 };
-
-

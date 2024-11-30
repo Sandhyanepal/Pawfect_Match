@@ -81,7 +81,7 @@ const loginUserCtrl = async (req, res) => {
     })
     // console.log(findUser);
   } else {
-    res.status(401).json({ msg: "Invalid Credentails" })
+    res.status(404).json({ msg: "Invalid Credentails" });
   }
 }
 
