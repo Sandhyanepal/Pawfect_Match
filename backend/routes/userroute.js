@@ -1,19 +1,24 @@
-const express = require("express");
+const express = require("express")
 const {
   register,
   loginUserCtrl,
   getAUser,
-  // deleteAUser,
-  // updateUser,
-} = require("../controller/usercontrol");
-const validateUser = require("../middleware/authToken");
+  getUserStats,
+  getAllIndividuals,
+  deleteIndividual,
+  getAllOrganizations,
+  deleteOrganization,
+} = require("../controller/usercontrol")
+const validateUser = require("../middleware/authToken")
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/register", register);
-// router.post("/register", createUser)
-router.post("/login", loginUserCtrl);
-router.get("/get-user-by-id", validateUser, getAUser);
-// router.delete("/:id", deleteAUser);
-// router.put("/:id", updateUser);
-module.exports = router;
+router.post("/register", register)
+router.post("/login", loginUserCtrl)
+router.get("/get-user-by-id", validateUser, getAUser)
+router.get('/getuserstats', getUserStats)
+router.get('/getallindividuals', getAllIndividuals)
+router.delete('/deleteindividual/:userId', deleteIndividual)
+router.get('/getallorganizations', getAllOrganizations)
+router.delete('/deleteorganization/:orgId', deleteOrganization)
+module.exports = router
