@@ -40,7 +40,7 @@ const Home = () => {
       </div>
 
       {/* Filter space */}
-      <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-12 w-4/5 m-auto">
+      {/* <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-12 w-4/5 m-auto">
         <div className="flex gap-5 justify-center">
           <div className="p-2 flex flex-col items-center justify-center">
             <i class="fa-solid fa-dog text-xl"></i>
@@ -72,18 +72,12 @@ const Home = () => {
             Find a friend
           </button>
         </div>
-      </div>
+      </div> */}
 
 
-      {/* for Register */}
-      <div className="bg-gray-500 flex w-full my-7" style={{height:"150px"}}>
-        <div className="flex flex-col mt-8 ml-36">
-          <h2 className="text-3xl font-bold">Register for a Pawfect Match Account</h2>
-          <h3 className="text-lg pt-1">Create your free account and get ready to connect safely with thousands of adopters.</h3>
-        </div>
-        <div>
-          <button className="border-2 p-4 rounded-md ml-72 mt-10 w-52 bg-orange-100 border-none">Register</button>
-        </div>
+      <div className="flex text-center justify-center gap-4 pe-3 mt-14 mb-6">
+        <input type="text" placeholder="Search for pets..." className="border-2 p-3" style={{width:"71%"}} />
+        <button className="border bg-gray-700 p-3 w-32 text-white text-lg" >Search</button>
       </div>
 
       {/* About Us */}
