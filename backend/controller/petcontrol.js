@@ -3,6 +3,20 @@ const Pet = require("../model/petmodel");
 // Add Pets
 exports.addPet = async (req, res) => {
   try {
+    // console.log(
+    //   req.body.name,
+    //   req.body.age,
+    //   req.body.gender,
+    //   req.body.breed,
+    //   req.body.category,
+    //   req.body.address,
+    //   req.body.owner,
+    //   req.body.vaccination_status,
+    //   req.body.health_issue,
+    //   req.body.medication,
+    //   req.file?.path.replace(/\\/g, "/"),
+    //   req.body?.description
+    // );
     let pet = await Pet.create({
       name: req.body.name,
       age: req.body.age,

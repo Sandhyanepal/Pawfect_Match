@@ -11,7 +11,7 @@ const Header = ({ title, color }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handelLogOut = () => {
-    localStorage.removeItem('authToken')
+    localStorage.removeItem("authToken");
     dispatch(setUserDetail({}));
     dispatch(setLoggedIn(false));
     navigate("/");
@@ -60,7 +60,6 @@ const Header = ({ title, color }) => {
         >
           Contact
         </li>
-        <Link to="/shop">Shop</Link>
         {isLoggedIn ? (
           <div className="relative">
             <div

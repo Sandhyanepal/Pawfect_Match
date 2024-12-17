@@ -7,7 +7,6 @@ import About from "../component/About";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-
   return (
     <div>
       <Header title="home" />
@@ -18,7 +17,7 @@ const Home = () => {
         // style={{ backgroundColor: "#A39073" }}
       >
         <div className="w-full md:w-1/2">
-          <img src={banner} alt="" srcset="" className="w-4/5 m-auto" />
+          <img src={banner} alt="" className="w-4/5 m-auto" />
           {/* <img src={dnc} alt="" className="w-full " /> */}
         </div>
         <div className="w-full md:w-1/2 md:flex flex-col justify-center">
@@ -43,11 +42,11 @@ const Home = () => {
       <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-12 w-4/5 m-auto">
         <div className="flex gap-5 justify-center">
           <div className="p-2 flex flex-col items-center justify-center">
-            <i class="fa-solid fa-dog text-xl"></i>
+            <i className="fa-solid fa-dog text-xl"></i>
             <span>dog</span>
           </div>
           <div className="p-2 flex flex-col items-center justify-center">
-            <i class="fa-solid fa-cat text-xl"></i>
+            <i className="fa-solid fa-cat text-xl"></i>
             <span className="">cat</span>
           </div>
         </div>
@@ -74,15 +73,21 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* for Register */}
-      <div className="bg-gray-500 flex w-full my-7" style={{height:"150px"}}>
+      <div className="bg-gray-500 flex w-full my-7" style={{ height: "150px" }}>
         <div className="flex flex-col mt-8 ml-36">
-          <h2 className="text-3xl font-bold">Register for a Pawfect Match Account</h2>
-          <h3 className="text-lg pt-1">Create your free account and get ready to connect safely with thousands of adopters.</h3>
+          <h2 className="text-3xl font-bold">
+            Register for a Pawfect Match Account
+          </h2>
+          <h3 className="text-lg pt-1">
+            Create your free account and get ready to connect safely with
+            thousands of adopters.
+          </h3>
         </div>
         <div>
-          <button className="border-2 p-4 rounded-md ml-72 mt-10 w-52 bg-orange-100 border-none">Register</button>
+          <button className="border-2 p-4 rounded-md ml-72 mt-10 w-52 bg-orange-100 border-none">
+            Register
+          </button>
         </div>
       </div>
 
@@ -95,7 +100,6 @@ const Home = () => {
         <img
           src={people}
           alt=""
-          srcset=""
           className="w-full sm:w-1/3 object-cover pl-36"
         />
         {/* </div> */}
@@ -108,21 +112,21 @@ const Home = () => {
           </h1>
           <ul className="pt-9 text-xl text-gray-500">
             <div className="flex items-center pb-3">
-              <i class="fa-solid fa-circle-check"></i>
+              <i className="fa-solid fa-circle-check"></i>
               <li className="pl-2">Find a pet you wish to take home</li>
             </div>
             <div className="flex items-center pb-3">
-              <i class="fa-regular fa-circle-check"></i>
+              <i className="fa-regular fa-circle-check"></i>
               <li className="pl-2">
                 Go through adoption requirement and checklist
               </li>
             </div>
             <div className="flex items-center pb-3">
-              <i class="fa-regular fa-circle-check"></i>
+              <i className="fa-regular fa-circle-check"></i>
               <li className="pl-2">Schedule a visit with shelter</li>
             </div>
             <div className="flex items-center pb-3">
-              <i class="fa-regular fa-circle-check"></i>
+              <i className="fa-regular fa-circle-check"></i>
               <li className="pl-2">Meet the pet and complete procedure</li>
             </div>
           </ul>
@@ -205,12 +209,12 @@ const Home = () => {
               <p>+22 45 89 235 </p>
             </div>
             <div className="flex items-center gap-3 pl-5 pt-7">
-              <i class="fa-regular fa-clock"></i>
+              <i className="fa-regular fa-clock"></i>
               <p>09:00-18:00</p>
             </div>
             <div className="pl-5 md:pt-28 pb-6">
-              <i class="fa-brands fa-facebook text-lg pr-3"></i>
-              <i class="fa-brands fa-instagram text-lg px-3"></i>
+              <i className="fa-brands fa-facebook text-lg pr-3"></i>
+              <i className="fa-brands fa-instagram text-lg px-3"></i>
               <i className="fa-brands fa-twitter text-lg px-3"></i>
             </div>
           </div>

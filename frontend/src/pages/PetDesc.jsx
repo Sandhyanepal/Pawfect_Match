@@ -3,17 +3,22 @@ import pet2 from "../images/pet1.jpg";
 import Header from "../component/Header";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import MeetForm from "./MeetForm";
 
 const PetDesc = () => {
   const { id } = useParams();
   const [petDetail, setPetDetail] = useState(null);
   const [owner, setOwner] = useState(null);
+
+  const [meet, showMeet] = useState(false);
+  const toggleMeet = () => {
+    showMeet((prev) => !prev);
+  };
   useEffect(() => {
     const fetchPetDesc = async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/pets/${id}`
       );
-      console.log(response);
       if (response.status === 200) {
         setPetDetail(response.data.data);
         const ownerResponse = await axios.post(
@@ -137,12 +142,14 @@ const PetDesc = () => {
           </button>
           <br />
           {/* form button */}
-          <Link to="/meetform">
-            <button className="mt-5 py-2 bg-gray-700 font-semibold text-white rounded-3xl px-5">
-              Meet Me!
-            </button>
-          </Link>
+          <button
+            onClick={toggleMeet}
+            className="bg-slate-500 text-white py-2 px-5 rounded-xl"
+          >
+            Meet Me
+          </button>
         </div>
+        {meet && <MeetForm petDetail={petDetail} />}
       </div>
 
       {/* Recommend pets */}

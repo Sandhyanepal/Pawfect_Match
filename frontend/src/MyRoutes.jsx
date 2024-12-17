@@ -21,8 +21,8 @@ const MyRoutes = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("authToken");
-      if(!token){
-        return ;
+      if (!token) {
+        return;
       }
       const response = await axios(
         `${import.meta.env.VITE_BACKEND_URL}/get-user-by-id`,
@@ -32,11 +32,16 @@ const MyRoutes = () => {
           },
         }
       );
-      dispatch(setLoggedIn(true));
-      dispatch(setUserDetail(response.data.data));
+      if (response.data.success) {
+        dispatch(setLoggedIn(true));
+        dispatch(setUserDetail(response.data.data));
+      } else {
+        dispatch(setLoggedIn(false));
+        dispatch(setUserDetail({}));
+      }
     };
     fetchUserDetails();
-  });
+  }, []);
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -49,8 +54,8 @@ const MyRoutes = () => {
           <Route path="/pet/:id" element={<PetDesc />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path='faq' element={<FAQ/>}/>
-          <Route path="/meetform" element={<MeetForm/>}/>
+          <Route path="faq" element={<FAQ />} />
+          <Route path="/meetform" element={<MeetForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
