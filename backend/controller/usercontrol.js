@@ -1,6 +1,6 @@
-const { generateToken } = require("../config/jwtToken")
-const { Individual, Organization, User } = require("../model")
-const bcrypt = require("bcrypt")
+const { generateToken } = require('../config/jwtToken')
+const { Individual, Organization, User } = require('../model')
+const bcrypt = require('bcrypt')
 
 // Register User
 const register = async (req, res) => {
@@ -19,7 +19,7 @@ const register = async (req, res) => {
     // Check if the email is already registered
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      return res.status(400).json({ message: "Email is already registered" })
+      return res.status(400).json({ message: 'Email is already registered' })
     }
 
     // Hash the password
@@ -35,7 +35,7 @@ const register = async (req, res) => {
     const savedUser = await newUser.save()
 
     // Create additional details based on role
-    if (role === "Individual") {
+    if (role === 'Individual') {
       // Save Individual User details
       const individual = new Individual({
         userId: savedUser._id,
@@ -44,7 +44,7 @@ const register = async (req, res) => {
         phone,
       })
       await individual.save()
-    } else if (role === "Organization") {
+    } else if (role === 'Organization') {
       // Save Organization details
       const organization = new Organization({
         userId: savedUser._id,
@@ -53,16 +53,16 @@ const register = async (req, res) => {
       })
       await organization.save()
     } else {
-      return res.status(400).json({ message: "Invalid role provided" })
+      return res.status(400).json({ message: 'Invalid role provided' })
     }
 
     // Respond with success
-    res.status(201).json({ message: "User registered successfully" })
+    res.status(201).json({ message: 'User registered successfully' })
   } catch (error) {
     console.error(error)
     res
       .status(500)
-      .json({ message: "An error occurred during registration", error })
+      .json({ message: 'An error occurred during registration', error })
   }
 }
 
@@ -81,18 +81,18 @@ const loginUserCtrl = async (req, res) => {
     })
     // console.log(findUser);
   } else {
-    res.status(404).json({ msg: "Invalid Credentails" });
+    res.status(401).json({ msg: 'Invalid Credentails' })
   }
 }
 
 // Get a single User
 const getAUser = async (req, res) => {
   try {
-    const getUser = await User.findById(req.body.userId).select("-password ")
+    const getUser = await User.findById(req.body.userId).select('-password ')
     if (getUser) {
       return res.status(200).json({ data: getUser, success: true })
     }
-    return res.status(401).json({ success: false, msg: "Unsuccessful" })
+    return res.status(401).json({ success: false, msg: 'Unsuccessful' })
   } catch (err) {
     res.send(err)
   }
@@ -112,7 +112,7 @@ const getUserStats = async (req, res) => {
     })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: "Error fetching user stats", error })
+    res.status(500).json({ message: 'Error fetching user stats', error })
   }
 }
 
@@ -121,13 +121,13 @@ const getAllIndividuals = async (req, res) => {
   try {
     // Fetch all individual users with their associated details
     const individuals = await Individual.find()
-      .populate("userId", "email") // Populate the 'userId' with email field
-      .select("fullName address phone userId") // Select only necessary fields
+      .populate('userId', 'email') // Populate the 'userId' with email field
+      .select('fullName address phone userId') // Select only necessary fields
 
     res.status(200).json(individuals)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: "Error fetching individuals", error })
+    res.status(500).json({ message: 'Error fetching individuals', error })
   }
 }
 
@@ -141,19 +141,17 @@ const deleteIndividual = async (req, res) => {
     // Then, delete the associated User document
     if (deletedIndividual) {
       await User.findByIdAndDelete(userId)
-      res
-        .status(200)
-        .json({
-          message: "Individual and associated user deleted successfully",
-        })
+      res.status(200).json({
+        message: 'Individual and associated user deleted successfully',
+      })
     } else {
-      res.status(404).json({ message: "Individual not found" })
+      res.status(404).json({ message: 'Individual not found' })
     }
   } catch (err) {
     console.error(err)
     res
       .status(500)
-      .json({ message: "Error deleting individual user", error: err })
+      .json({ message: 'Error deleting individual user', error: err })
   }
 }
 
@@ -162,40 +160,44 @@ const getAllOrganizations = async (req, res) => {
   try {
     // Fetch all organization users with their associated details
     const organizations = await Organization.find()
-      .populate("userId", "email") // Populate the 'userId' field with email from the User model
-      .select("orgName licenseNumber userId") // Select necessary fields for the organization
+      .populate('userId', 'email') // Populate the 'userId' field with email from the User model
+      .select('orgName licenseNumber userId') // Select necessary fields for the organization
 
     res.status(200).json(organizations)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: "Error fetching organizations", error })
+    res.status(500).json({ message: 'Error fetching organizations', error })
   }
 }
 
-// Delete an Organization
+// Delete Organization by ID
 const deleteOrganization = async (req, res) => {
-  const { orgId } = req.params // Retrieve the organization ID from the URL parameter
+  const { id } = req.params // Getting the organization ID from the route params
 
   try {
-    // First, delete the Organization document
-    const deletedOrganization = await Organization.findByIdAndDelete( orgId )
+    // Find the organization by ID
+    const organization = await Organization.findById(id)
 
-    // If the organization is found and deleted, then delete the associated User document
-    if (deletedOrganization) {
-      // Delete the associated User document
-      await User.findByIdAndDelete(deletedOrganization.userId)
-
-      res
-        .status(200)
-        .json({
-          message: "Organization and associated user deleted successfully",
-        })
-    } else {
-      res.status(404).json({ message: "Organization not found" })
+    if (!organization) {
+      return res.status(404).json({ message: 'Organization not found' })
     }
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: "Error deleting organization", error: err })
+
+    // Delete the organization
+    await Organization.deleteOne({ _id: id })
+
+    // Optionally, delete the related user (if you want to remove the user as well)
+    await User.deleteOne({ _id: organization.userId })
+
+    // Respond with success
+    res.status(200).json({ message: 'Organization deleted successfully' })
+  } catch (error) {
+    console.error(error)
+    res
+      .status(500)
+      .json({
+        message: 'An error occurred while deleting the organization',
+        error,
+      })
   }
 }
 

@@ -20,5 +20,5 @@ router.get('/getuserstats', getUserStats)
 router.get('/getallindividuals', getAllIndividuals)
 router.delete('/deleteindividual/:userId', deleteIndividual)
 router.get('/getallorganizations', getAllOrganizations)
-router.delete('/deleteorganization/:orgId', deleteOrganization)
+router.delete('/deleteorganization/:id', deleteOrganization)
 module.exports = router

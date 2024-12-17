@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Card from "../component/Card";
-import Header from "../component/Header";
-// import { getAllPets } from "../api/petApi";
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import Card from '../component/Card'
+import Header from '../component/Header'
+import { getAllPets } from '../api/petApi'
 
 const Adopt = () => {
-  const [pets, setPets] = useState([]);
-  const [filterProduct, setFilterProduct] = useState([]);
-  const [search, setSearch] = useState("");
-  const [error, setError] = useState(false);
+  const [pets, setPets] = useState([])
+  const [filterProduct, setFilterProduct] = useState([])
+  const [search, setSearch] = useState('')
+  const [error, setError] = useState(false)
 
+  // Fetch pets using the getAllPets function from petApi
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/getallpets`
-        );
-        if (response?.data?.success) {
-          setPets(response?.data?.data);
+        const response = await getAllPets() // Use the function instead of axios
+        if (response?.success) {
+          setPets(response?.data)
         }
       } catch (error) {
-        console.error("Error fetching pets:", error);
+        console.error('Error fetching pets:', error)
       }
-    };
+    }
 
-    fetchPets();
-  }, []);
+    fetchPets()
+  }, [])
 
   const handelSearch = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     // console.log(search);
     const filteredPets = pets.filter(
       (pet) =>
@@ -36,23 +35,23 @@ const Adopt = () => {
         pet.breed.toLowerCase().includes(search.toLowerCase()) ||
         pet?.description?.toLowerCase().includes(search.toLowerCase()) ||
         pet.gender.toLowerCase().includes(search.toLowerCase())
-    );
-    setSearch("");
+    )
+    setSearch('')
     if (filteredPets.length > 0) {
-      setError(false);
-      setFilterProduct(filteredPets);
+      setError(false)
+      setFilterProduct(filteredPets)
     } else {
-      setError(true);
+      setError(true)
     }
-  };
+  }
 
   const handelChange = (e) => {
-    const { name, value } = e.target;
-    setSearch(value);
-  };
+    const { name, value } = e.target
+    setSearch(value)
+  }
   return (
     <>
-      <Header title="Adopt" color={"text-white"} />
+      <Header title="Adopt" color={'text-white'} />
 
       <div className="w-4/5 mx-auto my-10">
         <h1 className="text-3xl font-semibold my-10">Find 🙲 Adopt</h1>
@@ -81,7 +80,7 @@ const Adopt = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Adopt;
+export default Adopt
