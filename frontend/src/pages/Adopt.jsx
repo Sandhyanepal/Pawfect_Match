@@ -60,9 +60,10 @@ const Adopt = () => {
             type="text"
             placeholder="Search"
             onChange={handelChange}
+            className="border-2 w-8/12 ms-10 p-1"
             // value={search}
           />
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit" className="bg-gray-600 pl-3 pr-3 pt-1 pb-1 ms-2 rounded-md"/>
         </form>
 
         {error ? (

@@ -15,7 +15,7 @@ const validateUser = async (req, res, next) => {
         }
       });
     } catch (error) {
-      res.send({ error: "Please Authenticate using valid token" });
+      res.send({ error: "Please Authenticate using valid token"});
     }
   }
 };
