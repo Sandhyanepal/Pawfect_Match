@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import pet2 from "../images/pet1.jpg";
 import Header from "../component/Header";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import MeetForm from "./MeetForm";
+import { useSelector } from "react-redux";
 
 const PetDesc = () => {
   const { id } = useParams();
   const [petDetail, setPetDetail] = useState(null);
   const [owner, setOwner] = useState(null);
+
+  const { isLoggedIn } = useSelector((state) => state.loginStatus);
 
   const [meet, showMeet] = useState(false);
   const toggleMeet = () => {
@@ -149,7 +152,12 @@ const PetDesc = () => {
             Meet Me
           </button>
         </div>
-        {meet && <MeetForm petDetail={petDetail} />}
+        {meet &&
+          (isLoggedIn ? (
+            <MeetForm petDetail={petDetail} isLoggedIn={isLoggedIn} />
+          ) : (
+            <NavLink to="/login"> Login to meet</NavLink>
+          ))}
       </div>
 
       {/* Recommend pets */}

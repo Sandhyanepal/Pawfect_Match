@@ -1,10 +1,11 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom";
-import axios from "axios"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
-  //   const navigate = useNavigate();
-  const [role, setRole] = useState("Individual") // Default role is 'Individual'
+  const navigate = useNavigate();
+  const [role, setRole] = useState("Individual"); // Default role is 'Individual'
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,19 +13,19 @@ const Register = () => {
     phone: "",
     orgName: "",
     licenseNumber: "",
-  })
+  });
 
-  const handleRoleChange = (e) => setRole(e.target.value)
+  const handleRoleChange = (e) => setRole(e.target.value);
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Prepare data for submission
     const payload = {
@@ -40,19 +41,21 @@ const Register = () => {
         orgName: formData.orgName,
         licenseNumber: formData.licenseNumber,
       }),
-    }
+    };
 
     try {
       // Make API request
       const response = await axios.post(
-        "http://localhost:5000/register",
+        "http://localhost:5002/register",
         payload
-      )
-      alert(response.data.message)
+      );
+      navigate("/login");
+      toast.success("Successfully Registered");
+      // alert(response.data.message);
     } catch (error) {
-      alert(error.response?.data?.message || "An error occurred")
+      alert(error.response?.data?.message || "An error occurred");
     }
-  }
+  };
 
   return (
     <div
@@ -218,14 +221,14 @@ const Register = () => {
           </button>
         </form>
         <p className="pl-5 sm:pl-10 pb-5">
-             Already have an account?{" "}
-             <Link to="/login" className="italic text-gray-500">
-               Login
-             </Link>
-           </p>
+          Already have an account?{" "}
+          <Link to="/login" className="italic text-gray-500">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
