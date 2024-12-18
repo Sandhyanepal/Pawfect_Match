@@ -13,7 +13,6 @@ const categoryRoute = require("./routes/categoryRoute");
 const meetformRoute = require("./routes/meetformRoute");
 const individualOwnerRoute = require("./routes/individualRoute");
 const adminRoute = require("./routes/adminRoute");
-const adoptionRoute = require("./routes/adoptionRoute");
 app.use(cors());
 app.use(express.static("media"));
 // app.use(bodyParser.json());
@@ -29,7 +28,6 @@ app.use(categoryRoute);
 app.use(meetformRoute);
 app.use(individualOwnerRoute);
 app.use(adminRoute);
-app.use("/api/adoption", adoptionRoute)
 
 app.get("/hello", (req, res) => {
   return res.send("hello");

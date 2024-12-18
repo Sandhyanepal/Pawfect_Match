@@ -32,11 +32,16 @@ const MyRoutes = () => {
           },
         }
       )
-      dispatch(setLoggedIn(true))
-      dispatch(setUserDetail(response.data.data))
+      if (response.data.success) {
+        dispatch(setLoggedIn(true))
+        dispatch(setUserDetail(response.data.data))
+      } else {
+        dispatch(setLoggedIn(false))
+        dispatch(setUserDetail({}))
+      }
     }
     fetchUserDetails()
-  })
+  }, [])
   return (
     <BrowserRouter>
       <ToastContainer />

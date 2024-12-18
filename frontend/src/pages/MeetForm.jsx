@@ -1,6 +1,10 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-const MeetForm = () => {
+const MeetForm = ({ petDetail, isLoggedIn }) => {
+  const navigate = useNavigate()
+  console.log(petDetail)
   const [formData, setFormData] = useState({
     fullName: '',
     dateOfBirth: '',
@@ -11,13 +15,15 @@ const MeetForm = () => {
     homeOwnership: 'Rent',
     allergies: false,
     hasPets: false, // Track if the user has pets
+    owner: petDetail?.owner,
     currentPets: [
       {
-        species: '',
-        breed: '',
-        age: '',
-        gender: 'Male',
-        vaccinated: false,
+        breed: petDetail?.breed,
+        age: petDetail?.age,
+        gender: petDetail?.gender,
+        vaccinated: true,
+        name: petDetail?.name,
+        image: petDetail?.image,
       },
     ],
     termsAndConditions: false,
@@ -85,19 +91,40 @@ const MeetForm = () => {
 
       if (response.ok) {
         const data = await response.json()
-        alert('Form submitted successfully!')
-        console.log(data)
+        toast.success('Form submitted successfully!')
+        setFormData({
+          fullName: '',
+          dateOfBirth: '',
+          address: '',
+          phoneNumber: '',
+          email: '',
+          occupation: '',
+          homeOwnership: 'Rent',
+          allergies: false,
+          hasPets: false, // Track if the user has pets
+          owner: petDetail?.owner,
+          currentPets: [
+            {
+              species: '',
+              breed: '',
+              age: '',
+              gender: 'Male',
+              vaccinated: false,
+            },
+          ],
+          termsAndConditions: false,
+        })
       } else {
-        alert('Form submission failed!')
+        toast.error('Form submission failed!')
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert('An error occurred. Please try again.')
+      toast.error('An error occurred. Please try again.')
     }
   }
 
   return (
-    <div className="w-full bg-gray-100 flex items-center">
+    <div className="w-full mt-4 bg-gray-100 flex items-center">
       <div
         className="md:w-1/2 bg-white m-auto w-3/4 my-20"
         style={{ boxShadow: '0 41.8px 33.4px rgba(0, 0, 0, 0.086)' }}

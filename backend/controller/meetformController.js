@@ -1,4 +1,4 @@
-const MeetForm = require("../model/meetformmodel")
+const MeetForm = require("../model/meetformmodel");
 
 // Add Meetform (POST request to submit a form)
 exports.addMeetform = async (req, res) => {
@@ -6,12 +6,12 @@ exports.addMeetform = async (req, res) => {
     // Filter out empty pets if there are any
     let filteredPets = req.body.currentPets.filter((pet) => {
       // Only include pets that have at least one non-empty field
-      return pet.species || pet.breed || pet.age || pet.vaccinated
-    })
+      return pet.species || pet.breed || pet.age || pet.vaccinated;
+    });
 
     // If no pets are provided and 'hasPets' is true, set currentPets as an empty array
     if (req.body.hasPets && filteredPets.length === 0) {
-      filteredPets = []
+      filteredPets = [];
     }
 
     const meetform = await MeetForm.create({
@@ -25,22 +25,33 @@ exports.addMeetform = async (req, res) => {
       allergies: req.body.allergies,
       currentPets: filteredPets, // Assuming currentPets is an array
       termsAndConditions: req.body.termsAndConditions,
-    })
+      owner: req.body.owner,
+    });
 
     // If meetform creation fails, return an error
     if (!meetform) {
       return res
         .status(400)
-        .json({ error: "Something went wrong. Could not submit the form." })
+        .json({ error: "Something went wrong. Could not submit the form." });
     }
 
     // Return the newly created meetform as a response
-    res.status(201).send(meetform)
+    res.status(201).send(meetform);
   } catch (err) {
     // Handle any errors during the form submission process
-    console.error(err)
-    res.status(500).json({ error: "Server error. Could not submit the form." })
+    console.error(err);
+    res.status(500).json({ error: "Server error. Could not submit the form." });
   }
-}
+};
 
-
+exports.getAllFormRequest = async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const allRequest = await MeetForm.find({ owner: userId });
+    return res.status(200).json({ success: true, data: allRequest });
+  } catch (error) {
+    return res
+      .staus(404)
+      .json({ success: false, msg: "No Forms found for the User." });
+  }
+};

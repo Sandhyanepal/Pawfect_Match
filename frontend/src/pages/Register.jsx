@@ -1,75 +1,74 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { register } from '../api/userApi'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
-  const navigate = useNavigate()
-  const [role, setRole] = useState('Individual') // Default role is 'Individual'
+  const navigate = useNavigate();
+  const [role, setRole] = useState("Individual"); // Default role is 'Individual'
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    address: '',
-    phone: '',
-    orgName: '',
-    licenseNumber: '',
-    fullName: '',
-  })
+    email: "",
+    password: "",
+    address: "",
+    phone: "",
+    orgName: "",
+    licenseNumber: "",
+  });
 
-  const handleRoleChange = (e) => setRole(e.target.value)
+  const handleRoleChange = (e) => setRole(e.target.value);
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Prepare data for submission
     const payload = {
       email: formData.email,
       password: formData.password,
       role,
-      ...(role === 'Individual' && {
+      ...(role === "Individual" && {
         fullName: formData.fullName,
         address: formData.address,
         phone: formData.phone,
       }),
-      ...(role === 'Organization' && {
+      ...(role === "Organization" && {
         orgName: formData.orgName,
         licenseNumber: formData.licenseNumber,
       }),
-    }
+    };
 
     try {
       // Make API request
       const response = await axios.post(
-        'http://localhost:5002/register',
+        "http://localhost:5002/register",
         payload
-      )
-      // const response = await register(payload)
-      alert(response.data.message)
-      navigate('/login')
+      );
+      navigate("/login");
+      toast.success("Successfully Registered");
+      // alert(response.data.message);
     } catch (error) {
-      alert(error.response?.data?.message || 'An error occurred')
+      alert(error.response?.data?.message || "An error occurred");
     }
-  }
+  };
 
   return (
     <div
       className="w-full bg-gray-100 flex items-center"
-      style={{ height: '100vh' }}
+      style={{ height: "100vh" }}
     >
       <div
         className="md:w-1/2 bg-white m-auto w-3/4"
-        style={{ boxShadow: '0 41.8px 33.4px rgba(0, 0, 0, 0.086)' }}
+        style={{ boxShadow: "0 41.8px 33.4px rgba(0, 0, 0, 0.086)" }}
       >
         <h2
           className="text-3xl text-center pt-8 font-bold"
-          style={{ fontFamily: 'lato' }}
+          style={{ fontFamily: "lato" }}
         >
           Register
         </h2>
@@ -91,7 +90,7 @@ const Register = () => {
             </select>
           </div>
           {/* Conditional Fields for Normal Users */}
-          {role === 'Individual' && (
+          {role === "Individual" && (
             <>
               <div>
                 <label htmlFor="fullName" className="text-lg">
@@ -111,7 +110,7 @@ const Register = () => {
           )}
 
           {/* Conditional Fields for Organizations */}
-          {role === 'Organization' && (
+          {role === "Organization" && (
             <>
               <div>
                 <label htmlFor="orgName" className="text-lg">
@@ -161,7 +160,7 @@ const Register = () => {
           </div>
 
           {/* Conditional Fields for Normal Users */}
-          {role === 'Individual' && (
+          {role === "Individual" && (
             <>
               <div>
                 <label htmlFor="address" className="text-lg">
@@ -195,7 +194,7 @@ const Register = () => {
           )}
 
           {/* Conditional Fields for Organizations */}
-          {role === 'Organization' && (
+          {role === "Organization" && (
             <>
               <div>
                 <label htmlFor="licenseNumber" className="text-lg">
@@ -222,14 +221,14 @@ const Register = () => {
           </button>
         </form>
         <p className="pl-5 sm:pl-10 pb-5">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link to="/login" className="italic text-gray-500">
             Login
           </Link>
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

@@ -1,6 +1,12 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const meetformSchema = new mongoose.Schema({
+  owner: {
+    type: ObjectId,
+    ref: "User",
+    required: true,
+  },
   fullName: {
     type: String,
     required: true,
@@ -53,12 +59,18 @@ const meetformSchema = new mongoose.Schema({
       },
       gender: {
         type: String,
-        enum: ["Male", "Female"],
+        enum: ["Male", "Female", "male", "female"],
         // required: true,
       },
       vaccinated: {
-        type: Boolean,
+        type: String,
         // required: true,
+      },
+      name: {
+        type: String,
+      },
+      image: {
+        type: String,
       },
     },
   ],
@@ -70,6 +82,6 @@ const meetformSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-})
+});
 
-module.exports = mongoose.model("Meetform", meetformSchema)
+module.exports = mongoose.model("Meetform", meetformSchema);

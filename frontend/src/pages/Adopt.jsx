@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Card from '../component/Card'
 import Header from '../component/Header'
-import { getAllPets } from '../api/petApi'
+// import { getAllPets } from "../api/petApi";
 
 const Adopt = () => {
   const [pets, setPets] = useState([])
@@ -10,13 +10,14 @@ const Adopt = () => {
   const [search, setSearch] = useState('')
   const [error, setError] = useState(false)
 
-  // Fetch pets using the getAllPets function from petApi
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await getAllPets() // Use the function instead of axios
-        if (response?.success) {
-          setPets(response?.data)
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/getallpets`
+        )
+        if (response?.data?.success) {
+          setPets(response?.data?.data)
         }
       } catch (error) {
         console.error('Error fetching pets:', error)
@@ -60,14 +61,9 @@ const Adopt = () => {
             type="text"
             placeholder="Search"
             onChange={handelChange}
-            className="border-2 w-8/12 ms-10 p-1"
             // value={search}
           />
-          <input
-            type="submit"
-            value="Submit"
-            className="bg-gray-600 pl-3 pr-3 pt-1 pb-1 ms-2 rounded-md"
-          />
+          <input type="submit" value="Submit" />
         </form>
 
         {error ? (

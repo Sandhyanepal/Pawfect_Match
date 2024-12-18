@@ -44,7 +44,6 @@ const Login = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        console.log(error.response)
         setMessage(
           error.response.data.message || 'An error occurred during login'
         )
