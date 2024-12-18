@@ -16,7 +16,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
@@ -46,7 +46,3 @@ code {
   background-position-y: 20% ;
   background-size: cover;
 } */
-
-
-
-

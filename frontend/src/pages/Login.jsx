@@ -32,7 +32,6 @@ const Login = () => {
         `${import.meta.env.VITE_BACKEND_URL}/login`,
         data
       )
-      // const response = await axios.post(`http://localhost:5002/login`, data)
       if (response.status === 200) {
         const { token } = response.data
         localStorage.setItem('authToken', token)

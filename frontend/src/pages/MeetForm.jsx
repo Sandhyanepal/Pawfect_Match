@@ -1,52 +1,52 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const MeetForm = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    dateOfBirth: "",
-    address: "",
-    phoneNumber: "",
-    email: "",
-    occupation: "",
-    homeOwnership: "Rent",
+    fullName: '',
+    dateOfBirth: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    occupation: '',
+    homeOwnership: 'Rent',
     allergies: false,
     hasPets: false, // Track if the user has pets
     currentPets: [
       {
-        species: "",
-        breed: "",
-        age: "",
-        gender: "Male",
+        species: '',
+        breed: '',
+        age: '',
+        gender: 'Male',
         vaccinated: false,
       },
     ],
     termsAndConditions: false,
-  });
+  })
 
   // Handle input changes for all form fields
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+      [name]: type === 'checkbox' ? checked : value,
+    }))
+  }
 
   // Handle the dynamic pet fields
   const handlePetChange = (index, e) => {
-    const { name, value, type, checked } = e.target;
-    const newPets = [...formData.currentPets];
-    if (type === "checkbox") {
-      newPets[index][name] = checked;
+    const { name, value, type, checked } = e.target
+    const newPets = [...formData.currentPets]
+    if (type === 'checkbox') {
+      newPets[index][name] = checked
     } else {
-      newPets[index][name] = value;
+      newPets[index][name] = value
     }
     setFormData((prevData) => ({
       ...prevData,
       currentPets: newPets,
-    }));
-  };
+    }))
+  }
 
   // Add a new pet form entry
   const addPet = () => {
@@ -54,14 +54,14 @@ const MeetForm = () => {
       ...prevData,
       currentPets: [
         ...prevData.currentPets,
-        { species: "", breed: "", age: "", gender: "Male", vaccinated: false },
+        { species: '', breed: '', age: '', gender: 'Male', vaccinated: false },
       ],
-    }));
-  };
+    }))
+  }
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const formDataToSend = {
       ...formData,
@@ -72,39 +72,39 @@ const MeetForm = () => {
             ),
           }
         : {}), // Only include non-empty pets
-    };
+    }
 
     try {
-      const response = await fetch("http://localhost:5002/submitform", {
-        method: "POST",
+      const response = await fetch('http://localhost:5002/submitform', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formDataToSend),
-      });
+      })
 
       if (response.ok) {
-        const data = await response.json();
-        alert("Form submitted successfully!");
-        console.log(data);
+        const data = await response.json()
+        alert('Form submitted successfully!')
+        console.log(data)
       } else {
-        alert("Form submission failed!");
+        alert('Form submission failed!')
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again.");
+      console.error('Error submitting form:', error)
+      alert('An error occurred. Please try again.')
     }
-  };
+  }
 
   return (
     <div className="w-full bg-gray-100 flex items-center">
       <div
         className="md:w-1/2 bg-white m-auto w-3/4 my-20"
-        style={{ boxShadow: "0 41.8px 33.4px rgba(0, 0, 0, 0.086)" }}
+        style={{ boxShadow: '0 41.8px 33.4px rgba(0, 0, 0, 0.086)' }}
       >
         <h1
           className="text-3xl text-center pt-8 font-bold"
-          style={{ fontFamily: "lato" }}
+          style={{ fontFamily: 'lato' }}
         >
           Meet Form
         </h1>
@@ -323,7 +323,7 @@ const MeetForm = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MeetForm;
+export default MeetForm

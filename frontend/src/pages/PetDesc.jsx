@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from "react";
-import pet2 from "../images/pet1.jpg";
-import Header from "../component/Header";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from 'react'
+import pet2 from '../images/pet1.jpg'
+import Header from '../component/Header'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const PetDesc = () => {
-  const { id } = useParams();
-  const [petDetail, setPetDetail] = useState(null);
-  const [owner, setOwner] = useState(null);
+  const { id } = useParams()
+  const [petDetail, setPetDetail] = useState(null)
+  const [owner, setOwner] = useState(null)
   useEffect(() => {
     const fetchPetDesc = async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/pets/${id}`
-      );
-      console.log(response);
+      )
+      console.log(response)
       if (response.status === 200) {
-        setPetDetail(response.data.data);
+        setPetDetail(response.data.data)
         const ownerResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner`,
           {
             id: response?.data?.data?.owner,
           }
-        );
-        setOwner(ownerResponse.data.data);
+        )
+        setOwner(ownerResponse.data.data)
       }
-    };
-    fetchPetDesc();
-  }, []);
-  const [openDetail, setOpenDetail] = useState(false);
+    }
+    fetchPetDesc()
+  }, [])
+  const [openDetail, setOpenDetail] = useState(false)
   const handleToggle = () => {
-    setOpenDetail((prev) => !prev);
-  };
+    setOpenDetail((prev) => !prev)
+  }
   return (
     <>
-      <Header title="Login" color={"text-white"} />
+      <Header title="Login" color={'text-white'} />
       {/* <div> */}
       <div className="flex w-4/5 m-auto px-7 py-12 flex-wrap">
         {/* <div className="w-3/5 flex "> */}
@@ -51,7 +51,7 @@ const PetDesc = () => {
         {/* About */}
         <div className="lg:pt-0 pt-5 pl-5 w-full lg:w-1/2 ">
           <h1 className="text-4xl font-semibold">
-            {petDetail?.name?.split("")[0].toUpperCase() +
+            {petDetail?.name?.split('')[0].toUpperCase() +
               petDetail?.name?.slice(1)}
           </h1>
           <h3 className="pt-3 text-2xl font-semibold text-gray-500">About</h3>
@@ -133,7 +133,7 @@ const PetDesc = () => {
           )}
           {/* toggle button */}
           <button onClick={handleToggle} className="mt-2 py-1 underline">
-            {openDetail ? "Show Less" : "Show More..."}
+            {openDetail ? 'Show Less' : 'Show More...'}
           </button>
           <br />
           {/* form button */}
@@ -153,7 +153,7 @@ const PetDesc = () => {
             <img
               src={pet2}
               alt=""
-              style={{ width: "300px" }}
+              style={{ width: '300px' }}
               className="rounded-3xl"
             />
             <div className="p-5 flex flex-col justify-center gap-2">
@@ -164,12 +164,12 @@ const PetDesc = () => {
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-paw"></i>{" "}
+                <i className="fa-solid fa-paw"></i>{' '}
                 <span className="pl-2"> years old</span>
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-user"></i>{" "}
+                <i className="fa-solid fa-user"></i>{' '}
                 <span className="pl-2">
                   Animal shelter: <span>Animal Paw</span>
                 </span>
@@ -180,7 +180,7 @@ const PetDesc = () => {
             <img
               src={pet2}
               alt=""
-              style={{ width: "300px" }}
+              style={{ width: '300px' }}
               className="rounded-3xl"
             />
             <div className="p-5 flex flex-col justify-center gap-2">
@@ -191,12 +191,12 @@ const PetDesc = () => {
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-paw"></i>{" "}
+                <i className="fa-solid fa-paw"></i>{' '}
                 <span className="pl-2"> years old</span>
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-user"></i>{" "}
+                <i className="fa-solid fa-user"></i>{' '}
                 <span className="pl-2">
                   Animal shelter: <span>Animal Paw</span>
                 </span>
@@ -207,7 +207,7 @@ const PetDesc = () => {
             <img
               src={pet2}
               alt=""
-              style={{ width: "300px" }}
+              style={{ width: '300px' }}
               className="rounded-3xl"
             />
             <div className="p-5 flex flex-col justify-center gap-2">
@@ -218,12 +218,12 @@ const PetDesc = () => {
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-paw"></i>{" "}
+                <i className="fa-solid fa-paw"></i>{' '}
                 <span className="pl-2"> years old</span>
                 <br />
               </div>
               <div>
-                <i className="fa-solid fa-user"></i>{" "}
+                <i className="fa-solid fa-user"></i>{' '}
                 <span className="pl-2">
                   Animal shelter: <span>Animal Paw</span>
                 </span>
@@ -234,7 +234,7 @@ const PetDesc = () => {
       </div>
       {/* </div> */}
     </>
-  );
-};
+  )
+}
 
-export default PetDesc;
+export default PetDesc
