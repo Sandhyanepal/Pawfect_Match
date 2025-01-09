@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Tailwind directives should follow @import */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,21 +11,19 @@ html {
 
 body {
   margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Poppins';
 }
 
 code {
+<<<<<<< HEAD
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+=======
+  font-family: 'Poppins', sans-serif; /* Apply Poppins to code */
+>>>>>>> 8cdd6df5b1a1bca8832aba83962331851939c44a
 }
-
-/* .nav-bar{
-  background: linear-gradient(89deg, rgba(255,255,255,1) 0%, rgba(199,189,182,1) 100%);
-} */
 
 .home-banner {
   background: linear-gradient(
@@ -39,10 +40,3 @@ code {
     rgba(238, 237, 236, 1) 100%
   );
 }
-
-/* .shelter{
-  background-image: url("./images/bg1\ shelter.jpg");
-  background-position-x: center ;
-  background-position-y: 20% ;
-  background-size: cover;
-} */

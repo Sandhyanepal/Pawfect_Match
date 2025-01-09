@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import pet2 from '../images/pet1.jpg'
 import Header from '../component/Header'
-import { Link, NavLink, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import MeetForm from './MeetForm'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const PetDesc = () => {
   const { id } = useParams()
   const [petDetail, setPetDetail] = useState(null)
   const [owner, setOwner] = useState(null)
+  const navigate = useNavigate()
 
   const [showModal, setShowModal] = useState(false)
 
@@ -17,8 +19,13 @@ const PetDesc = () => {
 
   const [meet, showMeet] = useState(false)
   const toggleMeet = () => {
+    if (!isLoggedIn) {
+      toast.error('Please Login to Continue!!')
+      navigate('/login')
+    }
     showMeet((prev) => !prev)
   }
+
   useEffect(() => {
     const fetchPetDesc = async () => {
       const response = await axios.get(
@@ -36,30 +43,18 @@ const PetDesc = () => {
       }
     }
     fetchPetDesc()
-  }, [])
-
-  // Open the modal
-  const openModal = () => {
-    setShowModal(true)
-  }
-
-  // Close the modal
-  const closeModal = () => {
-    setShowModal(false)
-  }
+  }, [id])
 
   const [openDetail, setOpenDetail] = useState(false)
   const handleToggle = () => {
     setOpenDetail((prev) => !prev)
   }
+
   return (
     <>
       <Header title="Login" color={'text-white'} />
-      {/* <div> */}
       <div className="flex w-4/5 m-auto px-7 py-12 flex-wrap">
-        {/* <div className="w-3/5 flex "> */}
         <div className="w-full lg:w-1/2 flex flex-col items-center ">
-          {/* <div className=""> */}
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/${petDetail?.image?.slice(
               6
@@ -67,20 +62,13 @@ const PetDesc = () => {
             alt=""
             className="rounded-3xl"
           />
-          {/* </div> */}
         </div>
-        {/* About */}
         <div className="lg:pt-0 pt-5 pl-5 w-full lg:w-1/2 ">
           <h1 className="text-4xl font-semibold">
             {petDetail?.name?.split('')[0].toUpperCase() +
               petDetail?.name?.slice(1)}
           </h1>
           <h3 className="pt-3 text-2xl font-semibold text-gray-500">About</h3>
-          {/* {!openDetail && (
-              <p className="mt-5 text-justify text-xl">
-                {petDetail?.description}
-              </p>
-            )} */}
 
           {!openDetail && (
             <div className="pt-5">
@@ -91,23 +79,21 @@ const PetDesc = () => {
                   <span className="pl-2">{petDetail?.address}</span>
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw text-lg"></i>
+                  <i className="fa-solid fa-paw text-lg"></i>
                   <span className="pl-2"> {petDetail?.breed}</span>
-                  <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw text-lg"></i>
+                  <i className="fa-solid fa-paw text-lg"></i>
                   <span className="pl-2"> {petDetail?.age} years old</span>
-                  <br />
                 </div>
                 <div>
-                  <i class="fa-solid fa-paw text-lg"></i>
+                  <i className="fa-solid fa-paw text-lg"></i>
                   <span className="pl-2">{petDetail?.gender}</span>
-                  <br />
                 </div>
               </div>
             </div>
           )}
+
           {openDetail && (
             <div className="flex flex-col gap-2 mt-6">
               <div className="flex flex-col gap-2">
@@ -128,7 +114,7 @@ const PetDesc = () => {
                   <p className="flex-1">{petDetail?.gender}</p>
                 </div>
                 <div className="flex ">
-                  <span className="font-semibold flex-1 ">Catogory:</span>
+                  <span className="font-semibold flex-1 ">Category:</span>
                   <p className="flex-1">{petDetail?.category?.category_name}</p>
                 </div>
                 <div className="flex">
@@ -152,12 +138,10 @@ const PetDesc = () => {
               </div>
             </div>
           )}
-          {/* toggle button */}
           <button onClick={handleToggle} className="mt-2 py-1 underline">
             {openDetail ? 'Show Less' : 'Show More...'}
           </button>
           <br />
-          {/* form button */}
           <button
             onClick={toggleMeet}
             // onClick={openModal}
@@ -179,94 +163,74 @@ const PetDesc = () => {
           ))}
       </div>
 
-      {/* Recommend pets */}
+      {/* Modal for MeetForm */}
+      {meet && (
+        <>
+          {/* Background Blur */}
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+          {/* Modal Content */}
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div
+              className="bg-white p-6 rounded-lg w-1/2 relative"
+              style={{
+                maxWidth: '50vw',
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <button
+                onClick={toggleMeet}
+                className="absolute top-2 right-2 text-3xl font-bold text-red-500"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              {isLoggedIn ? (
+                <MeetForm petDetail={petDetail} showMeet={showMeet} />
+              ) : (
+                <NavLink to="/login" className="text-blue-500">
+                  Login to meet
+                </NavLink>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Recommended pets */}
       <div className="w-4/5 m-auto">
         <h1 className="mt-16 text-4xl font-bold">Other pets near you</h1>
         <div className="flex flex-wrap gap-14  justify-evenly py-12">
-          <section>
-            <img
-              src={pet2}
-              alt=""
-              style={{ width: '300px' }}
-              className="rounded-3xl"
-            />
-            <div className="p-5 flex flex-col justify-center gap-2">
-              <h1 className="text-lg font-bold">Lily</h1>
-              <div>
-                <i className="fa-solid fa-location-dot"></i>
-                <span className="pl-2">valencia, spain</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-paw"></i>{' '}
-                <span className="pl-2"> years old</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-user"></i>{' '}
-                <span className="pl-2">
-                  Animal shelter: <span>Animal Paw</span>
-                </span>
-              </div>
-            </div>
-          </section>
-          <section>
-            <img
-              src={pet2}
-              alt=""
-              style={{ width: '300px' }}
-              className="rounded-3xl"
-            />
-            <div className="p-5 flex flex-col justify-center gap-2">
-              <h1 className="text-lg font-bold">Lily</h1>
-              <div>
-                <i className="fa-solid fa-location-dot"></i>
-                <span className="pl-2">valencia, spain</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-paw"></i>{' '}
-                <span className="pl-2"> years old</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-user"></i>{' '}
-                <span className="pl-2">
-                  Animal shelter: <span>Animal Paw</span>
-                </span>
-              </div>
-            </div>
-          </section>
-          <section>
-            <img
-              src={pet2}
-              alt=""
-              style={{ width: '300px' }}
-              className="rounded-3xl"
-            />
-            <div className="p-5 flex flex-col justify-center gap-2">
-              <h1 className="text-lg font-bold">Lily</h1>
-              <div>
-                <i className="fa-solid fa-location-dot"></i>
-                <span className="pl-2">valencia, spain</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-paw"></i>{' '}
-                <span className="pl-2"> years old</span>
-                <br />
-              </div>
-              <div>
-                <i className="fa-solid fa-user"></i>{' '}
-                <span className="pl-2">
-                  Animal shelter: <span>Animal Paw</span>
-                </span>
-              </div>
-            </div>
-          </section>
+          {/* Repeat the pet cards */}
+          {Array(3)
+            .fill()
+            .map((_, index) => (
+              <section key={index}>
+                <img
+                  src={pet2}
+                  alt="pet"
+                  style={{ width: '300px' }}
+                  className="rounded-3xl"
+                />
+                <div className="p-5 flex flex-col justify-center gap-2">
+                  <h1 className="text-lg font-bold">Lily</h1>
+                  <div>
+                    <i className="fa-solid fa-location-dot"></i>
+                    <span className="pl-2">Valencia, Spain</span>
+                  </div>
+                  <div>
+                    <i className="fa-solid fa-paw"></i>
+                    <span className="pl-2">2 years old</span>
+                  </div>
+                  <div>
+                    <i className="fa-solid fa-user"></i>
+                    <span className="pl-2">Animal shelter: Animal Paw</span>
+                  </div>
+                </div>
+              </section>
+            ))}
         </div>
       </div>
-      {/* </div> */}
     </>
   )
 }

@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setLoggedIn, setUserDetail } from "../store/slice/loginStatusSlice";
 import { toast } from "react-toastify";
+import YTTransition from "../assets/transition/uptodown/YTTransition";
 
 const Header = ({ title, color }) => {
   const { isLoggedIn, userDetail } = useSelector((state) => state.loginStatus);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const Header = ({ title, color }) => {
   };
 
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
+  const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
 
   return (
     <nav
@@ -49,45 +52,97 @@ const Header = ({ title, color }) => {
           Pawfect Match
         </Link>
       </div>
-      <ul className="w-3/5 flex justify-evenly items-center">
-        <Link to="/adopt">Adopt a pet</Link>
-        <li onClick={() => scrollToSection("about")} className="cursor-pointer">
+
+      <div className="hidden md:flex w-3/5 justify-evenly items-center">
+        <YTTransition>
+          <Link to="/adopt">Adopt a pet</Link>
+        </YTTransition>
+        <YTTransition delay="0.4" onClick={() => scrollToSection("about")} className="cursor-pointer">
           About Us
-        </li>
-        <li
+        </YTTransition>
+        <YTTransition
+          delay="0.8"
           onClick={() => scrollToSection("contact")}
           className="cursor-pointer"
         >
           Contact
-        </li>
+        </YTTransition>
         {isLoggedIn ? (
           <div className="relative">
             <div
               className="h-10 w-10 grid place-items-center bg-white rounded-full text-slate-700 font-bold cursor-pointer"
               onClick={toggleDropdown}
             >
-              {userDetail?.fullName?.split("")[0]?.toUpperCase()}
+              {userDetail?.email?.split("")[0]?.toUpperCase()}
             </div>
             {showDropdown && (
               <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-48">
                 <ul className="py-2">
-                  <li className="px-4 py-2 hover:bg-slate-100">
+                  <li className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer">
                     <Link to="/profile">Profile</Link>
                   </li>
-                  <li
-                    className="px-4 py-2 hover:bg-slate-100 cursor-pointer"
+                  <div 
+                    delay="1.2"
+                    className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer"
                     onClick={handelLogOut}
                   >
                     Logout
-                  </li>
+                  </div>
                 </ul>
               </div>
             )}
           </div>
         ) : (
-          <Link to="/login">Login</Link>
+          <YTTransition delay="1.2">
+            <Link to="/login">Login</Link>
+          </YTTransition>
         )}
-      </ul>
+      </div>
+
+      <div className="md:hidden flex items-center">
+        <button
+          onClick={toggleMobileMenu}
+          className="text-2xl text-white focus:outline-none"
+        >
+          <i className="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <div
+        className={`md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 transition-all transform ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        onClick={toggleMobileMenu}
+      >
+        <div className="flex justify-end p-5">
+          <button onClick={toggleMobileMenu} className="text-2xl text-white">
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center justify-center text-center">
+          <YTTransition>
+            <Link to="/adopt" className="py-3 text-white text-lg">
+              Adopt a pet
+            </Link>
+          </YTTransition>
+          <YTTransition delay="0.4" className="py-3 text-white text-lg" onClick={() => scrollToSection("about")}>
+            About Us
+          </YTTransition>
+          <YTTransition delay="0.8" className="py-3 text-white text-lg" onClick={() => scrollToSection("contact")}>
+            Contact
+          </YTTransition>
+          {isLoggedIn ? (
+            <div className="py-3 text-white text-lg cursor-pointer" onClick={handelLogOut}>
+              Logout
+            </div>
+          ) : (
+            <Link to="/login" className="py-3 text-white text-lg">
+              Login
+            </Link>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };
