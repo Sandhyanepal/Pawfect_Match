@@ -11,6 +11,8 @@ const PetDesc = () => {
   const [petDetail, setPetDetail] = useState(null)
   const [owner, setOwner] = useState(null)
 
+  const [showModal, setShowModal] = useState(false)
+
   const { isLoggedIn } = useSelector((state) => state.loginStatus)
 
   const [meet, showMeet] = useState(false)
@@ -35,6 +37,17 @@ const PetDesc = () => {
     }
     fetchPetDesc()
   }, [])
+
+  // Open the modal
+  const openModal = () => {
+    setShowModal(true)
+  }
+
+  // Close the modal
+  const closeModal = () => {
+    setShowModal(false)
+  }
+
   const [openDetail, setOpenDetail] = useState(false)
   const handleToggle = () => {
     setOpenDetail((prev) => !prev)
@@ -147,6 +160,7 @@ const PetDesc = () => {
           {/* form button */}
           <button
             onClick={toggleMeet}
+            // onClick={openModal}
             className="bg-slate-500 text-white py-2 px-5 rounded-xl"
           >
             Meet Me
@@ -154,7 +168,12 @@ const PetDesc = () => {
         </div>
         {meet &&
           (isLoggedIn ? (
-            <MeetForm petDetail={petDetail} isLoggedIn={isLoggedIn} />
+            <MeetForm
+              petDetail={petDetail}
+              isLoggedIn={isLoggedIn}
+              showModal={showModal}
+              closeModal={closeModal}
+            />
           ) : (
             <NavLink to="/login"> Login to meet</NavLink>
           ))}

@@ -55,7 +55,7 @@ const MyRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="faq" element={<FAQ />} />
-          <Route path="/meetform" element={<MeetForm />} />
+          {/* <Route path="/meetform" element={<MeetForm />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

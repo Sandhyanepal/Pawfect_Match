@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-const MeetForm = ({ petDetail, isLoggedIn }) => {
+const MeetForm = ({ showModal, closeModal, petDetail, isLoggedIn }) => {
   const navigate = useNavigate()
   console.log(petDetail)
   const [formData, setFormData] = useState({
@@ -121,6 +121,12 @@ const MeetForm = ({ petDetail, isLoggedIn }) => {
       console.error('Error submitting form:', error)
       toast.error('An error occurred. Please try again.')
     }
+  }
+
+  // Close the modal and reset the form
+  const handleClose = () => {
+    // resetForm()
+    closeModal() // Close the modal
   }
 
   return (
@@ -340,13 +346,21 @@ const MeetForm = ({ petDetail, isLoggedIn }) => {
               I agree to the terms and conditions
             </label>
           </div>
-
-          <button
-            type="submit"
-            className="w-full mt-5 bg-gray-700 text-white py-2 rounded-lg"
-          >
-            Submit
-          </button>
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="w-full mt-5 bg-gray-700 text-white py-2 rounded-lg"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>
