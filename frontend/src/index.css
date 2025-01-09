@@ -17,12 +17,7 @@ body {
 }
 
 code {
-<<<<<<< HEAD
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-=======
   font-family: 'Poppins', sans-serif; /* Apply Poppins to code */
->>>>>>> 8cdd6df5b1a1bca8832aba83962331851939c44a
 }
 
 .home-banner {
