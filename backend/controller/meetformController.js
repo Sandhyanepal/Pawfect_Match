@@ -26,6 +26,7 @@ exports.addMeetform = async (req, res) => {
       currentPets: filteredPets, // Assuming currentPets is an array
       termsAndConditions: req.body.termsAndConditions,
       owner: req.body.owner,
+      petId:req.body.petId,
     });
 
     // If meetform creation fails, return an error

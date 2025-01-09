@@ -1,4 +1,4 @@
-const Adoption = require("../model/adoptionmodel")
+const MeetForm = require("../model/meetformmodel")
 const Pet = require("../model/petmodel");
 const User = require("../model/usermodel");
 
@@ -63,7 +63,7 @@ exports.updateAdoptionStatus = async (req, res) => {
     const { status } = req.body;
   
     try {
-      const adoption = await Adoption.findByIdAndUpdate(
+      const adoption = await MeetForm.findByIdAndUpdate(
         id,
         { status },
         { new: true, runValidators: true }
@@ -83,7 +83,9 @@ exports.updateAdoptionStatus = async (req, res) => {
 exports.deleteAdoption = async (req, res) =>{
     const {id} = req.params;
     try{
-        const adoption = await Adoption.findByIdAndDelete(id);
+        const adoption = await MeetForm.findOneAndDelete({petId:id});
+        console.log(id)
+        console.log(adoption)
         if(!adoption){
             return res.status(404).json({ message: "Adoption request not found" });
         }

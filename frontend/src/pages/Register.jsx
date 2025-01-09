@@ -53,7 +53,7 @@ const Register = () => {
       toast.success("Successfully Registered");
       // alert(response.data.message);
     } catch (error) {
-      alert(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurred");
     }
   };
 

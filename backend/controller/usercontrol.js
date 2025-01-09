@@ -79,7 +79,6 @@ const loginUserCtrl = async (req, res) => {
       password: findUser?.password,
       token: generateToken(findUser?._id),
     });
-    // console.log(findUser);
   } else {
     res.status(404).json({ msg: "Invalid Credentails" });
   }

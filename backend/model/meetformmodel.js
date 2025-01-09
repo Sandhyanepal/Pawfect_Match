@@ -7,6 +7,10 @@ const meetformSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  petId:{
+    type: ObjectId,
+    ref: "Pet",
+  },
   fullName: {
     type: String,
     required: true,

@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Footer = () => {
+  const [mail,setMail] = useState('');
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    toast.success('Thank your for subscribing!!');
+    setMail('')
+  }
   return (
     <>
 
@@ -11,7 +18,7 @@ const Footer = () => {
             <i className="fa-solid fa-paw font-bold py-2 mb-1 text-5xl -rotate-45"></i>
           </div>
 
-          <div className="footer-middle flex justify-around md:w-2/5 ">
+          <div className="footer-middle flex justify-around md:w-2/5 max-sm:flex-col">
             <div className="list-none px-10 pt-3 text-start">
               <h2 className="font-bold mb-2">TOPICS</h2>
               <li className="pb-2">
@@ -44,15 +51,17 @@ const Footer = () => {
               Sign up for our newsletter
             </h2>
 
-            <form className="flex pt-3 pl-5 sm:pl-20 md:pl-10  ">
+            <form className="flex pt-3 pl-5 sm:pl-20 md:pl-10  " onSubmit={handleSubmit}>
               <input
                 className="w-full p-2 rounded-md mt-1 text-black "
                 type="email"
                 placeholder="Enter email"
+                value={mail}
+                onChange={(e)=>setMail(e.target.value)}
               />
               <input type="hidden" />
               <input type="hidden" />
-              <button className="p-2 rounded-lg mt-1">Subscribe</button>
+              <button type="submit" className="p-2 rounded-lg mt-1">Subscribe</button>
             </form>
           </div>
         </div>
