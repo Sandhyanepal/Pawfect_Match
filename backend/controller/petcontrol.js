@@ -1,4 +1,3 @@
-//petcontrol.js
 const Pet = require("../model/petmodel");
 const Breed = require("../model/breedmodel");
 
@@ -196,7 +195,7 @@ exports.suggestPets = async (req, res) => {
       vaccination_status: req.query.vaccination_status || null,
     };
 
-    // console.log("User Preferences:", userPreferences);
+    console.log("User Preferences:", userPreferences);
 
     // Fetch breed and category data dynamically from the database
     const breedMapping = await getBreedMapping();
@@ -208,7 +207,7 @@ exports.suggestPets = async (req, res) => {
       breedMapping,
       categoryMapping
     );
-    // console.log("User Vector:", userVector);
+    console.log("User Vector:", userVector);
 
     // Fetch all pets from the database
     const pets = await Pet.find()
