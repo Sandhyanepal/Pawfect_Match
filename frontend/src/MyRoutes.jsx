@@ -42,18 +42,18 @@ const MyRoutes = () => {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem('authToken')
       if (!token) {
-        return;
+        return
       }
       const response = await axios(
         `${import.meta.env.VITE_BACKEND_URL}/get-user-by-id`,
         {
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: 'Bearer ' + token,
           },
         }
-      );
+      )
       if (response.data.success) {
         const user = response.data.data;
         dispatch(setLoggedIn(true));
@@ -67,8 +67,8 @@ const MyRoutes = () => {
           setShowPreferencesModal(true); // Show preferences modal
         }
       } else {
-        dispatch(setLoggedIn(false));
-        dispatch(setUserDetail({}));
+        dispatch(setLoggedIn(false))
+        dispatch(setUserDetail({}))
       }
     };
     fetchUserDetails();
@@ -254,7 +254,7 @@ const MyRoutes = () => {
         </div>
       )}
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default MyRoutes;
+export default MyRoutes

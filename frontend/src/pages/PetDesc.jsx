@@ -9,49 +9,51 @@ import { toast } from "react-toastify";
 import Recommend from "../component/recommend/Recommend";
 
 const PetDesc = () => {
-  const { id } = useParams();
-  const [petDetail, setPetDetail] = useState(null);
-  const [owner, setOwner] = useState(null);
-  const navigate = useNavigate();
+  const { id } = useParams()
+  const [petDetail, setPetDetail] = useState(null)
+  const [owner, setOwner] = useState(null)
+  const navigate = useNavigate()
 
-  const { isLoggedIn } = useSelector((state) => state.loginStatus);
+  const [showModal, setShowModal] = useState(false)
 
-  const [meet, showMeet] = useState(false);
+  const { isLoggedIn } = useSelector((state) => state.loginStatus)
+
+  const [meet, showMeet] = useState(false)
   const toggleMeet = () => {
     if (!isLoggedIn) {
-      toast.error("Please Login to Continue!!");
-      navigate("/login");
+      toast.error('Please Login to Continue!!')
+      navigate('/login')
     }
-    showMeet((prev) => !prev);
-  };
+    showMeet((prev) => !prev)
+  }
 
   useEffect(() => {
     const fetchPetDesc = async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/pets/${id}`
-      );
+      )
       if (response.status === 200) {
-        setPetDetail(response.data.data);
+        setPetDetail(response.data.data)
         const ownerResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner`,
           {
             id: response?.data?.data?.owner,
           }
-        );
-        setOwner(ownerResponse.data.data);
+        )
+        setOwner(ownerResponse.data.data)
       }
-    };
-    fetchPetDesc();
-  }, [id]);
+    }
+    fetchPetDesc()
+  }, [id])
 
-  const [openDetail, setOpenDetail] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false)
   const handleToggle = () => {
-    setOpenDetail((prev) => !prev);
-  };
+    setOpenDetail((prev) => !prev)
+  }
 
   return (
     <>
-      <Header title="Login" color={"text-white"} />
+      <Header title="Login" color={'text-white'} />
       <div className="flex w-4/5 m-auto px-7 py-12 flex-wrap">
         <div className="w-full lg:w-1/2 flex flex-col items-center ">
           <img
@@ -64,7 +66,7 @@ const PetDesc = () => {
         </div>
         <div className="lg:pt-0 pt-5 pl-5 w-full lg:w-1/2 ">
           <h1 className="text-4xl font-semibold">
-            {petDetail?.name?.split("")[0].toUpperCase() +
+            {petDetail?.name?.split('')[0].toUpperCase() +
               petDetail?.name?.slice(1)}
           </h1>
           <h3 className="pt-3 text-2xl font-semibold text-gray-500">About</h3>
@@ -128,6 +130,9 @@ const PetDesc = () => {
                   <span className="font-semibold flex-1 ">
                     Vaccination Status:
                   </span>
+                  <span className="font-semibold flex-1 ">
+                    Vaccination Status:
+                  </span>
                   <p className="flex-1">{petDetail?.vaccination_status} </p>
                 </div>
                 <div className="flex">
@@ -138,16 +143,28 @@ const PetDesc = () => {
             </div>
           )}
           <button onClick={handleToggle} className="mt-2 py-1 underline">
-            {openDetail ? "Show Less" : "Show More..."}
+            {openDetail ? 'Show Less' : 'Show More...'}
           </button>
           <br />
           <button
             onClick={toggleMeet}
+            // onClick={openModal}
             className="bg-slate-500 text-white py-2 px-5 rounded-xl"
           >
             Meet Me
           </button>
         </div>
+        {meet &&
+          (isLoggedIn ? (
+            <MeetForm
+              petDetail={petDetail}
+              isLoggedIn={isLoggedIn}
+              showModal={showModal}
+              closeModal={closeModal}
+            />
+          ) : (
+            <NavLink to="/login"> Login to meet</NavLink>
+          ))}
       </div>
 
       {/* Modal for MeetForm */}
@@ -161,9 +178,9 @@ const PetDesc = () => {
             <div
               className="bg-white p-6 rounded-lg w-1/2 relative"
               style={{
-                maxWidth: "50vw",
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                backdropFilter: "blur(10px)",
+                maxWidth: '50vw',
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(10px)',
               }}
             >
               <button
@@ -187,7 +204,7 @@ const PetDesc = () => {
       {/* Recommended pets */}
       <Recommend />
     </>
-  );
-};
+  )
+}
 
-export default PetDesc;
+export default PetDesc

@@ -17,7 +17,6 @@ root.render(
   <React.StrictMode>
     {/* <App /> */}
     <Provider store={store}>
-      <ToastContainer />
 
       <ShopContextProvider>
         <MyRoutes />
