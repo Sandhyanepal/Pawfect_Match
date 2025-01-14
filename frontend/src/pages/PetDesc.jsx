@@ -6,6 +6,7 @@ import axios from "axios";
 import MeetForm from "./MeetForm";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Recommend from "../component/recommend/Recommend";
 
 const PetDesc = () => {
   const { id } = useParams();
@@ -124,7 +125,9 @@ const PetDesc = () => {
                   <p className="flex-1">{petDetail?.medication}</p>
                 </div>
                 <div className="flex">
-                  <span className="font-semibold flex-1 ">Vaccination Status:</span>
+                  <span className="font-semibold flex-1 ">
+                    Vaccination Status:
+                  </span>
                   <p className="flex-1">{petDetail?.vaccination_status} </p>
                 </div>
                 <div className="flex">
@@ -182,37 +185,7 @@ const PetDesc = () => {
       )}
 
       {/* Recommended pets */}
-      <div className="w-4/5 m-auto">
-        <h1 className="mt-16 text-4xl font-bold">Other pets near you</h1>
-        <div className="flex flex-wrap gap-14  justify-evenly py-12">
-          {/* Repeat the pet cards */}
-          {Array(3).fill().map((_, index) => (
-            <section key={index}>
-              <img
-                src={pet2}
-                alt="pet"
-                style={{ width: "300px" }}
-                className="rounded-3xl"
-              />
-              <div className="p-5 flex flex-col justify-center gap-2">
-                <h1 className="text-lg font-bold">Lily</h1>
-                <div>
-                  <i className="fa-solid fa-location-dot"></i>
-                  <span className="pl-2">Valencia, Spain</span>
-                </div>
-                <div>
-                  <i className="fa-solid fa-paw"></i>
-                  <span className="pl-2">2 years old</span>
-                </div>
-                <div>
-                  <i className="fa-solid fa-user"></i>
-                  <span className="pl-2">Animal shelter: Animal Paw</span>
-                </div>
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
+      <Recommend />
     </>
   );
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const MeetForm = ({ petDetail,showMeet}) => {
+const MeetForm = ({ petDetail, showMeet }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -12,9 +12,9 @@ const MeetForm = ({ petDetail,showMeet}) => {
     occupation: "",
     homeOwnership: "Rent",
     allergies: false,
-    hasPets: false, // Track if the user has pets
+    hasPets: false,
     owner: petDetail?.owner,
-    petId:petDetail?._id,
+    petId: petDetail?._id,
     currentPets: [
       {
         breed: petDetail?.breed,
@@ -72,10 +72,10 @@ const MeetForm = ({ petDetail,showMeet}) => {
       ...formData,
       ...(formData.hasPets
         ? {
-          currentPets: formData.currentPets.filter(
-            (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
-          ),
-        }
+            currentPets: formData.currentPets.filter(
+              (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
+            ),
+          }
         : {}), // Only include non-empty pets
     };
 
@@ -113,7 +113,7 @@ const MeetForm = ({ petDetail,showMeet}) => {
           ],
           termsAndConditions: false,
         });
-        showMeet(false)
+        showMeet(false);
       } else {
         toast.error("Form submission failed!");
       }
@@ -124,12 +124,8 @@ const MeetForm = ({ petDetail,showMeet}) => {
   };
 
   return (
-    <div
-      className="bg-white m-auto"
-    >
-      <h1
-        className="text-3xl font-sans text-center pt-8 font-bold"
-      >
+    <div className="bg-white m-auto">
+      <h1 className="text-3xl font-sans text-center pt-8 font-bold">
         Meet Form
       </h1>
       <form onSubmit={handleSubmit} className="sm:p-10 p-5">

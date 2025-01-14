@@ -10,6 +10,8 @@ const Header = ({ title, color }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const { items } = useSelector(state => state.cart)
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handelLogOut = () => {
@@ -57,7 +59,11 @@ const Header = ({ title, color }) => {
         <YTTransition>
           <Link to="/adopt">Adopt a pet</Link>
         </YTTransition>
-        <YTTransition delay="0.4" onClick={() => scrollToSection("about")} className="cursor-pointer">
+        <YTTransition
+          delay="0.4"
+          onClick={() => scrollToSection("about")}
+          className="cursor-pointer"
+        >
           About Us
         </YTTransition>
         <YTTransition
@@ -67,6 +73,12 @@ const Header = ({ title, color }) => {
         >
           Contact
         </YTTransition>
+        <YTTransition>
+          <Link to="/shops">Shop</Link>
+        </YTTransition>
+        {isLoggedIn && <YTTransition>
+          <Link to="/cart">Cart({items?.length ? items?.length : 0})</Link>
+        </YTTransition>}
         {isLoggedIn ? (
           <div className="relative">
             <div
@@ -81,7 +93,7 @@ const Header = ({ title, color }) => {
                   <li className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer">
                     <Link to="/profile">Profile</Link>
                   </li>
-                  <div 
+                  <div
                     delay="1.2"
                     className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer"
                     onClick={handelLogOut}
@@ -109,9 +121,8 @@ const Header = ({ title, color }) => {
       </div>
 
       <div
-        className={`md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 transition-all transform ${
-          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 transition-all transform ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         onClick={toggleMobileMenu}
       >
         <div className="flex justify-end p-5">
@@ -126,14 +137,25 @@ const Header = ({ title, color }) => {
               Adopt a pet
             </Link>
           </YTTransition>
-          <YTTransition delay="0.4" className="py-3 text-white text-lg" onClick={() => scrollToSection("about")}>
+          <YTTransition
+            delay="0.4"
+            className="py-3 text-white text-lg"
+            onClick={() => scrollToSection("about")}
+          >
             About Us
           </YTTransition>
-          <YTTransition delay="0.8" className="py-3 text-white text-lg" onClick={() => scrollToSection("contact")}>
+          <YTTransition
+            delay="0.8"
+            className="py-3 text-white text-lg"
+            onClick={() => scrollToSection("contact")}
+          >
             Contact
           </YTTransition>
           {isLoggedIn ? (
-            <div className="py-3 text-white text-lg cursor-pointer" onClick={handelLogOut}>
+            <div
+              className="py-3 text-white text-lg cursor-pointer"
+              onClick={handelLogOut}
+            >
               Logout
             </div>
           ) : (

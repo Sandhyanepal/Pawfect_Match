@@ -71,6 +71,13 @@ const loginUserCtrl = async (req, res) => {
   const { email, password } = req.body;
   const findUser = await User.findOne({ email });
   if (findUser && (await findUser.isPasswordMatched(password))) {
+    const hasPreferences =
+      findUser.preferences?.age &&
+      findUser.preferences?.gender &&
+      findUser.preferences?.breed &&
+      findUser.preferences?.category;
+    const needsPreferences = !hasPreferences;
+
     return res.status(200).send({
       _id: findUser?._id,
       firstname: findUser?.firstname,
@@ -78,6 +85,7 @@ const loginUserCtrl = async (req, res) => {
       email: findUser?.email,
       password: findUser?.password,
       token: generateToken(findUser?._id),
+      needsPreferences: needsPreferences,
     });
   } else {
     res.status(404).json({ msg: "Invalid Credentails" });
@@ -228,6 +236,27 @@ const deleteOrganization = async (req, res) => {
 //     res.send(err);
 //   }
 // };
+
+const updatePreferences = async (req, res) => {
+  const { userId, preferences } = req.body;
+
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user preferences
+    user.preferences = preferences;
+    await user.save();
+
+    res.status(200).json({ message: "Preferences updated successfully" });
+  } catch (error) {
+    console.error("Error updating preferences:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   register,
   loginUserCtrl,
@@ -237,4 +266,5 @@ module.exports = {
   deleteIndividual,
   getAllOrganizations,
   deleteOrganization,
+  updatePreferences,
 };
