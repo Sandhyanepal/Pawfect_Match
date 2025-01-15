@@ -195,7 +195,7 @@ exports.suggestPets = async (req, res) => {
       vaccination_status: req.query.vaccination_status || null,
     };
 
-    console.log("User Preferences:", userPreferences);
+   
 
     // Fetch breed and category data dynamically from the database
     const breedMapping = await getBreedMapping();
@@ -207,7 +207,7 @@ exports.suggestPets = async (req, res) => {
       breedMapping,
       categoryMapping
     );
-    console.log("User Vector:", userVector);
+
 
     // Fetch all pets from the database
     const pets = await Pet.find()
@@ -231,20 +231,16 @@ exports.suggestPets = async (req, res) => {
           categoryMapping
         );
 
-        // Check the petVector and log it
-        console.log(`Pet ${pet.name} Vector:`, petVector);
+
 
         const similarity = calculateCosineSimilarity(userVector, petVector);
 
-        console.log(
-          `Comparing User Vector with Pet ${pet.name}: Similarity = ${similarity}`
-        );
+
 
         return { pet, similarity };
       })
       .filter((result) => result !== null); // Filter out invalid results
 
-    console.log("Results before sorting:", results);
 
     // Sort pets by similarity in descending order
     results.sort((a, b) => b.similarity - a.similarity);

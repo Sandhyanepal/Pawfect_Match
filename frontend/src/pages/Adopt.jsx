@@ -1,60 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import Card from '../component/Card'
-import Header from '../component/Header'
-import Loader from '../component/Loader'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Card from "../component/Card";
+import Header from "../component/Header";
+import Loader from "../component/Loader";
 
 const Adopt = () => {
-  const [pets, setPets] = useState([])
-  const [filterProduct, setFilterProduct] = useState([])
-  const [search, setSearch] = useState('')
-  const [keyword, setKeyword] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All Category')
-  const [showCategories, setShowCategories] = useState(false)
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [categories, setCategories] = useState([])
+  const [pets, setPets] = useState([]);
+  const [filterProduct, setFilterProduct] = useState([]);
+  const [search, setSearch] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Category");
+  const [showCategories, setShowCategories] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchPets = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/getallpets`
-        )
+        );
         if (response?.data?.success) {
-          setPets(response?.data?.data)
+          setPets(response?.data?.data);
         }
       } catch (error) {
-        console.error('Error fetching pets:', error)
+        console.error("Error fetching pets:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/getallcategory`
-        )
+        );
         if (response.status === 200) {
-          setCategories(response?.data || [])
+          setCategories(response?.data || []);
         }
       } catch (error) {
-        console.error('Error fetching categories:', error)
+        console.error("Error fetching categories:", error);
       }
-    }
+    };
 
-    fetchPets()
-    fetchCategories()
-  }, [])
+    fetchPets();
+    fetchCategories();
+  }, []);
 
   if (loading) {
-    return <Loader />
+    return <Loader />;
   }
 
   const handleSearch = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     let filteredPets = pets.filter(
       (pet) =>
@@ -62,53 +62,51 @@ const Adopt = () => {
         pet.breed.toLowerCase().includes(search.toLowerCase()) ||
         pet?.description?.toLowerCase().includes(search.toLowerCase()) ||
         pet.gender.toLowerCase().includes(search.toLowerCase())
-    )
+    );
 
-    if (selectedCategory && selectedCategory !== 'All Category') {
+    if (selectedCategory && selectedCategory !== "All Category") {
       filteredPets = filteredPets.filter(
         (pet) => pet.category.category_name === selectedCategory
-      )
+      );
     }
 
-    setSearch('')
+    setSearch("");
     if (filteredPets.length > 0) {
-      setError(false)
-      setFilterProduct(filteredPets)
+      setError(false);
+      setFilterProduct(filteredPets);
     } else {
-      setError(true)
+      setError(true);
     }
-  }
+  };
 
   const handleCategoryToggle = () => {
-    setShowCategories((prev) => !prev)
-  }
+    setShowCategories((prev) => !prev);
+  };
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category)
-    setShowCategories(false)
+    setSelectedCategory(category);
+    setShowCategories(false); 
 
-    if (category === 'All Category') {
-      setFilterProduct(pets)
-      return
+    if (category === "All Category") {
+      setFilterProduct(pets); 
+      return;
     }
 
-    const filteredPets = pets.filter(
-      (pet) => pet.category.category_name === category
-    )
-    setFilterProduct(filteredPets)
-  }
+    const filteredPets = pets.filter((pet) => pet.category.category_name === category);
+    setFilterProduct(filteredPets);
+  };
 
   const handleChange = (e) => {
-    const { value } = e.target
-    setSearch(value)
-    setKeyword(value)
-  }
+    const { value } = e.target;
+    setSearch(value);
+    setKeyword(value);
+  };
 
-  const allCategories = [{ category_name: 'All Category' }, ...categories]
+  const allCategories = [{ category_name: "All Category" }, ...categories];
 
   return (
     <>
-      <Header title="Adopt" color={'text-white'} />
+      <Header title="Adopt" color={"text-white"} />
 
       <div className="w-4/5 mx-auto my-10">
         <h1 className="text-3xl font-semibold my-10">Find 🙲 Adopt</h1>
@@ -154,9 +152,7 @@ const Adopt = () => {
 
         {/* {filterProduct && <p className="mt-2">Search Results for: {keyword}</p>} */}
         {error ? (
-          <p className="text-red-500 text-center text-2xl mt-10">
-            No pets found
-          </p>
+          <p className="text-red-500 text-center text-2xl mt-10">No pets found</p>
         ) : filterProduct?.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filterProduct.map((pet) => (
@@ -174,7 +170,7 @@ const Adopt = () => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Adopt
+export default Adopt;
