@@ -32,6 +32,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true, // Determines if the product is active or deactivated
     },
+    type:{
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

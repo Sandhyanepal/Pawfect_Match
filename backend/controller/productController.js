@@ -4,7 +4,7 @@ const Category = require("../model/categorymodel");
 // Add a new product
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category } = req.body;
+    const { name, description, price, stock, category,type } = req.body;
     // Validate if the category exists
 
     const existingCategory = await Category.findById(category);
@@ -22,6 +22,7 @@ const addProduct = async (req, res) => {
       stock,
       category,
       image: req.file?.path.replace(/\\/g, "/"),
+      type,
     });
 
     const savedProduct = await newProduct.save();
