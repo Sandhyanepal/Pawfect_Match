@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import {useSelector} from 'react-redux'
 
 const MeetForm = ({ petDetail, showMeet }) => {
+  const {userDetail} = useSelector(state=>state.loginStatus);
   const [formData, setFormData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -25,6 +27,8 @@ const MeetForm = ({ petDetail, showMeet }) => {
         image: petDetail?.image,
       },
     ],
+    userId:userDetail?._id,
+    status: "pennding",
     termsAndConditions: false,
   });
 
@@ -78,6 +82,7 @@ const MeetForm = ({ petDetail, showMeet }) => {
           }
         : {}), // Only include non-empty pets
     };
+    console.log(formDataToSend)
 
     try {
       const response = await fetch("http://localhost:5002/submitform", {
@@ -87,7 +92,6 @@ const MeetForm = ({ petDetail, showMeet }) => {
         },
         body: JSON.stringify(formDataToSend),
       });
-
       if (response.ok) {
         const data = await response.json();
         toast.success("Form submitted successfully!");
@@ -118,8 +122,8 @@ const MeetForm = ({ petDetail, showMeet }) => {
         toast.error("Form submission failed!");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("An error occurred. Please try again.");
+      console.log(error.response);
+      // toast.error("An error occurred. Please try again.");
     }
   };
 

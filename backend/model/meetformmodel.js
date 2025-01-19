@@ -78,6 +78,15 @@ const meetformSchema = new mongoose.Schema({
       },
     },
   ],
+  status:
+  {
+    type: String
+  },
+  userId:{
+    type: ObjectId,
+    ref:'user',
+    required:true,
+  },
   termsAndConditions: {
     type: Boolean,
     required: true,

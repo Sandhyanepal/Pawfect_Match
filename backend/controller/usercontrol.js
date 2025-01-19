@@ -257,6 +257,143 @@ const updatePreferences = async (req, res) => {
   }
 };
 
+// const sendAdoptionDetails = async (req, res) => {
+//   try {
+//     const { user, pet } = req.body;
+
+  
+//    const emailContent = `
+//        <h1>Adoption Request Details</h1>
+//        <h2>User Information:</h2>
+//        <p><strong>Full Name:</strong> ${user.fullName}</p>
+//       <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
+//        <p><strong>Address:</strong> ${user.address}</p>
+//        <p><strong>Phone Number:</strong> ${user.phoneNumber}</p>
+//       <p><strong>Email:</strong> ${user.email}</p>
+//       <p><strong>Occupation:</strong> ${user.occupation}</p>
+//        <p><strong>Home Ownership:</strong> ${user.homeOwnership}</p>
+//        <p><strong>Allergies:</strong> ${user.allergies}</p>
+
+//        <h2>Pet Information:</h2>
+//        <p><strong>Name:</strong> ${pet.name}</p>
+//        <p><strong>Age:</strong> ${pet.age}</p>
+//        <p><strong>Gender:</strong> ${pet.gender}</p>
+//        <p><strong>Breed:</strong> ${pet.breed}</p>
+//        <p><strong>Category:</strong> ${pet.category}</p>
+//        <p><strong>Address:</strong> ${pet.address}</p>
+//        <p><strong>Vaccination Status:</strong> ${pet.vaccination_status}</p>
+//        <p><strong>Health Issues:</strong> ${pet.health_issue}</p>
+//        <p><strong>Medication:</strong> ${pet.medication}</p>
+//        <p><strong>Description:</strong> ${pet.description}</p>
+//      `;
+
+
+    
+//     sendEmail({
+//             from: "noreply@something.com",
+//             to: req.body.email,
+//             subject: "Adoption request",
+//             text: "Adoption request",
+//             html: emailContent,
+//         })
+
+//     res.status(200).json({ success: true, message: "Email sent successfully!" });
+//   } catch (error) {
+//     console.error("Error sending email:", error);
+//     res.status(500).json({ success: false, message: "Failed to send email", error: error.message });
+//   }
+// };
+
+const sendAdoptionDetails = async (req, res) => {
+  try {
+    const { fullName, dateOfBirth, address, phoneNumber, email, occupation, 
+            homeOwnership, allergies, hasPets, currentPets } = req.body;
+
+    // Get pet details from your database
+    const pet = currentPets[0]; 
+
+    // Construct email content
+    const emailContent = `
+      <h1>New Adoption Request</h1>
+      <h2>Applicant Information:</h2>
+      <p><strong>Full Name:</strong> ${fullName}</p>
+      <p><strong>Date of Birth:</strong> ${dateOfBirth}</p>
+      <p><strong>Address:</strong> ${address}</p>
+      <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Occupation:</strong> ${occupation}</p>
+      <p><strong>Home Ownership:</strong> ${homeOwnership}</p>
+      <p><strong>Has Allergies:</strong> ${allergies ? 'Yes' : 'No'}</p>
+      
+      <h2>Pet Information:</h2>
+      <p><strong>Name:</strong> ${pet.name}</p>
+      <p><strong>Breed:</strong> ${pet.breed}</p>
+      <p><strong>Age:</strong> ${pet.age}</p>
+      <p><strong>Gender:</strong> ${pet.gender}</p>
+
+      ${hasPets ? `
+        <h2>Current Pets:</h2>
+        ${currentPets.slice(1).map(pet => `
+          <div>
+            <p><strong>Species:</strong> ${pet.species}</p>
+            <p><strong>Breed:</strong> ${pet.breed}</p>
+            <p><strong>Age:</strong> ${pet.age}</p>
+            <p><strong>Gender:</strong> ${pet.gender}</p>
+            <p><strong>Vaccinated:</strong> ${pet.vaccinated ? 'Yes' : 'No'}</p>
+          </div>
+        `).join('')}
+      ` : ''}
+    `;
+
+    // Find owner's email from the database
+    // Assuming you have a User model and owner contains the owner's ID
+    const User = require('../model').User;
+    // const petOwner = await User.findById(owner);
+    
+    // if (!petOwner) {
+    //   return res.status(404).json({ 
+    //     success: false, 
+    //     message: "Pet owner not found" 
+    //   });
+    // }
+
+    // Send email to pet owner
+    await transporter.sendMail({
+      from: 'noreply@pawfectmatch.com',
+      to: email,
+      subject: "New Pet Adoption Request",
+      html: emailContent,
+    });
+
+    // Send confirmation email to applicant
+    await transporter.sendMail({
+      from: 'noreply@pawfectmatch.com',
+      to: email,
+      subject: "Your Pet Adoption Application Received",
+      html: `
+        <h1>Thank you for your adoption application!</h1>
+        <p>We have received your application and forwarded it to the pet owner. They will contact you soon.</p>
+        <p>Pet details:</p>
+        <p>Name: ${pet.name}</p>
+        <p>Breed: ${pet.breed}</p>
+      `
+    });
+    console.log('Emails sent successfully to Mailtrap');
+    
+    res.status(200).json({ 
+      success: true, 
+      message: "Adoption request sent successfully!" 
+    });
+  } catch (error) {
+    console.error("Error sending adoption request:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Failed to send adoption request", 
+      error: error.message 
+    });
+  }
+};
+
 module.exports = {
   register,
   loginUserCtrl,
@@ -267,4 +404,5 @@ module.exports = {
   getAllOrganizations,
   deleteOrganization,
   updatePreferences,
+  sendAdoptionDetails
 };
