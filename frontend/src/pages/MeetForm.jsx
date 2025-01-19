@@ -124,10 +124,10 @@ const MeetForm = ({ petDetail, showMeet }) => {
   }
 
   // Close the modal and reset the form
-  const handleClose = () => {
-    // resetForm()
-    closeModal() // Close the modal
-  }
+  // const handleClose = () => {
+  //   // resetForm()
+  //   closeModal() // Close the modal
+  // }
 
   return (
     <div className="bg-white m-auto">

@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Footer = () => {
-  const [mail,setMail] = useState('');
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-    toast.success('Thank your for subscribing!!');
+  const [mail, setMail] = useState('')
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    toast.success('Thank your for subscribing!!')
     setMail('')
   }
   return (
     <>
-
-      <footer className="w-full text-white bg-gray-700 absolute pt-5">
+      <footer
+        className="w-full absolute pt-5"
+        style={{ backgroundColor: '#d6ddd6' }}
+      >
         <div className="footer w-11/12 m-auto flex flex-col md:flex-row  pt-3 justify-between">
           <div className="md:w-1/5 text-center pt-2">
             <i className="fa-solid fa-paw font-bold py-2 mb-1 text-5xl -rotate-45"></i>
@@ -51,27 +53,36 @@ const Footer = () => {
               Sign up for our newsletter
             </h2>
 
-            <form className="flex pt-3 pl-5 sm:pl-20 md:pl-10  " onSubmit={handleSubmit}>
+            <form
+              className="flex pt-3 pl-5 sm:pl-20 md:pl-10  gap-1"
+              onSubmit={handleSubmit}
+            >
               <input
                 className="w-full p-2 rounded-md mt-1 text-black "
                 type="email"
                 placeholder="Enter email"
                 value={mail}
-                onChange={(e)=>setMail(e.target.value)}
+                onChange={(e) => setMail(e.target.value)}
               />
               <input type="hidden" />
               <input type="hidden" />
-              <button type="submit" className="p-2 rounded-lg mt-1">Subscribe</button>
+              <button
+                type="submit"
+                className="p-2 rounded-lg mt-1 shadow-md"
+                style={{ backgroundColor: '#f9f8f6' }}
+              >
+                Subscribe
+              </button>
             </form>
           </div>
         </div>
-        <hr className="w-11/12 m-auto mt-6" />
+        <hr className="w-11/12 m-auto mt-6 border-black" />
         <div className="cont py-6 text-sm md:text-lg w-11/12 mx-auto text-center">
           &copy; 2024 Copyright - Pawfect Match
         </div>
       </footer>
     </>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

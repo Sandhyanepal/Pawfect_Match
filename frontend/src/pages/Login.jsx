@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import Header from '../component/Header'
+// import Header from '../component/Header'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn, setUserDetail } from '../store/slice/loginStatusSlice'
@@ -28,13 +28,12 @@ const Login = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/login`,
-        data
-      )
+      const response = await axios.post('http://localhost:5002/login', data)
+      // navigate('/')
       if (response.status === 200) {
-        const { token } = response.data
-        localStorage.setItem('authToken', token)
+        // const { token } = response.data
+        // localStorage.setItem('authToken', token)
+        localStorage.setItem('token', response.data.token)
         toast.success('Login Successful')
         navigate('/')
         dispatch(setUserDetail(response.data))
@@ -103,7 +102,7 @@ const Login = () => {
           </form>
           {message && <p className="text-center text-red-500">{message}</p>}
           <h1 className="italic text-center text-gray-500">
-            <Link to="/reset-password">Forgot Password? Click to reset</Link>
+            <Link to="/forget-password">Forgot Password? Click to reset</Link>
           </h1>
           <p className="pl-5 sm:pl-10 py-5">
             Don't have an account?{' '}

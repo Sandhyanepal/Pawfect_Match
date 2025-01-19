@@ -1,237 +1,246 @@
-import React, { useEffect } from "react";
-import Header from "../component/Header";
-import banner from "../images/banner3.png";
-import people from "../images/people with dog.jpg";
-import dnc from "../images/cat_and_dog_3.2.png";
-import About from "../component/About";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react'
+import Header from '../component/Header'
+import banner from '../images/banner3.png'
+import people from '../images/people1.png'
+import dnc from '../images/cat_and_dog_3.2.png'
 import YTranstition from '../assets/transition/downtoup/YTransition'
 import Scale from '../assets/transition/scale/Scale'
-import XTransition from "../assets/transition/leftright/XTransition";
-import YTTransition from "../assets/transition/uptodown/YTTransition";
+import XTransition from '../assets/transition/leftright/XTransition'
+// import YTTransition from '../assets/transition/uptodown/YTTransition'
+import { Swiper, SwiperSlide } from 'swiper/react'
+// import { Autoplay } from 'swiper'
+import 'swiper/swiper-bundle.css' // Correct import for Swiper styles
+import { PiFlowerTulipThin } from 'react-icons/pi'
+import { HiOutlineHome } from 'react-icons/hi2'
+import pets from '../images/pets.jpg'
 
 const Home = () => {
+  const partnerOrganizations = [
+    { id: 1, name: 'Organization 1' },
+    { id: 2, name: 'Organization 2' },
+    { id: 3, name: 'Organization 3' },
+    { id: 4, name: 'Organization 4' },
+  ]
+
   return (
     <div>
       <Header title="home" />
 
       {/* Banner */}
-      <div
-        className="home-banner w-full sm:flex pb-8"
-      // style={{ backgroundColor: "#A39073" }}
+      <section
+        className="w-full bg-white py-4"
+        style={{ backgroundColor: '#f9f8f6' }}
       >
-        <Scale className="w-full md:w-1/2">
-          <img src={banner} alt="" className="w-4/5 m-auto" />
-          {/* <img src={dnc} alt="" className="w-full " /> */}
-        </Scale>
-        <div className="w-full md:w-1/2 md:flex flex-col justify-center">
-          <YTranstition
-            className="banner-text w-3/5 mx-auto sm:mx-0 md:text-4xl text-3xl font-semibold py-5 md:text-left text-center"
-          >
-            You can't buy love, but you can rescue it!
-          </YTranstition>
-          <YTranstition delay="0.4" className="flex justify-center sm:flex sm:flex-col">
-            <Link
-              to="/adopt"
-              className="w-max text-white px-4 py-2 rounded-3xl text-lg bg-gray-700 "
+        <div className="w-11/12 mx-auto px-6 md:px-12 lg:px-16 flex flex-col sm:flex-row items-center gap-5">
+          {/* Left Image Section */}
+          <div className="w-full md:w-1/2 flex justify-center">
+            <img
+              src={banner}
+              alt="Smiling woman holding baguettes"
+              className=" w-4/5 sm:w-4/5 lg:w-full object-cover transform hover:scale-105 transition-transform duration-500 "
+            />
+          </div>
+
+          {/* Right Text Section */}
+          <div className="w-full md:w-1/2 mt-10 md:mt-0  md:text-left">
+            <h1 className="text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 leading-tight">
+              I help women in their later years reclaim their bodies, minds, and
+              lives.
+            </h1>
+            <p className="text-sm lg:text-lg text-gray-600 mt-2 leading-relaxed">
+              Health Coach, Wife, and Mom of Two
+              <br />
+              Passionate about empowering people to give up dieting, nourish
+              their bodies, and find balance with food and fitness for life!
+            </p>
+            <button
+              className="mt-2 px-4 py-2 text-sm rounded-full shadow-md"
+              style={{ backgroundColor: '#d6ddd6' }}
             >
-              Adopt a pet
-            </Link>
-          </YTranstition>
-        </div>
-      </div>
-
-      {/* Filter space */}
-      <div className="sm:w-11/12 sm:flex flex-wrap justify-evenly my-12 w-4/5 m-auto">
-        <div className="flex gap-5 justify-center">
-          <div className="p-2 flex flex-col items-center justify-center">
-            <i className="fa-solid fa-dog text-xl"></i>
-            <span>dog</span>
-          </div>
-          <div className="p-2 flex flex-col items-center justify-center">
-            <i className="fa-solid fa-cat text-xl"></i>
-            <span className="">cat</span>
+              Learn More
+            </button>
           </div>
         </div>
+      </section>
 
-        <div className="p-2 flex flex-col">
-          <span className="pr-2 pb-1">City</span>
-          <input type="text" className="border-2 rounded-md" />
-        </div>
+      {/* carousel */}
+      <div className="py-5" style={{ backgroundColor: '#d6ddd6' }}>
+        <h2 className="text-center text-3xl font-semibold">
+          Our Partner Organizations
+        </h2>
 
-        <div className="p-2 flex flex-col">
-          <span className="pr-2 pb-1">Size</span>
-          <input type="text" className="border-2 rounded-md" />
-        </div>
-
-        <div className="p-2 flex flex-col">
-          <span className="pr-2 pb-1">Age</span>
-          <input type="text" className="border-2 rounded-md" />
-        </div>
-
-        <div className="flex flex-col justify-center mt-3">
-          <button className="bg-gray-700 rounded-3xl text-white py-2 px-5">
-            Find a friend
-          </button>
-        </div>
+        <Swiper
+          // modules={[Autoplay]}
+          spaceBetween={5}
+          slidesPerView={3}
+          loop={true}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          // className="mySwiper"
+        >
+          {partnerOrganizations.map((org) => (
+            <SwiperSlide
+              key={org.id}
+              className="flex justify-center items-center p-4"
+            >
+              <p className="text-center font-medium">{org.name}</p>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-
-      {/* for Register */}
-      <div className="bg-gray-500 flex w-full my-7 " >
-        <div className="w-4/5 m-auto flex max-sm:flex-col max-sm:gap-10 gap-3 justify-between items-center py-10">
-          <div className="flex flex-col text-white">
-            <XTransition  className="text-3xl font-bold">
-              Register for a Pawfect Match Account
-            </XTransition>
-            <XTransition delay="0.4" className="text-lg pt-1">
-              Create your free account and get ready to connect safely with
-              thousands of adopters.
-            </XTransition>
-          </div>
-          <YTTransition>
-            <Link to='/register' className="text-xl font-medium border-2 p-4 rounded-md px-12 bg-orange-100 border-none">
-              Register
-            </Link>
-          </YTTransition>
-        </div>
-      </div>
-
-      {/* About Us */}
-      <About />
 
       {/* How Adoption works */}
-      <div className=" flex w-full flex-wrap pb-14">
-        {/* <div className="w-full "> */}
-        <Scale className="w-full sm:w-1/3 object-cover pl-36" >
-          <img
-            src={people}
-            alt=""
-          />
-        </Scale>
-        {/* </div> */}
-        <div
-          className="w-full sm:w-2/3 p-20"
-        // style={{ boxShadow: "0 10px 6px -6px #777" }}
-        >
-          <YTranstition className="text-4xl font-bold" >
-            How adoption works
-          </YTranstition>
-          <ul className="pt-9 text-xl text-gray-500">
-            <YTranstition delay="0.2" className="flex items-center pb-3">
-              <i className="fa-solid fa-circle-check"></i>
-              <li className="pl-2">Find a pet you wish to take home</li>
+      <section style={{ backgroundColor: '#f9f8f6' }}>
+        <div className=" flex w-4/5 flex-wrap pl-32 mx-auto">
+          {/* <div className="w-full "> */}
+          <Scale className="w-full sm:w-1/3 object-cover">
+            <img src={people} alt="" className="rounded-sm" />
+          </Scale>
+          {/* </div> */}
+          <div
+            className="w-full sm:w-2/3 pl-10 pt-16"
+            // style={{ boxShadow: "0 10px 6px -6px #777" }}
+          >
+            <YTranstition className="text-4xl font-bold">
+              How adoption works
             </YTranstition>
-            <YTranstition delay="0.4" className="flex items-center pb-3">
-              <i className="fa-regular fa-circle-check"></i>
-              <li className="pl-2">
-                Go through adoption requirement and checklist
-              </li>
-            </YTranstition>
-            <YTranstition delay="0.6" className="flex items-center pb-3">
-              <i className="fa-regular fa-circle-check"></i>
-              <li className="pl-2">Schedule a visit with shelter</li>
-            </YTranstition>
-            <YTranstition delay="0.8" className="flex items-center pb-3">
-              <i className="fa-regular fa-circle-check"></i>
-              <li className="pl-2">Meet the pet and complete procedure</li>
-            </YTranstition>
-          </ul>
-          <YTranstition delay="1" className="mt-9 w-max cursor-pointer bg-gray-700 text-white py-2 px-5 rounded-3xl">
-            Pet adoption FAQs
-          </YTranstition>
+            <ul className="pt-9 text-xl text-gray-500">
+              <YTranstition delay="0.2" className="flex items-center pb-3">
+                <i className="fa-solid fa-circle-check"></i>
+                <li className="pl-2">Find a pet you wish to take home</li>
+              </YTranstition>
+              <YTranstition delay="0.4" className="flex items-center pb-3">
+                <i className="fa-regular fa-circle-check"></i>
+                <li className="pl-2">
+                  Go through adoption requirement and checklist
+                </li>
+              </YTranstition>
+              <YTranstition delay="0.6" className="flex items-center pb-3">
+                <i className="fa-regular fa-circle-check"></i>
+                <li className="pl-2">Schedule a visit with shelter</li>
+              </YTranstition>
+              <YTranstition delay="0.8" className="flex items-center pb-3">
+                <i className="fa-regular fa-circle-check"></i>
+                <li className="pl-2">Meet the pet and complete procedure</li>
+              </YTranstition>
+            </ul>
+            {/* <YTranstition
+              delay="1"
+              className="mt-5 w-max cursor-pointer bg-gray-700 text-white py-2 px-5 rounded-3xl"
+            > */}
+            <button
+              className="mt-5 w-max cursor-pointer py-2 px-5 rounded-3xl shadow-md"
+              style={{ backgroundColor: '#d6ddd6' }}
+            >
+              Pet adoption FAQs
+            </button>
+            {/* </YTranstition> */}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* card */}
+      <section
+        className="w-full pt-5 pb-9"
+        style={{ backgroundColor: '#d6ddd6' }}
+      >
+        <h1 className="text-3xl text-center py-5 font-semi-bold">
+          Love Helping Pets?
+        </h1>
+        <div className="flex w-4/5 mx-auto gap-5">
+          <div
+            className="w-1/2 text-center bg-white p-3"
+            // style={{ border: 'solid black ' }}
+          >
+            <div className="px-3 py-7" style={{ border: 'solid #d6ddd6' }}>
+              <div className="flex justify-center">
+                <PiFlowerTulipThin className="text-5xl my-5 ml-5" />
+              </div>
+              <h1 className="text-xl pb-3 font-medium">Become a volunteer</h1>
+              <p className="p-3">
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Incidunt earum qui non iste corrupti dignissimos, quasi
+                consequuntur, repellendus, porro veritatis animi doloremque
+                perspiciatis enim dolorem.
+              </p>
+              <button
+                className=" py-2 px-4 my-3 rounded-3xl shadow-md"
+                style={{ backgroundColor: '#d6ddd6' }}
+              >
+                Volunteer
+              </button>
+            </div>
+          </div>
+          <div
+            className="w-1/2 text-center bg-white p-3"
+            // style={{ border: 'solid black ' }}
+          >
+            <div className="px-3 py-7" style={{ border: 'solid #d6ddd6' }}>
+              <div className="flex justify-center">
+                <HiOutlineHome className="text-5xl text-center my-5" />
+              </div>
+              <h1 className="text-xl pb-3 font-medium">
+                Become a foster parent
+              </h1>
+              <p className="p-3">
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Incidunt earum qui non iste corrupti dignissimos, quasi
+                consequuntur, repellendus, porro veritatis animi doloremque
+                perspiciatis enim dolorem.
+              </p>
+              <button
+                className=" py-2 px-7 my-3 rounded-3xl shadow-md"
+                style={{ backgroundColor: '#d6ddd6' }}
+              >
+                Foster
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Adopt Today */}
-      <div className="home-adoption w-full pt-16" style={{}}>
-        <XTransition
-          className="text-3xl pt-9 font-semibold w-4/5 mx-auto"
-        >
-          Adopt today
-        </XTransition>
-        <div className="w-4/5 md:flex  m-auto">
-          <div className="w-full md:w-1/2">
-            <XTransition delay="0.3" className="pt-7">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Accusantium nostrum aliquam doloribus reiciendis minima, possimus
-              repellat architecto nesciunt odio ullam cumque ea labore facere?
-              Similique.
+      <div
+        className="home-adoption w-full py-5"
+        style={{ backgroundColor: '#f9f8f6' }}
+      >
+        <div className="w-4/5 md:flex gap-5 m-auto">
+          <div className="w-full md:w-1/2 pt-5">
+            <XTransition className="text-3xl font-semibold py-5">
+              Adopt today
             </XTransition>
-            <XTransition delay="0.6" className="w-max bg-gray-700 text-white mt-7 rounded-3xl px-5 py-2">
-              Find a Friend
+            <XTransition delay="0.3" className=" text-justify">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit nam
+              voluptatem architecto laudantium cum molestiae fugit ullam
+              provident nobis. Enim ratione quas itaque officiis minima
+              veritatis ad autem, voluptate odio maxime. Porro alias odit
+              officia facere sapiente illum, cumque eos praesentium corrupti
+              velit delectus tempore molestias rem dolores ipsam, earum quasi
+              architecto quo fuga. Rem illum repudiandae nihil deleniti ullam!
+            </XTransition>
+            <XTransition delay="0.6" className="w-max mt-7 rounded-3xl py-2">
+              <button
+                className=" w-max cursor-pointer py-2 px-5 rounded-3xl shadow-md"
+                style={{ backgroundColor: '#d6ddd6' }}
+              >
+                Find a Friend
+              </button>
             </XTransition>
           </div>
-          <Scale className="w-full md:w-1/2">
-            <img src={dnc} alt="" className="w-full " />
+          <Scale className="w-full md:w-1/2 pl-5">
+            <img src={pets} alt="" className=" w-3/4" />
           </Scale>
         </div>
       </div>
-
-      {/* Next Contact */}
-      <div id="contact" className="w-3/4 mx-auto my-16">
-        <div className="border relative flex flex-col ">
-          <section className="mt-16">
-            <h1
-              className="py-2 pl-5 bg-gray-300 text-3xl font-bold"
-            >
-              CONTACT
-            </h1>
-            <form action="" className="flex flex-col w-2/5 pl-7 py-10 max-sm:w-full">
-              <input
-                type="text"
-                placeholder="Name"
-                className="border-b-2 mb-5 pl-2"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className="border-b-2 mb-5 pl-2"
-              />
-              <input
-                type="text"
-                placeholder="Message"
-                className="border-b-2 pl-2"
-              />
-              <button className="mt-7 bg-gray-700 text-white py-2 rounded-3xl">
-                Send
-              </button>
-            </form>
-          </section>
-          <div className=" w-2/5 max-sm:w-full bg-gray-700 text-white absolute top-0 right-16 max-sm:static">
-            <h2
-              className=" pl-7 font-bold text-xl"
-              style={{ paddingTop: "75px" }}
-            >
-              INFO
-            </h2>
-            <div className="flex items-center gap-2 pl-5 pt-7">
-              <i className="fa-regular fa-envelope"></i>
-              <p className="max-sm:text-sm">info@pawfectmatch.com </p>
-            </div>
-            <div className="flex items-center gap-3 pl-5 pt-7">
-              <i className="fa-solid fa-phone"></i>
-              <p>+22 45 89 235 </p>
-            </div>
-            <div className="flex items-center gap-3 pl-5 pt-7">
-              <i className="fa-regular fa-clock"></i>
-              <p>09:00-18:00</p>
-            </div>
-            <div className="pl-5 md:pt-28 pb-6">
-              <i className="fa-brands fa-facebook text-lg pr-3"></i>
-              <i className="fa-brands fa-instagram text-lg px-3"></i>
-              <i className="fa-brands fa-twitter text-lg px-3"></i>
-            </div>
-          </div>
-          <h1
-            className="py-6 pl-5 text-3xl font-bold bg-gray-300 flex gap-2"
-          >
-            <i className="fa-solid fa-paw font-bold text-3xl -rotate-45"></i>
-            Pawfect Match
-          </h1>
-        </div>
-      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

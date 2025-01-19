@@ -43,3 +43,19 @@ export const isAuthenticate = () => {
     return false
   }
 }
+
+// FORGET PASSWORD
+export const forgetpassword = (user) => {
+  return fetch(`${API}/forget-password`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+    .then((res) => {
+      return res.json()
+    })
+    .catch((err) => console.log(err))
+}
