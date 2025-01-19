@@ -1,19 +1,22 @@
-import React from "react";
-import Header from "../component/Header";
+import React from 'react'
+import Header from '../component/Header'
+import About from '../component/About'
 // import pets from "../images/contact3.jpg";
 
 const Contact = () => {
   return (
     <>
-      <Header title='contact'/>
+      <Header title="contact" />
 
+      {/* About US */}
+      <About />
       {/* Next Contact */}
       <div className="w-3/4 mx-auto my-10">
         <div className="flex flex-wrap  border relative">
           <section className="pl-12 mt-16">
             <h1
               className="py-2 pl-5 bg-gray-300 text-3xl font-bold"
-              style={{ fontFamily: "lato" }}
+              style={{ fontFamily: 'lato' }}
             >
               CONTACT
             </h1>
@@ -40,10 +43,9 @@ const Contact = () => {
           </section>
 
           <div className=" w-2/5 bg-gray-700 text-white absolute top-0 right-16">
-
             <h2
               className=" pl-7 font-bold text-xl"
-              style={{ fontFamily: "lato", paddingTop: "75px" }}
+              style={{ fontFamily: 'lato', paddingTop: '75px' }}
             >
               INFO
             </h2>
@@ -65,23 +67,19 @@ const Contact = () => {
               <i class="fa-brands fa-instagram text-lg px-3"></i>
               <i className="fa-brands fa-twitter text-lg px-3"></i>
             </div>
-
           </div>
 
           <h1
             className="py-6 pl-5 text-3xl font-bold bg-gray-300 flex gap-2"
-            style={{ fontFamily: "lato" }}
+            style={{ fontFamily: 'lato' }}
           >
             <i class="fa-solid fa-paw"></i>
             Pawfect Match
           </h1>
-
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Contact;
-
-
+export default Contact

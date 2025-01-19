@@ -1,91 +1,72 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { setLoggedIn, setUserDetail } from "../store/slice/loginStatusSlice";
-import { toast } from "react-toastify";
-import YTTransition from "../assets/transition/uptodown/YTTransition";
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { setLoggedIn, setUserDetail } from '../store/slice/loginStatusSlice'
+import { toast } from 'react-toastify'
+import YTTransition from '../assets/transition/uptodown/YTTransition'
 
-const Header = ({ title, color }) => {
-  const { isLoggedIn, userDetail } = useSelector((state) => state.loginStatus);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Header = () => {
+  const { isLoggedIn, userDetail } = useSelector((state) => state.loginStatus)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [showDropdown, setShowDropdown] = useState(false)
 
-  const { items } = useSelector(state => state.cart)
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handelLogOut = () => {
-    localStorage.removeItem("authToken");
-    dispatch(setUserDetail({}));
-    dispatch(setLoggedIn(false));
-    navigate("/");
-    toast.success("Logged Out Successfully");
-  };
-
-  let backgroundStyle;
-  if (title === "Adopt" || title === "Login") {
-    backgroundStyle = "#374151";
-  } else {
-    backgroundStyle =
-      "linear-gradient(89deg, rgba(255,255,255,1) 0%, rgba(199,189,182,1) 100%)";
+    localStorage.removeItem('authToken')
+    dispatch(setUserDetail({}))
+    dispatch(setLoggedIn(false))
+    navigate('/')
+    toast.success('Logged Out Successfully')
   }
 
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
-  const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
+  const toggleDropdown = () => setShowDropdown((prev) => !prev)
 
   return (
-    <nav
-      className={`nav-bar flex justify-between items-center px-5 pt-5 pb-5 w-full sticky ${color}`}
-      style={{ background: backgroundStyle }}
-    >
-      <div className="w-2/5">
-        <Link
-          to="/"
-          className="text-xl font-bold flex justify-center items-center gap-2"
-        >
-          <i className="fa-solid fa-paw font-bold text-3xl -rotate-45"></i>
+    <header className="bg-white shadow-md sticky top-0 z-10">
+      {/* Top Section */}
+      <div className="flex justify-between items-center px-6  py-4 pl-6">
+        {/* Social Media Links */}
+        <div className="flex space-x-4 text-gray-600 text-xl">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-black"
+          >
+            <i className="fab fa-facebook"></i>
+          </a>
+          <a
+            href="https://www.twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-black"
+          >
+            <i className="fab fa-twitter"></i>
+          </a>
+          <a
+            href="https://www.pinterest.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-black"
+          >
+            <i className="fab fa-pinterest"></i>
+          </a>
+        </div>
+
+        {/* Logo */}
+        <Link to="/" className="text-3xl font-bold ">
           Pawfect Match
         </Link>
-      </div>
 
-      <div className="hidden md:flex w-3/5 justify-evenly items-center">
-        <YTTransition>
-          <Link to="/adopt">Adopt a pet</Link>
-        </YTTransition>
-        <YTTransition
-          delay="0.4"
-          onClick={() => scrollToSection("about")}
-          className="cursor-pointer"
-        >
-          About Us
-        </YTTransition>
-        <YTTransition
-          delay="0.8"
-          onClick={() => scrollToSection("contact")}
-          className="cursor-pointer"
-        >
-          Contact
-        </YTTransition>
-        <YTTransition>
-          <Link to="/shops">Shop</Link>
-        </YTTransition>
-        {isLoggedIn && <YTTransition>
-          <Link to="/cart">Cart({items?.length ? items?.length : 0})</Link>
-        </YTTransition>}
+        {/* Call to Action Button */}
         {isLoggedIn ? (
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div
-              className="h-10 w-10 grid place-items-center bg-white rounded-full text-slate-700 font-bold cursor-pointer"
+              className=" grid place-items-center bg-black text-white cursor-pointer py-1 px-4 rounded-3xl"
               onClick={toggleDropdown}
             >
-              {userDetail?.email?.split("")[0]?.toUpperCase()}
+              {userDetail?.email?.split('@')[0]}
             </div>
             {showDropdown && (
               <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-48">
@@ -93,6 +74,7 @@ const Header = ({ title, color }) => {
                   <li className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer">
                     <Link to="/profile">Profile</Link>
                   </li>
+
                   <div
                     delay="1.2"
                     className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer"
@@ -106,67 +88,97 @@ const Header = ({ title, color }) => {
           </div>
         ) : (
           <YTTransition delay="1.2">
-            <Link to="/login">Login</Link>
+            <Link
+              to="/login"
+              className="hidden md:block px-6 py-2 bg-black text-white text-sm rounded-full hover:bg-gray-800"
+            >
+              Login
+            </Link>
           </YTTransition>
         )}
-      </div>
 
-      <div className="md:hidden flex items-center">
+        {/* Hamburger Menu (for mobile) */}
         <button
-          onClick={toggleMobileMenu}
-          className="text-2xl text-white focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="text-2xl text-gray-800 md:hidden"
         >
-          <i className="fa-solid fa-bars"></i>
+          <i className={`fa-solid ${menuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
         </button>
       </div>
 
-      <div
-        className={`md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 transition-all transform ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        onClick={toggleMobileMenu}
-      >
-        <div className="flex justify-end p-5">
-          <button onClick={toggleMobileMenu} className="text-2xl text-white">
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+      {/* Navigation Links (Desktop) */}
+      <nav className="hidden md:flex justify-center space-x-8 text-gray-700 pb-4">
+        <Link to="/" className="hover:text-black">
+          Home
+        </Link>
+        <Link to="/contact" className="hover:text-black">
+          About
+        </Link>
+        <Link to="/adopt" className="hover:text-black">
+          Adopt a pet
+        </Link>
+        <Link to="/shops" className="hover:text-black">
+          Shop
+        </Link>
+      </nav>
 
-        <div className="flex flex-col items-center justify-center text-center">
-          <YTTransition>
-            <Link to="/adopt" className="py-3 text-white text-lg">
-              Adopt a pet
-            </Link>
-          </YTTransition>
-          <YTTransition
-            delay="0.4"
-            className="py-3 text-white text-lg"
-            onClick={() => scrollToSection("about")}
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <nav className="flex flex-col items-center bg-gray-100 md:hidden py-4">
+          <Link
+            to="/"
+            className="py-2 text-gray-700 hover:text-gray-900"
+            onClick={() => setMenuOpen(false)}
           >
-            About Us
-          </YTTransition>
-          <YTTransition
-            delay="0.8"
-            className="py-3 text-white text-lg"
-            onClick={() => scrollToSection("contact")}
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="py-2 text-gray-700 hover:text-gray-900"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            to="/blog"
+            className="py-2 text-gray-700 hover:text-gray-900"
+            onClick={() => setMenuOpen(false)}
+          >
+            Blog
+          </Link>
+          <Link
+            to="/contact"
+            className="py-2 text-gray-700 hover:text-gray-900"
+            onClick={() => setMenuOpen(false)}
           >
             Contact
-          </YTTransition>
+          </Link>
+          <Link
+            to="/shop"
+            className="py-2 text-gray-700 hover:text-gray-900"
+            onClick={() => setMenuOpen(false)}
+          >
+            Shop
+          </Link>
           {isLoggedIn ? (
             <div
-              className="py-3 text-white text-lg cursor-pointer"
+              className="py-2 text-gray-700 hover:text-gray-900"
               onClick={handelLogOut}
             >
               Logout
             </div>
           ) : (
-            <Link to="/login" className="py-3 text-white text-lg">
+            <Link
+              to="/login"
+              className="py-2 text-gray-700 hover:text-gray-900"
+            >
               Login
             </Link>
           )}
-        </div>
-      </div>
-    </nav>
-  );
-};
+        </nav>
+      )}
+    </header>
+  )
+}
 
-export default Header;
+export default Header

@@ -7,6 +7,11 @@ const meetformSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  userId:{
+    type:ObjectId,
+    ref:'User',
+    required:true,
+  },
   petId:{
     type: ObjectId,
     ref: "Pet",
@@ -95,6 +100,9 @@ const meetformSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  status:{
+    type:String,
+  }
 });
 
 module.exports = mongoose.model("Meetform", meetformSchema);

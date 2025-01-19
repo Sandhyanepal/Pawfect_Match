@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Header from "../component/Header";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUserDetail } from "../store/slice/loginStatusSlice";
@@ -43,19 +42,13 @@ const Login = () => {
         setMessage(response.data.message || "Login failed!");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setMessage(
-          error.response.data.message || "An error occurred during login"
-        );
-      } else {
-        setMessage("An error occurred. Please try again.");
-      }
+      setMessage(error.response.data.msg);
+
     }
   };
 
   return (
     <>
-      {/* <Header title="Login" color={"text-white"} /> */}
       <div
         className="w-full bg-gray-100 flex items-center"
         style={{ height: "100vh" }}
@@ -103,7 +96,7 @@ const Login = () => {
           </form>
           {message && <p className="text-center text-red-500">{message}</p>}
           <h1 className="italic text-center text-gray-500">
-            <Link to="/reset-password">Forgot Password? Click to reset</Link>
+            <Link to="/forget-password">Forgot Password? Click to reset</Link>
           </h1>
           <p className="pl-5 sm:pl-10 py-5">
             Don't have an account?{" "}

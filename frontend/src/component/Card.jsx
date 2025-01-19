@@ -1,16 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Card = ({ pet }) => {
   return (
-    <div className="flex flex-wrap gap-14  justify-evenly pt-10">
+    <div className="flex flex-wrap gap-14 justify-evenly md:pt-8">
       <Link to={`/pet/${pet._id}`}>
         {pet.image ? (
           <div className="overflow-hidden rounded-2xl">
             <img
-              src={`${import.meta.env.VITE_BACKEND_URL}/${pet?.image?.slice(6)}`}
+              src={`${import.meta.env.VITE_BACKEND_URL}/${pet?.image?.slice(
+                6
+              )}`}
               alt=""
-              style={{ height:'300px',width:'100%' }}
+              style={{ height: '300px', width: '100%' }}
               className="transition-all w-full duration-700 transt object-cover hover:scale-110"
             />
           </div>
@@ -25,21 +27,21 @@ const Card = ({ pet }) => {
             <br />
           </div>
           <div>
-            <i class="fa-solid fa-paw"></i>{" "}
+            <i class="fa-solid fa-paw"></i>{' '}
             <span className="pl-2">{pet.age} years old</span>
             <br />
           </div>
           <div>
-            <i class="fa-solid fa-user"></i>{" "}
+            <i class="fa-solid fa-user"></i>{' '}
             <span className="pl-2">
-              <span>{pet.owner === "Individual" ? pet.owner : "shelter"}</span>
+              <span>{pet.owner === 'Individual' ? pet.owner : 'shelter'}</span>
             </span>
           </div>
         </div>
       </Link>
       {/* </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

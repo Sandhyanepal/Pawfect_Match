@@ -1,62 +1,64 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Search } from 'lucide-react';
 
-const SearchSection = ({ type, setType }) => {
+const SearchSection = ({ type, setType, setKeyword }) => {
     const types = [
+        { name: 'All', value: 'all' },
         { name: "Food", value: "food" },
         { name: "Toys", value: "toys" },
         { name: "Accessories", value: "accessories" },
     ];
-    const [showTypes, setShowTypes] = useState(false);
 
-    const handelTypeSelect = (type) => {
-        setType(type)
-    }
-    const handleTypeToggle = () => {
-        setShowTypes(prev => !prev)
-    }
+    const handleTypeSelect = (e) => {
+        setType(e.target.value);
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        // Add any additional search logic here
+    };
+
     return (
-        <div>
+        <div className="w-full max-w-2xl mx-auto mt-4">
             <form
-                // onSubmit={handleSearch}
-                className="relative min-w-96 h-10 mx-auto overflow-hidden rounded-2xl"
+                onSubmit={handleSearch}
+                className="relative flex items-center"
             >
-                <input
-                    type="text"
-                    placeholder="Search"
-                    // onChange={handleChange}
-                    className="w-full h-full rounded-2xl pl-3 py-1 bg-gray-100"
-                />
-                <div
-                    className="absolute border-2 border-white border-r-2 px-5 right-11 top-1/2 transform -translate-y-1/2 p-2 cursor-pointer"
-                    onClick={handleTypeToggle}
-                >
-                    {/* <p className="text-black">{selectedCategory}</p> */}
-                    <p>Hello</p>
+                <div className="relative flex-1">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        onChange={(e) => setKeyword(e.target.value)}
+                        className="w-full h-10 pl-4 pr-32 py-2 bg-gray-100 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors"
+                        aria-label="Search input"
+                    />
+
+                    <div className="absolute right-0 top-0 h-full">
+                        <select
+                            className="h-full px-3 bg-white border-l border-gray-200 focus:outline-none cursor-pointer"
+                            onChange={handleTypeSelect}
+                            value={type}
+                            aria-label="Select product type"
+                        >
+                            {types.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
+
                 <button
                     type="submit"
-                    className="cursor-pointer px-4 text-white h-full absolute right-0"
+                    className="h-10 px-4 bg-blue-500 text-white rounded-r-2xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    aria-label="Submit search"
                 >
-                    <i className="text-black fa-solid fa-magnifying-glass"></i>
+                    <Search className="w-5 h-5" />
                 </button>
             </form>
-            {showTypes && (
-                <div className="absolute rounded-2xl bg-white border-2 border-gray-200 shadow-lg right-20 w-48 z-10">
-                    <ul className="max-h-40 overflow-y-auto">
-                        {types.map((type, index) => (
-                            <li
-                                key={index}
-                                className="p-2 hover:bg-gray-200 cursor-pointer"
-                                onClick={() => handelTypeSelect(type.value)}
-                            >
-                                {type.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </div>
-    )
-}
+    );
+};
 
-export default SearchSection
+export default SearchSection;

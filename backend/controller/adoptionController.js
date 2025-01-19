@@ -84,8 +84,7 @@ exports.deleteAdoption = async (req, res) =>{
     const {id} = req.params;
     try{
         const adoption = await MeetForm.findOneAndDelete({petId:id});
-        console.log(id)
-        console.log(adoption)
+        
         if(!adoption){
             return res.status(404).json({ message: "Adoption request not found" });
         }
@@ -93,4 +92,29 @@ exports.deleteAdoption = async (req, res) =>{
         } catch (error) {
           res.status(500).json({ message: "Error deleting adoption status", error: error.message });
     }
+};
+
+exports.rejectAdoption = async (req, res) => {
+  const { id } = req.params;  
+  //handle delete with user Id 
+  try {
+    const updatedMeetform = await MeetForm.findOneAndUpdate(
+      {userId:id}, //here pass userId 
+      { status: 'Reject' },  
+      { new: true }  
+    );
+    if (!updatedMeetform) {
+      return res.status(404).json({ message: 'Meetform not found' });
+    }
+
+    res.status(200).json({
+      message: 'Adoption request rejected successfully',
+      meetform: updatedMeetform,  
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error rejecting adoption status',
+      error: error.message,  
+    });
+  }
 };
