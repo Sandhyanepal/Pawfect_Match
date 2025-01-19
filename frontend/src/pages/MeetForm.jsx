@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const MeetForm = ({ petDetail, showMeet }) => {
+  const { userDetail } = useSelector(state => state.loginStatus)
   const [formData, setFormData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -26,6 +28,8 @@ const MeetForm = ({ petDetail, showMeet }) => {
       },
     ],
     termsAndConditions: false,
+    userId: userDetail?._id,
+    status: 'Pen'
   });
 
   // Handle input changes for all form fields
@@ -72,13 +76,12 @@ const MeetForm = ({ petDetail, showMeet }) => {
       ...formData,
       ...(formData.hasPets
         ? {
-            currentPets: formData.currentPets.filter(
-              (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
-            ),
-          }
+          currentPets: formData.currentPets.filter(
+            (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
+          ),
+        }
         : {}), // Only include non-empty pets
     };
-
     try {
       const response = await fetch("http://localhost:5002/submitform", {
         method: "POST",
@@ -87,7 +90,7 @@ const MeetForm = ({ petDetail, showMeet }) => {
         },
         body: JSON.stringify(formDataToSend),
       });
-
+      console.log(response)
       if (response.ok) {
         const data = await response.json();
         toast.success("Form submitted successfully!");

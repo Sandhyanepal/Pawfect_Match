@@ -43,13 +43,8 @@ const Login = () => {
         setMessage(response.data.message || "Login failed!");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setMessage(
-          error.response.data.message || "An error occurred during login"
-        );
-      } else {
-        setMessage("An error occurred. Please try again.");
-      }
+      setMessage(error.response.data.msg);
+
     }
   };
 

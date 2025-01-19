@@ -8,13 +8,15 @@ import SearchSection from "../component/shop/SearchSection";
 const Shops = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [type, setType] = useState("all");
+  const [keyword, setKeyword] = useState('');
+
   return (
     <div>
       <NavBar />
       <div>
-        <SearchSection type={type} setType={setType} />
+        <SearchSection setKeyword={setKeyword} type={type} setType={setType} />
         <Category selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-        <ShopArea selectedCategory={selectedCategory} type={type} />
+        <ShopArea keyword={keyword} selectedCategory={selectedCategory} type={type} />
       </div>
     </div>
   );

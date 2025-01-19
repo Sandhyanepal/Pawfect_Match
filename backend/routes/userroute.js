@@ -9,6 +9,7 @@ const {
   getAllOrganizations,
   deleteOrganization,
   updatePreferences,
+  updateFullName,
 } = require("../controller/usercontrol");
 const validateUser = require("../middleware/authToken");
 const { suggestPets } = require("../controller/petcontrol");
@@ -25,4 +26,6 @@ router.get("/getallorganizations", getAllOrganizations);
 router.delete("/deleteorganization/:orgId", deleteOrganization);
 router.get("/suggestedpets", suggestPets);
 router.post("/updatepreferences", updatePreferences);
+router.patch('/update-name', updateFullName);
+
 module.exports = router;

@@ -1,6 +1,7 @@
 const { generateToken } = require("../config/jwtToken");
 const { Individual, Organization, User } = require("../model");
 const bcrypt = require("bcrypt");
+const individualModel = require("../model/individualModel");
 
 // Register User
 const register = async (req, res) => {
@@ -96,8 +97,9 @@ const loginUserCtrl = async (req, res) => {
 const getAUser = async (req, res) => {
   try {
     const getUser = await User.findById(req.body.userId).select("-password ");
+    const getUserIndividual = await Individual.findOne({userId:req.body.userId})
     if (getUser) {
-      return res.status(200).json({ data: getUser, success: true });
+      return res.status(200).json({ data: getUser, success: true, userData:getUserIndividual });
     }
     return res.status(401).json({ success: false, msg: "Unsuccessful" });
   } catch (err) {
@@ -257,6 +259,37 @@ const updatePreferences = async (req, res) => {
   }
 };
 
+const updateFullName = async (req, res) => {
+  const { userId, fullName } = req.body;
+
+  // Input validation
+  if (!fullName || fullName.trim().length === 0) {
+    return res.status(400).json({ message: "Full name is required" });
+  }
+
+  try {
+    // Find user by ID
+    let user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user's full name
+    user.fullName = fullName.trim();
+    await user.save();
+
+    res.status(200).json({ 
+      message: "Full name updated successfully",
+      fullName: user.fullName 
+    });
+
+  } catch (error) {
+    console.error("Error updating full name:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   register,
   loginUserCtrl,
@@ -267,4 +300,5 @@ module.exports = {
   getAllOrganizations,
   deleteOrganization,
   updatePreferences,
+  updateFullName
 };

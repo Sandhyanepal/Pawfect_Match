@@ -27,6 +27,8 @@ exports.addMeetform = async (req, res) => {
       termsAndConditions: req.body.termsAndConditions,
       owner: req.body.owner,
       petId: req.body.petId,
+      userId:req.body.userId,
+      status:req.body.status
     });
 
     // If meetform creation fails, return an error
@@ -52,7 +54,21 @@ exports.getAllFormRequest = async (req, res) => {
     return res.status(200).json({ success: true, data: allRequest });
   } catch (error) {
     return res
-      .staus(404)
+      .status(404)
       .json({ success: false, msg: "No Forms found for the User." });
   }
 };
+
+exports.getAllFormForUser = async(req,res)=>{
+  const {userId} = req.params;
+  try{
+    const allRequest = await MeetForm.find({userId:userId});
+    if(allRequest){
+      return res.status(200).json({success:true,data:allRequest})
+    }else{
+      return res.status(404).json({success:false,msg:'No forms found!!!'})
+    }
+  }catch(error){
+    return res.status(404).json({success:false,msg:'No forms found!!!'})
+  }
+}

@@ -23,6 +23,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SingleProduct from "./pages/SingleProduct";
 import { setCart } from "./store/slice/cartSlice";
+import Test from "./pages/Test";
 
 const MyRoutes = () => {
   const dispatch = useDispatch();
@@ -56,8 +57,9 @@ const MyRoutes = () => {
       );
       if (response.data.success) {
         const user = response.data.data;
+        const detail = response.data.userData
         dispatch(setLoggedIn(true));
-        dispatch(setUserDetail(user));
+        dispatch(setUserDetail({ ...user, detail }));
         const { preferences } = user;
 
         // Check if the user needs to set preferences
@@ -146,6 +148,7 @@ const MyRoutes = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path='/profile' element={<Test />} />
           <Route path="/adopt" element={<Adopt />} />
           <Route path="/pet/:id" element={<PetDesc />} />
           <Route path="/login" element={<Login />} />
