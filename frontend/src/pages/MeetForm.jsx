@@ -1,18 +1,19 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const MeetForm = ({ petDetail, showMeet }) => {
+  const { userDetail } = useSelector(state => state.loginStatus)
   const [formData, setFormData] = useState({
-    fullName: '',
-    dateOfBirth: '',
-    address: '',
-    phoneNumber: '',
-    email: '',
-    occupation: '',
-    homeOwnership: 'Rent',
+    fullName: "",
+    dateOfBirth: "",
+    address: "",
+    phoneNumber: "",
+    email: "",
+    occupation: "",
+    homeOwnership: "Rent",
     allergies: false,
-    hasPets: false, // Track if the user has pets
+    hasPets: false,
     owner: petDetail?.owner,
     petId: petDetail?._id,
     currentPets: [
@@ -26,32 +27,34 @@ const MeetForm = ({ petDetail, showMeet }) => {
       },
     ],
     termsAndConditions: false,
-  })
+    userId: userDetail?._id,
+    status: 'Pen'
+  });
 
   // Handle input changes for all form fields
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   // Handle the dynamic pet fields
   const handlePetChange = (index, e) => {
-    const { name, value, type, checked } = e.target
-    const newPets = [...formData.currentPets]
-    if (type === 'checkbox') {
-      newPets[index][name] = checked
+    const { name, value, type, checked } = e.target;
+    const newPets = [...formData.currentPets];
+    if (type === "checkbox") {
+      newPets[index][name] = checked;
     } else {
-      newPets[index][name] = value
+      newPets[index][name] = value;
     }
     setFormData((prevData) => ({
       ...prevData,
       currentPets: newPets,
-    }))
-  }
+    }));
+  };
 
   // Add a new pet form entry
   const addPet = () => {
@@ -59,75 +62,68 @@ const MeetForm = ({ petDetail, showMeet }) => {
       ...prevData,
       currentPets: [
         ...prevData.currentPets,
-        { species: '', breed: '', age: '', gender: 'Male', vaccinated: false },
+        { species: "", breed: "", age: "", gender: "Male", vaccinated: false },
       ],
-    }))
-  }
+    }));
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const formDataToSend = {
       ...formData,
       ...(formData.hasPets
         ? {
-            currentPets: formData.currentPets.filter(
-              (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
-            ),
-          }
+          currentPets: formData.currentPets.filter(
+            (pet) => pet.species || pet.breed || pet.age || pet.vaccinated
+          ),
+        }
         : {}), // Only include non-empty pets
-    }
-
+    };
     try {
-      const response = await fetch('http://localhost:5002/submitform', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5002/submitform", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formDataToSend),
-      })
-
+      });
+      console.log(response)
       if (response.ok) {
-        const data = await response.json()
-        toast.success('Form submitted successfully!')
+        const data = await response.json();
+        toast.success("Form submitted successfully!");
         setFormData({
-          fullName: '',
-          dateOfBirth: '',
-          address: '',
-          phoneNumber: '',
-          email: '',
-          occupation: '',
-          homeOwnership: 'Rent',
+          fullName: "",
+          dateOfBirth: "",
+          address: "",
+          phoneNumber: "",
+          email: "",
+          occupation: "",
+          homeOwnership: "Rent",
           allergies: false,
           hasPets: false, // Track if the user has pets
           owner: petDetail?.owner,
           currentPets: [
             {
-              species: '',
-              breed: '',
-              age: '',
-              gender: 'Male',
+              species: "",
+              breed: "",
+              age: "",
+              gender: "Male",
               vaccinated: false,
             },
           ],
           termsAndConditions: false,
-        })
-        showMeet(false)
+        });
+        showMeet(false);
       } else {
-        toast.error('Form submission failed!')
+        toast.error("Form submission failed!");
       }
     } catch (error) {
-      console.error('Error submitting form:', error)
-      toast.error('An error occurred. Please try again.')
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred. Please try again.");
     }
-  }
-
-  // Close the modal and reset the form
-  // const handleClose = () => {
-  //   // resetForm()
-  //   closeModal() // Close the modal
-  // }
+  };
 
   return (
     <div className="bg-white m-auto">
@@ -353,7 +349,7 @@ const MeetForm = ({ petDetail, showMeet }) => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default MeetForm
+export default MeetForm;

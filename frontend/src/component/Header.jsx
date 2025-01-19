@@ -74,6 +74,7 @@ const Header = () => {
                   <li className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer">
                     <Link to="/profile">Profile</Link>
                   </li>
+
                   <div
                     delay="1.2"
                     className="px-4 py-2 text-black hover:bg-slate-100 cursor-pointer"
@@ -116,7 +117,7 @@ const Header = () => {
         <Link to="/adopt" className="hover:text-black">
           Adopt a pet
         </Link>
-        <Link to="/shop" className="hover:text-black">
+        <Link to="/shops" className="hover:text-black">
           Shop
         </Link>
       </nav>

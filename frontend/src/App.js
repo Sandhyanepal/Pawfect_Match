@@ -20,6 +20,11 @@ function App() {
       {/* <Login/> */}
       {/* <Register/> */}
       {/* <MyRoutes/> */}
+      {isLoggedIn ? (
+        <PetRecommendations />
+      ) : (
+        <ClickBasedRecommendations />
+      )}
     </div>
   );
 }

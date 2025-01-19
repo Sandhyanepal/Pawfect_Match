@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Card from '../component/Card'
 import Header from '../component/Header'
@@ -10,7 +10,7 @@ const Adopt = () => {
   const [search, setSearch] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All Category')
-  const [showCategories, setShowCategories] = useState(false)
+  // const [showCategories, setShowCategories] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
