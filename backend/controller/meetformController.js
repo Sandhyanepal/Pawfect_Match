@@ -47,6 +47,7 @@ exports.addMeetform = async (req, res) => {
     let filteredPets = req.body.currentPets.filter((pet) => {
       return pet.species || pet.breed || pet.age || pet.vaccinated;
     });
+    console.log(filteredPets)
     const ownerDetail = await User.findById(req.body.owner);
     // if (req.body.hasPets && filteredPets.length === 0) {
     //   filteredPets = [];
@@ -93,15 +94,20 @@ exports.addMeetform = async (req, res) => {
         <p><strong>Has Allergies:</strong> ${req.body.allergies ? "Yes" : "No"}</p>
         <p><strong>Terms Accepted:</strong> ${req.body.termsAndConditions ? "Yes" : "No"}</p>
         <h2>Pet Details</h2>
-        ${filteredPets
-          .map(
-            (pet) =>
-              `<p><strong>Species:</strong> ${pet.species || "N/A"}</p>
-               <p><strong>Breed:</strong> ${pet.breed || "N/A"}</p>
-               <p><strong>Age:</strong> ${pet.age || "N/A"}</p>
-               <p><strong>Vaccinated:</strong> ${pet.vaccinated ? "Yes" : "No"}</p>`
-          )
-          .join("<br/>")}
+        ${
+          filteredPets.length > 0
+            ? filteredPets
+                .map(
+                  (pet) => `
+                    <p><strong>Species:</strong> ${pet.species || "N/A"}</p>
+                    <p><strong>Breed:</strong> ${pet.breed || "N/A"}</p>
+                    <p><strong>Age:</strong> ${pet.age || "N/A"}</p>
+                    <p><strong>Vaccinated:</strong> ${pet.vaccinated ? "Yes" : "No"}</p>
+                  `
+                )
+                .join("<br/>")
+            : "<p>No current pets listed.</p>"
+        }
       `,
     };
       await sendEmail(mailOptions);
