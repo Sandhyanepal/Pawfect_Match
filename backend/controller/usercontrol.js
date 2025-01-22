@@ -2,7 +2,10 @@ const { generateToken } = require('../config/jwtToken')
 const { Individual, Organization, User } = require('../model')
 const bcrypt = require('bcrypt')
 const individualModel = require('../model/individualModel')
+const Token = require('../model/token')
+const crypto = require('crypto')
 
+// Register User
 // Register User
 const register = async (req, res) => {
   const {
@@ -23,23 +26,27 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'Email is already registered' })
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    // Generate verification token
-    const verificationToken = crypto.randomBytes(32).toString('hex')
-    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
-
     // Create a new user document in the User collection
     const newUser = new User({
-      fullName,
       email,
-      password: hashedPassword,
+      password,
       role,
-      verificationToken,
-      verificationTokenExpiry,
     })
+
+    // Log to verify what's being saved
+    console.log('About to save user:', {
+      email: newUser.email,
+      hasPassword: !!newUser.password,
+      role: newUser.role,
+    })
+
     const savedUser = await newUser.save()
+
+    console.log('Saved user:', {
+      id: savedUser._id,
+      email: savedUser.email,
+      hasPassword: !!savedUser.password,
+    })
 
     // Create additional details based on role
     if (role === 'Individual') {
@@ -52,6 +59,13 @@ const register = async (req, res) => {
       })
       await individual.save()
     } else if (role === 'Organization') {
+      // Check if the license number already exists
+      const existingOrg = await Organization.findOne({ licenseNumber })
+      if (existingOrg) {
+        return res
+          .status(400)
+          .json({ message: 'License number is already taken.' })
+      }
       // Save Organization details
       const organization = new Organization({
         userId: savedUser._id,
@@ -64,15 +78,45 @@ const register = async (req, res) => {
     }
 
     // Respond with success
-    res.status(201).json({ message: 'User registered successfully' })
+    res.status(201).json({
+      message:
+        'User registered successfully. Verification email send to your email.',
+    })
+
+    // Generate Token
+    const token = await Token.create({
+      token: crypto.randomBytes(24).toString('hex'),
+      user: savedUser._id,
+    })
+    if (!token) {
+      return console.log('Failed to generate token')
+    }
+
+    // Send Verification Email
+    const URL = `http://localhost:5002/verify/${token.token}`
+    sendEmail({
+      from: 'noreply@something.com',
+      to: req.body.email,
+      subject: 'Verification Email',
+      text:
+        'Please copy the following link in the browser to verify your email' +
+        URL,
+      html: `<a href='${URL}'><button>Verify Email</button></a>`,
+    })
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message })
-    // console.error('Resend verification error:', error)
-    // return res.status(500).json({
-    //   success: false,
-    //   message: 'Failed to resend verification email',
-    //   error: error.message,
-    // })
+    console.error(error)
+    console.error('Registration Error:', error)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message:
+          'Duplicate key error: ' +
+          Object.keys(error.keyValue)[0] +
+          ' already exists',
+      })
+    }
+    res
+      .status(500)
+      .json({ message: 'An error occurred during registration', error })
   }
 }
 
