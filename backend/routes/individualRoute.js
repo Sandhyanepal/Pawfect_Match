@@ -1,8 +1,9 @@
-const express = require("express");
-const { getIndividualUser } = require("../controller/individualController");
+const express = require('express')
+const { getIndividualUser } = require('../controller/individualController')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/get-individual-owner", getIndividualUser);
+// router.post("/get-individual-owner", getIndividualUser);
+router.get('/get-individual-owner/:id', getIndividualUser)
 
-module.exports = router;
+module.exports = router

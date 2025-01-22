@@ -1,7 +1,7 @@
-const { generateToken } = require("../config/jwtToken");
-const { Individual, Organization, User } = require("../model");
-const bcrypt = require("bcrypt");
-const individualModel = require("../model/individualModel");
+const { generateToken } = require('../config/jwtToken')
+const { Individual, Organization, User } = require('../model')
+const bcrypt = require('bcrypt')
+const individualModel = require('../model/individualModel')
 
 // Register User
 const register = async (req, res) => {
@@ -60,11 +60,11 @@ const register = async (req, res) => {
       })
       await organization.save()
     } else {
-      return res.status(400).json({ message: "Invalid role provided" });
+      return res.status(400).json({ message: 'Invalid role provided' })
     }
 
     // Respond with success
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: 'User registered successfully' })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
     // console.error('Resend verification error:', error)
@@ -76,19 +76,17 @@ const register = async (req, res) => {
   }
 }
 
-
-
 // Login User
 const loginUserCtrl = async (req, res) => {
-  const { email, password } = req.body;
-  const findUser = await User.findOne({ email });
+  const { email, password } = req.body
+  const findUser = await User.findOne({ email })
   if (findUser && (await findUser.isPasswordMatched(password))) {
     const hasPreferences =
       findUser.preferences?.age &&
       findUser.preferences?.gender &&
       findUser.preferences?.breed &&
-      findUser.preferences?.category;
-    const needsPreferences = !hasPreferences;
+      findUser.preferences?.category
+    const needsPreferences = !hasPreferences
 
     return res.status(200).send({
       _id: findUser?._id,
@@ -98,19 +96,23 @@ const loginUserCtrl = async (req, res) => {
       password: findUser?.password,
       token: generateToken(findUser?._id),
       needsPreferences: needsPreferences,
-    });
+    })
   } else {
-    res.status(404).json({ msg: "Invalid Credentails" });
+    res.status(404).json({ msg: 'Invalid Credentails' })
   }
-};
+}
 
 // Get a single User
 const getAUser = async (req, res) => {
   try {
-    const getUser = await User.findById(req.body.userId).select("-password ");
-    const getUserIndividual = await Individual.findOne({userId:req.body.userId})
+    const getUser = await User.findById(req.body.userId).select('-password ')
+    const getUserIndividual = await Individual.findOne({
+      userId: req.body.userId,
+    })
     if (getUser) {
-      return res.status(200).json({ data: getUser, success: true, userData:getUserIndividual });
+      return res
+        .status(200)
+        .json({ data: getUser, success: true, userData: getUserIndividual })
     }
     return res.status(401).json({ success: false, msg: 'Unsuccessful' })
   } catch (err) {
@@ -213,8 +215,7 @@ const deleteOrganization = async (req, res) => {
     console.error(err)
     res.status(500).json({ message: 'Error deleting organization', error: err })
   }
-};
-
+}
 
 // //Update a User
 // const updateUser = async (req, res) => {
@@ -239,79 +240,42 @@ const deleteOrganization = async (req, res) => {
 // };
 
 const updatePreferences = async (req, res) => {
-  const { userId, preferences } = req.body;
+  const { userId, preferences } = req.body
 
   try {
-    let user = await User.findById(userId);
+    let user = await User.findById(userId)
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' })
     }
 
     // Update user preferences
-    user.preferences = preferences;
-    await user.save();
+    user.preferences = preferences
+    await user.save()
 
-    res.status(200).json({ message: "Preferences updated successfully" });
+    res.status(200).json({ message: 'Preferences updated successfully' })
   } catch (error) {
-    console.error("Error updating preferences:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error updating preferences:', error)
+    res.status(500).json({ message: 'Server error' })
   }
-};
-
-// const sendAdoptionDetails = async (req, res) => {
-//   try {
-//     const { user, pet } = req.body;
-
-  
-//    const emailContent = `
-//        <h1>Adoption Request Details</h1>
-//        <h2>User Information:</h2>
-//        <p><strong>Full Name:</strong> ${user.fullName}</p>
-//       <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
-//        <p><strong>Address:</strong> ${user.address}</p>
-//        <p><strong>Phone Number:</strong> ${user.phoneNumber}</p>
-//       <p><strong>Email:</strong> ${user.email}</p>
-//       <p><strong>Occupation:</strong> ${user.occupation}</p>
-//        <p><strong>Home Ownership:</strong> ${user.homeOwnership}</p>
-//        <p><strong>Allergies:</strong> ${user.allergies}</p>
-
-//        <h2>Pet Information:</h2>
-//        <p><strong>Name:</strong> ${pet.name}</p>
-//        <p><strong>Age:</strong> ${pet.age}</p>
-//        <p><strong>Gender:</strong> ${pet.gender}</p>
-//        <p><strong>Breed:</strong> ${pet.breed}</p>
-//        <p><strong>Category:</strong> ${pet.category}</p>
-//        <p><strong>Address:</strong> ${pet.address}</p>
-//        <p><strong>Vaccination Status:</strong> ${pet.vaccination_status}</p>
-//        <p><strong>Health Issues:</strong> ${pet.health_issue}</p>
-//        <p><strong>Medication:</strong> ${pet.medication}</p>
-//        <p><strong>Description:</strong> ${pet.description}</p>
-//      `;
-
-
-    
-//     sendEmail({
-//             from: "noreply@something.com",
-//             to: req.body.email,
-//             subject: "Adoption request",
-//             text: "Adoption request",
-//             html: emailContent,
-//         })
-
-//     res.status(200).json({ success: true, message: "Email sent successfully!" });
-//   } catch (error) {
-//     console.error("Error sending email:", error);
-//     res.status(500).json({ success: false, message: "Failed to send email", error: error.message });
-//   }
-// };
+}
 
 const sendAdoptionDetails = async (req, res) => {
   try {
-    const { fullName, dateOfBirth, address, phoneNumber, email, occupation, 
-            homeOwnership, allergies, hasPets, currentPets } = req.body;
+    const {
+      fullName,
+      dateOfBirth,
+      address,
+      phoneNumber,
+      email,
+      occupation,
+      homeOwnership,
+      allergies,
+      hasPets,
+      currentPets,
+    } = req.body
 
     // Get pet details from your database
-    const pet = currentPets[0]; 
+    const pet = currentPets[0]
 
     // Construct email content
     const emailContent = `
@@ -332,9 +296,14 @@ const sendAdoptionDetails = async (req, res) => {
       <p><strong>Age:</strong> ${pet.age}</p>
       <p><strong>Gender:</strong> ${pet.gender}</p>
 
-      ${hasPets ? `
+      ${
+        hasPets
+          ? `
         <h2>Current Pets:</h2>
-        ${currentPets.slice(1).map(pet => `
+        ${currentPets
+          .slice(1)
+          .map(
+            (pet) => `
           <div>
             <p><strong>Species:</strong> ${pet.species}</p>
             <p><strong>Breed:</strong> ${pet.breed}</p>
@@ -342,19 +311,23 @@ const sendAdoptionDetails = async (req, res) => {
             <p><strong>Gender:</strong> ${pet.gender}</p>
             <p><strong>Vaccinated:</strong> ${pet.vaccinated ? 'Yes' : 'No'}</p>
           </div>
-        `).join('')}
-      ` : ''}
-    `;
+        `
+          )
+          .join('')}
+      `
+          : ''
+      }
+    `
 
     // Find owner's email from the database
     // Assuming you have a User model and owner contains the owner's ID
-    const User = require('../model').User;
+    const User = require('../model').User
     // const petOwner = await User.findById(owner);
-    
+
     // if (!petOwner) {
-    //   return res.status(404).json({ 
-    //     success: false, 
-    //     message: "Pet owner not found" 
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Pet owner not found"
     //   });
     // }
 
@@ -362,38 +335,38 @@ const sendAdoptionDetails = async (req, res) => {
     await transporter.sendMail({
       from: 'noreply@pawfectmatch.com',
       to: email,
-      subject: "New Pet Adoption Request",
+      subject: 'New Pet Adoption Request',
       html: emailContent,
-    });
+    })
 
     // Send confirmation email to applicant
     await transporter.sendMail({
       from: 'noreply@pawfectmatch.com',
       to: email,
-      subject: "Your Pet Adoption Application Received",
+      subject: 'Your Pet Adoption Application Received',
       html: `
         <h1>Thank you for your adoption application!</h1>
         <p>We have received your application and forwarded it to the pet owner. They will contact you soon.</p>
         <p>Pet details:</p>
         <p>Name: ${pet.name}</p>
         <p>Breed: ${pet.breed}</p>
-      `
-    });
-    console.log('Emails sent successfully to Mailtrap');
-    
-    res.status(200).json({ 
-      success: true, 
-      message: "Adoption request sent successfully!" 
-    });
+      `,
+    })
+    console.log('Emails sent successfully to Mailtrap')
+
+    res.status(200).json({
+      success: true,
+      message: 'Adoption request sent successfully!',
+    })
   } catch (error) {
-    console.error("Error sending adoption request:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Failed to send adoption request", 
-      error: error.message 
-    });
+    console.error('Error sending adoption request:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send adoption request',
+      error: error.message,
+    })
   }
-};
+}
 
 module.exports = {
   register,
@@ -405,5 +378,5 @@ module.exports = {
   getAllOrganizations,
   deleteOrganization,
   updatePreferences,
-  sendAdoptionDetails
-};
+  sendAdoptionDetails,
+}

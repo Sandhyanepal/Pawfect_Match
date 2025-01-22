@@ -13,8 +13,7 @@ const {
   sendAdoptionDetails,
 } = require('../controller/usercontrol')
 const validateUser = require('../middleware/authToken')
-const { suggestPets } = require('../controller/petcontrol')
-const { userCheck, validation } = require("../validation");
+const { userCheck, validation } = require('../validation')
 
 const router = express.Router()
 
@@ -25,10 +24,9 @@ router.get('/getallindividuals', getAllIndividuals)
 router.delete('/deleteindividual/:userId', deleteIndividual)
 router.get('/getallorganizations', getAllOrganizations)
 router.delete('/deleteorganization/:orgId', deleteOrganization)
-router.get('/suggestedpets', suggestPets)
 router.post('/updatepreferences', updatePreferences)
 // router.patch('/update-name', updateFullName)
-router.post("/register", userCheck, validation, register);
-router.post("/send-adoption-email", sendAdoptionDetails);
+router.post('/register', userCheck, validation, register)
+router.post('/send-adoption-email', sendAdoptionDetails)
 
-module.exports = router;
+module.exports = router
