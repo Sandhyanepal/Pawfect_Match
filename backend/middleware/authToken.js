@@ -11,7 +11,6 @@ const validateUser = async (req, res, next) => {
           console.log(err)
           res.send({ message: 'Authentication Failed', success: false })
         } else {
-          console.log(decoded)
           req.body.userId = decoded.id
           req.body.role = decoded.role
           next()

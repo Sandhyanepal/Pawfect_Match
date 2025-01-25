@@ -5,44 +5,53 @@ const Category = require('../model/categorymodel')
 
 const path = require('path')
 const fs = require('fs')
+const petmodel = require('../model/petmodel')
 
 // Add Pets
 exports.addPet = async (req, res) => {
   try {
-    let pet = await Pet.create({
-      name: req.body.name,
-      age: req.body.age,
-      gender: req.body.gender,
-      breed: req.body.breed,
-      category: req.body.category,
-      address: req.body.address,
-      owner: req.body.owner,
-      vaccination_status: req.body.vaccination_status,
-      health_issue: req.body.health_issue,
-      medication: req.body.medication,
-      image: req.file?.path.replace(/\\/g, '/'),
-      description: req.body?.description,
-    })
+    const { name, age, gender, breed, category, address, owner, vaccination_status, health_issue, medication, description } = req.body;
 
-    if (!pet) {
-      return res
-        .status(400)
-        .json({ error: 'Something went wrong. Could not add pet.' })
+    // Check if the category exists
+    const categoryExists = await Category.findById(category);
+    if (!categoryExists) {
+      return res.status(404).json({ error: "Category not found" });
     }
 
-    res.status(200).json({ success: true, data: pet })
+    // Create the pet
+    const pet = await Pet.create({
+      name,
+      age,
+      gender,
+      breed,
+      category,
+      address,
+      owner,
+      vaccination_status,
+      health_issue,
+      medication,
+      image: req.file?.path.replace(/\\/g, "/"),
+      description,
+    });
+
+    if (!pet) {
+      return res.status(400).json({ error: "Something went wrong. Could not add pet." });
+    }
+
+    res.status(200).json({ success: true, data: pet });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: 'Server error. Could not add pet.' })
+    console.error(err);
+    res.status(500).json({ error: "Server error. Could not add pet." });
   }
-}
+};
 
 // Get all pets
 exports.getAllPets = async (req, res) => {
   try {
-    const pets = await Pet.find()
+    const pets = await Pet.find({petStatus:true})
       .populate('owner', 'orgName')
       .populate('category', 'category_name')
+      console.log(pets)
     res.status(200).json({
       success: true,
       message: 'Pets fetched successfully',
@@ -76,69 +85,74 @@ exports.deletePet = async (req, res) => {
 // Edit a pet
 exports.editPet = async (req, res) => {
   try {
-    const { id } = req.params
-    const existingPet = await Pet.findById(id)
-    if (!existingPet) return res.status(404).json({ message: 'Pet not found!' })
+    const { id } = req.params;
+    const existingPet = await Pet.findById(id);
+    if (!existingPet) return res.status(404).json({ message: "Pet not found!" });
 
-    const updatedData = { ...req.body }
+    const updatedData = { ...req.body };
 
+    // Handle image update
     if (req.file) {
       if (existingPet.image) {
-        const oldImagePath = path.join(__dirname, '../', existingPet.image)
-        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath)
+        const oldImagePath = path.join(__dirname, "../", existingPet.image);
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
       }
-      updatedData.image = req.file.path
+      updatedData.image = req.file.path;
     } else {
-      updatedData.image = existingPet.image
+      updatedData.image = existingPet.image;
     }
 
+    // Update the pet
     const updatedPet = await Pet.findByIdAndUpdate(id, updatedData, {
       new: true,
     })
+      .populate("category", "category_name") // Populate category
+      .populate("breed", "breed_name"); // Populate breed
+
     if (!updatedPet)
-      return res.status(400).json({ message: 'Failed to update pet!' })
+      return res.status(400).json({ message: "Failed to update pet!" });
 
     res
       .status(200)
-      .json({ message: 'Pet updated successfully!', data: updatedPet })
+      .json({ message: "Pet updated successfully!", data: updatedPet });
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'An error occurred!', error: error.message })
+      .json({ message: "An error occurred!", error: error.message });
   }
-}
+};
 
-// Get single pet by ID
 exports.getSinglePet = async (req, res) => {
   try {
-    const petId = req.params.id
+    const petId = req.params.id;
 
     // Fetch the pet by ID and populate references
     const pet = await Pet.findById(petId)
-      .populate('owner', 'orgName')
-      .populate('category', 'category_name')
+      .populate("owner", "orgName")
+      .populate("category", "category_name")
+      .populate("breed", "breed_name"); // Populate breed if needed
+
     if (!pet) {
       return res.status(404).json({
         success: false,
-        message: 'Pet not found',
-      })
+        message: "Pet not found",
+      });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Pet fetched successfully',
+      message: "Pet fetched successfully",
       data: pet,
-    })
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch pet',
+      message: "Failed to fetch pet",
       error: error.message,
-    })
+    });
   }
-}
-
+};
 // Suggest Pets Function
 // exports.suggestPets = async (req, res) => {
 //   try {
@@ -325,7 +339,7 @@ exports.getSinglePet = async (req, res) => {
 exports.suggestPets = async (req, res) => {
   try {
     // Step 1: Fetch the single pet using the id provided
-    const pet = await Pet.findById(req.params.id)
+    const pet = await Pet.findOne({id:req.params.id,petStatus:true})
       .populate('category', 'category_name')
       .populate('owner', 'orgName')
 
@@ -545,4 +559,24 @@ const calculateCosineSimilarity = (vectorA, vectorB) => {
   }
 
   return dotProduct / (magnitudeA * magnitudeB)
+}
+
+exports.updatePetStatus = async(req,res)=>{
+  const {id} = req.params;
+  const existingPet = await Pet.findById(id);
+  console.log(existingPet)
+  try {
+    const updatedPet = await Pet.findByIdAndUpdate(id,{
+      petStatus:0,
+    },{new:true})
+    if (!updatedPet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    return res.status(200).json({ message: 'Pet status updated successfully', updatedPet });
+
+  } catch (error) {
+    console.log(error.response)
+    return res.status(500).json({ message: 'Error occurred while updating pet status' });
+  }
 }

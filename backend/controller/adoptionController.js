@@ -58,26 +58,26 @@ exports.getAdoptionById = async (req, res) => {
   };
 
 // Update adoption status
-exports.updateAdoptionStatus = async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
+// exports.updateAdoptionStatus = async (req, res) => {
+//     const { id } = req.params;
+//     const { status } = req.body;
   
-    try {
-      const adoption = await MeetForm.findByIdAndUpdate(
-        id,
-        { status },
-        { new: true, runValidators: true }
-      );
+//     try {
+//       const adoption = await MeetForm.findByIdAndUpdate(
+//         id,
+//         { status },
+//         { new: true, runValidators: true }
+//       );
   
-      if (!adoption) {
-        return res.status(404).json({ message: "Adoption request not found" });
-      }
+//       if (!adoption) {
+//         return res.status(404).json({ message: "Adoption request not found" });
+//       }
   
-      res.status(200).json({ message: "Adoption status updated successfully", adoption });
-    } catch (error) {
-      res.status(500).json({ message: "Error updating adoption status", error: error.message });
-    }
-  };
+//       res.status(200).json({ message: "Adoption status updated successfully", adoption });
+//     } catch (error) {
+//       res.status(500).json({ message: "Error updating adoption status", error: error.message });
+//     }
+//   };
 
 //delete an adoption request
 exports.deleteAdoption = async (req, res) =>{
@@ -95,12 +95,13 @@ exports.deleteAdoption = async (req, res) =>{
 };
 
 exports.rejectAdoption = async (req, res) => {
-  const { id } = req.params;  
+  const { id } = req.params; 
+  const status = req.body.status; 
   //handle delete with user Id 
   try {
     const updatedMeetform = await MeetForm.findOneAndUpdate(
-      {userId:id}, //here pass userId 
-      { status: 'Reject' },  
+      {userId:id}, 
+      { status: status },  
       { new: true }  
     );
     if (!updatedMeetform) {
@@ -118,3 +119,5 @@ exports.rejectAdoption = async (req, res) => {
     });
   }
 };
+
+

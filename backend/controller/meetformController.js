@@ -121,7 +121,9 @@ exports.addMeetform = async (req, res) => {
 exports.getAllFormRequest = async (req, res) => {
   const { userId } = req.body;
   try {
-    const allRequest = await MeetForm.find({ owner: userId });
+    const allRequest = await MeetForm.find({ owner: userId }).populate('petId') 
+    .exec();;
+    console.log(allRequest)
     return res.status(200).json({ success: true, data: allRequest });
   } catch (error) {
     return res

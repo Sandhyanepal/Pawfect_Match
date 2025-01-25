@@ -4,6 +4,10 @@ const { ObjectId } = mongoose.Schema
 const petSchema = new mongoose.Schema(
   {
     // 1
+    petStatus:{
+    type:Boolean,
+    default:1
+    },
     name: {
       type: String,
       required: true,

@@ -7,6 +7,7 @@ const {
   deletePet,
   editPet,
   suggestPets,
+  updatePetStatus
 } = require('../controller/petcontrol')
 // const validateUser = require("../middleware/authToken");
 
@@ -18,5 +19,6 @@ router.get('/pets/:id', getSinglePet)
 router.delete('/pet/:id', deletePet)
 router.put('/pet/:id', upload.single('image'), editPet)
 router.get('/suggestedpets/:id', suggestPets)
+router.put('/pets/:id',updatePetStatus)
 
 module.exports = router
