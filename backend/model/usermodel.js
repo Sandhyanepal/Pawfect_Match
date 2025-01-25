@@ -1,45 +1,48 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-var userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
+var userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+    enum: ['Individual', 'Organization', 'Admin'], // Only these roles are allowed
+  },
+  // fullName: {
+  //   type: String,
+  //   required: function () {
+  //     return this.role === "Individual" || this.role === "Organization";
+  //   },
+  // },
+  // phoneNumber: {
+  //   type: String,
+  //   required: function () {
+  //     return this.role === "Individual" || this.role === "Organization";
+  //   },
+  // },
+  preferences: {
+    age: {
+      type: Number,
     },
-    password: {
-      type: String,
-      required: true,
+    gender: {
+      type: String, // Array of strings
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
+    breed: {
+      type: String, // Array of strings
     },
-    role: {
-      type: String,
-      required: true,
-      enum: ['Individual', 'Organization', 'Admin'], // Only these roles are allowed
-    },
-    preferences: {
-      age: {
-        type: Number,
-      },
-      gender: {
-        type: String, // Array of strings
-      },
-      breed: {
-        type: String, // Array of strings
-      },
-      category: {
-        type: String, // Array of strings
-      },
+    category: {
+      type: String, // Array of strings
     },
   },
-  {
-    timestamps: true,
-  }
-)
+})
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {

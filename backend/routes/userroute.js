@@ -18,6 +18,8 @@ const {
   getDashboardStats,
 } = require('../controller/usercontrol')
 const validateUser = require('../middleware/authToken')
+const { userCheck, validation } = require('../validation')
+const { handleAdoptionResponse } = require('../controller/meetformController')
 // const { userCheck, validation } = require('../validation')
 
 const router = express.Router()
@@ -37,6 +39,10 @@ router.get('/getallorganizations', getAllOrganizations)
 router.delete('/deleteorganization/:orgId', deleteOrganization)
 router.post('/updatepreferences', updatePreferences)
 // router.patch('/update-name', updateFullName)
+router.post('/register', userCheck, validation, register)
+router.post('/send-adoption-email', sendAdoptionDetails)
+router.post('/handle-adoption-response', handleAdoptionResponse)
+// router.patch('/:id', updateAdoptionStatus);
 router.post('/register', register)
 // router.post('/register', userCheck, validation, register)
 router.post('/send-adoption-email', sendAdoptionDetails)
