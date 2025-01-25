@@ -1,65 +1,89 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setLoggedIn, setUserDetail } from "../store/slice/loginStatusSlice";
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setLoggedIn, setUserDetail } from '../store/slice/loginStatusSlice'
 
 const Login = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+    email: '',
+    password: '',
+  })
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('')
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setData({
       ...data,
       [name]: value,
-    });
-  };
+    })
+  }
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault()
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_BACKEND_URL}/login`, // Remove /api/auth
+  //       data
+  //     )
+  //     if (response.status === 200) {
+  //       const { token } = response.data
+  //       localStorage.setItem('authToken', token)
+  //       toast.success('Login Successful')
+  //       navigate('/')
+  //       dispatch(setUserDetail(response.data))
+  //       dispatch(setLoggedIn(true))
+  //     } else {
+  //       setMessage(response.data.message || 'Login failed!')
+  //     }
+  //   } catch (error) {
+  //     setMessage(error.response.data.msg)
+  //   }
+  // }
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/login`,
+        `${import.meta.env.VITE_BACKEND_URL}/login`, // Remove /api/auth
         data
-      );
+      )
       if (response.status === 200) {
-        const { token } = response.data;
-        localStorage.setItem("authToken", token);
-        toast.success("Login Successful");
-        navigate("/");
-        dispatch(setUserDetail(response.data));
-        dispatch(setLoggedIn(true));
-      } else {
-        setMessage(response.data.message || "Login failed!");
+        const { token } = response.data
+        localStorage.setItem('authToken', token)
+        toast.success('Login Successful')
+        navigate('/')
+        dispatch(setUserDetail(response.data))
+        dispatch(setLoggedIn(true))
       }
     } catch (error) {
-      setMessage(error.response.data.msg);
-
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.msg ||
+        'An error occurred during login'
+      setMessage(errorMessage)
+      toast.error(errorMessage)
     }
-  };
+  }
 
   return (
     <>
       <div
         className="w-full bg-gray-100 flex items-center"
-        style={{ height: "100vh" }}
+        style={{ height: '100vh' }}
       >
         <div
           className="md:w-1/2 bg-white m-auto w-3/4"
-          style={{ boxShadow: "0 41.8px 33.4px rgba(0, 0, 0, 0.086)" }}
+          style={{ boxShadow: '0 41.8px 33.4px rgba(0, 0, 0, 0.086)' }}
         >
           <h1
             className="text-3xl text-center pt-8 font-bold"
-            style={{ fontFamily: "lato" }}
+            style={{ fontFamily: 'lato' }}
           >
             Login
           </h1>
@@ -99,7 +123,7 @@ const Login = () => {
             <Link to="/forget-password">Forgot Password? Click to reset</Link>
           </h1>
           <p className="pl-5 sm:pl-10 py-5">
-            Don't have an account?{" "}
+            Don't have an account?{' '}
             <Link to="/register" className="italic text-gray-500">
               Register
             </Link>
@@ -107,7 +131,7 @@ const Login = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

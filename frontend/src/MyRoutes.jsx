@@ -27,6 +27,7 @@ import Test from './pages/Test'
 import VerifyEmail from './pages/VerifyEmail'
 import ForgetPassword from './pages/ForgetPassword'
 import ResetPassword from './pages/ResetPassword'
+import About from './component/About'
 
 const MyRoutes = () => {
   const dispatch = useDispatch()
@@ -149,7 +150,8 @@ const MyRoutes = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* <Route path="/contact" element={<Contact />} /> */}
+          <Route path="/about" element={<About />} />
           <Route path="/profile" element={<Test />} />
           <Route path="/adopt" element={<Adopt />} />
           <Route path="/pet/:id" element={<PetDesc />} />

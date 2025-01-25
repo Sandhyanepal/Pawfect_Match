@@ -484,7 +484,8 @@ const PetRecommendations = () => {
 
         if (response.data.success && response.data.data.length > 0) {
           // Check what's in each pet object
-          console.log('First pet data:', response.data.data[0])
+          // console.log('First pet data:', response.data.data[0])
+          console.log('Total pets:', response.data.data.length)
 
           // If the pet data is nested inside a 'pet' property, extract it
           const processedPets = response.data.data.map((item) => {

@@ -1,11 +1,11 @@
 const { generateToken } = require('../config/jwtToken')
 const { Individual, Organization, User } = require('../model')
 const bcrypt = require('bcrypt')
-const individualModel = require('../model/individualModel')
 const Token = require('../model/token')
+const { sendEmail } = require('../middleware/emailSender')
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
 
-// Register User
 // Register User
 const register = async (req, res) => {
   const {
@@ -59,13 +59,6 @@ const register = async (req, res) => {
       })
       await individual.save()
     } else if (role === 'Organization') {
-      // Check if the license number already exists
-      const existingOrg = await Organization.findOne({ licenseNumber })
-      if (existingOrg) {
-        return res
-          .status(400)
-          .json({ message: 'License number is already taken.' })
-      }
       // Save Organization details
       const organization = new Organization({
         userId: savedUser._id,
@@ -106,25 +99,187 @@ const register = async (req, res) => {
   } catch (error) {
     console.error(error)
     console.error('Registration Error:', error)
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message:
-          'Duplicate key error: ' +
-          Object.keys(error.keyValue)[0] +
-          ' already exists',
-      })
-    }
     res
       .status(500)
       .json({ message: 'An error occurred during registration', error })
   }
 }
 
+// VERIFY EMAIL
+const verifyEmail = async (req, res) => {
+  // Check if token is correct or not
+  let token = await Token.findOne({ token: req.params.token })
+  if (!token) {
+    res.status(400).json({ error: 'Token not found, or may have expired' })
+  }
+
+  // find user associated with token
+  let user = await User.findById(token.user)
+  if (!user) {
+    res.status(400).json({ error: 'User not found' })
+  }
+
+  // Check if user is already verified
+  if (user.isVerified) {
+    return res
+      .status(400)
+      .json({ error: 'User already verified. Login to continue' })
+  }
+
+  // Verify User
+  user.isVerified = true
+  user = await user.save()
+  if (!user) {
+    res.status(400).json({ error: 'Failed to verify, please try again later' })
+  }
+  res.send({ message: 'User verified successfully' })
+}
+
+// TO RESEND VERIFICATION EMAIL
+const resendVerification = async (req, res) => {
+  // check if email is registered or not
+  let user = await User.findOne({ email: req.body.email })
+  console.log(user)
+  if (!user) {
+    return res.status(400).json({ error: 'Email not registered' })
+  }
+  // Generate Token
+  const token = await Token.create({
+    token: crypto.randomBytes(24).toString('hex'),
+    user: user._id,
+  })
+  if (!token) {
+    return console.log('Failed to generate token')
+  }
+
+  // Send Verification Email
+  const URL = `http://localhost:5002/verify/${token.token}`
+  sendEmail({
+    from: 'noreply@something.com',
+    to: req.body.email,
+    subject: 'Verification Email',
+    text:
+      'Please copy the following link in the browser to verify your email' +
+      URL,
+    html: `<a href='${URL}'><button>Verify Email</button></a>`,
+  })
+
+  res.send({ message: 'Verification link has been send to your email' })
+}
+
+// FORGET PASSWORD
+const forgetPassword = async (req, res) => {
+  // check if email exist
+  let user = await User.findOne({ email: req.body.email })
+  if (!user) {
+    return res.status(400).json({ error: 'Email not registered' })
+  }
+  // Generate Token
+  const token = await Token.create({
+    token: crypto.randomBytes(24).toString('hex'),
+    user: user._id,
+  })
+  if (!token) {
+    return console.log('Failed to generate token')
+  }
+  // send password reset link in email
+  const URL = `http://localhost:5002/resetpassword/${token.token}`
+  sendEmail({
+    from: 'noreply@something.com',
+    to: req.body.email,
+    subject: 'Password Reset link',
+    text:
+      'Please copy the following link in the browser to reset password' + URL,
+    html: `<a href='${URL}'><button>Reset Password</button></a>`,
+  })
+  res.send({ message: 'Password reset link has been send to your email' })
+}
+
+// TO RESET PASSWORD
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params
+
+    // Find valid token
+    let resetToken = await Token.findOne({ token: req.params.token })
+    if (!resetToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid token or token may have expired',
+      })
+    }
+
+    // Find user
+    let user = await User.findById(resetToken.user)
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    // If it's a GET request, just validate token
+    if (req.method === 'GET') {
+      return res.status(200).json({
+        success: true,
+        message: 'Token is valid',
+      })
+    }
+
+    // If it's a POST request, update password
+    if (req.method === 'POST') {
+      if (!req.body.password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Password is required',
+        })
+      }
+
+      // Update user's password - this will trigger the pre-save hook
+      user.password = req.body.password
+      await user.save()
+
+      // Delete the used token
+      await resetToken.deleteOne()
+
+      return res.status(200).json({
+        success: true,
+        message: 'Password has been changed successfully',
+      })
+    }
+  } catch (error) {
+    console.error('Reset Password Error:', error)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    })
+  }
+}
+
 // Login User
+
 const loginUserCtrl = async (req, res) => {
-  const { email, password } = req.body
-  const findUser = await User.findOne({ email })
-  if (findUser && (await findUser.isPasswordMatched(password))) {
+  try {
+    const { email, password } = req.body
+
+    // First check if user exists
+    const findUser = await User.findOne({ email })
+    if (!findUser) {
+      return res.status(404).json({ error: 'User not found. Please register.' })
+    }
+
+    // Then check if user is verified
+    if (!findUser.isVerified) {
+      return res.status(400).json({ error: 'User Not Verified' })
+    }
+
+    // Verify password using bcrypt
+    const isPasswordCorrect = await bcrypt.compare(password, findUser.password)
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: 'Invalid credentials' })
+    }
+
+    // Check preferences
     const hasPreferences =
       findUser.preferences?.age &&
       findUser.preferences?.gender &&
@@ -132,53 +287,141 @@ const loginUserCtrl = async (req, res) => {
       findUser.preferences?.category
     const needsPreferences = !hasPreferences
 
-    return res.status(200).send({
-      _id: findUser?._id,
-      firstname: findUser?.firstname,
-      lastname: findUser?.lastname,
-      email: findUser?.email,
-      password: findUser?.password,
-      token: generateToken(findUser?._id),
+    // Generate token and send response
+    return res.status(200).json({
+      _id: findUser._id,
+      fullName: findUser.fullName,
+      email: findUser.email,
+      token: generateToken(findUser._id),
       needsPreferences: needsPreferences,
     })
-  } else {
-    res.status(404).json({ msg: 'Invalid Credentails' })
+  } catch (error) {
+    console.error('Login Error:', error)
+    return res.status(500).json({
+      error: 'An error occurred during login. Please try again later.',
+    })
   }
 }
+
+// const loginUserCtrl = async (req, res) => {
+//   const { email, password } = req.body
+//   const findUser = await User.findOne({ email })
+
+//   if (!findUser.isVerified) {
+//     return res.status(400).json({ error: 'User Not Verified' })
+//   }
+
+//   // generate login token
+//   // const token = jwt.sign(
+//   //   {
+//   //     _id: findUser._id,
+//   //     role: findUser.role,
+//   //     fullName: findUser.fullName,
+//   //     email: findUser.email,
+//   //   },
+//   //   process.env.JWT_SECRET
+//   // )
+
+//   if (findUser && (await findUser.isPasswordMatched(password))) {
+//     const hasPreferences =
+//       findUser.preferences?.age &&
+//       findUser.preferences?.gender &&
+//       findUser.preferences?.breed &&
+//       findUser.preferences?.category
+//     const needsPreferences = !hasPreferences
+
+//     return res.status(200).send({
+//       _id: findUser?._id,
+//       fullName: findUser?.fullName,
+//       email: findUser?.email,
+//       // password: findUser?.password,
+//       token: generateToken(findUser?._id),
+//       needsPreferences: needsPreferences,
+//     })
+//   } else {
+//     res.status(404).json({ msg: 'Invalid Credentials' })
+//   }
+// }
+
+// const loginUserCtrl = async (req, res) => {
+//   try {
+//     const { email, password } = req.body
+
+//     // Check if the user exists
+//     const user = await User.findOne({ email })
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found. Please register.' })
+//     }
+
+//     // Check if user is verified
+//     if (!user.isVerified) {
+//       return res.status(400).json({
+//         error: 'User not verified. Check your email for verification link.',
+//       })
+//     }
+
+//     // Check if password matches
+//     // const isMatch = await user.isPasswordMatched(password)
+//     // if (!isMatch) {
+//     //   return res
+//     //     .status(401)
+//     //     .json({ error: 'Invalid credentials. Please try again.' })
+//     // }
+//     // Compare passwords
+//     const isPasswordCorrect = await bcrypt.compare(password, user.password)
+//     if (!isPasswordCorrect) {
+//       return res
+//         .status(401)
+//         .json({ error: 'Invalid credentials. Please try again.' })
+//     }
+
+//     // Generate JWT Token
+//     // const token = jwt.sign(
+//     //   {
+//     //     _id: user._id,
+//     //     role: user.role,
+//     //     fullName: user.fullName,
+//     //     email: user.email,
+//     //   },
+//     //   process.env.JWT_SECRET,
+//     //   { expiresIn: '1d' } // Set token expiration time
+//     // )
+//     // Generate a JWT token
+//     const token = generateToken(user)
+
+//     // Check if user has preferences
+//     const hasPreferences =
+//       user.preferences?.age &&
+//       user.preferences?.gender &&
+//       user.preferences?.breed &&
+//       user.preferences?.category
+//     const needsPreferences = !hasPreferences
+
+//     return res.status(200).json({
+//       _id: user._id,
+//       fullName: user.fullName,
+//       email: user.email,
+//       token,
+//       needsPreferences,
+//     })
+//   } catch (error) {
+//     console.error('Login Error:', error)
+//     return res.status(500).json({
+//       error: 'An error occurred during login. Please try again later.',
+//     })
+//   }
+// }
 
 // Get a single User
 const getAUser = async (req, res) => {
   try {
     const getUser = await User.findById(req.body.userId).select('-password ')
-    const getUserIndividual = await Individual.findOne({
-      userId: req.body.userId,
-    })
     if (getUser) {
-      return res
-        .status(200)
-        .json({ data: getUser, success: true, userData: getUserIndividual })
+      return res.status(200).json({ data: getUser, success: true })
     }
     return res.status(401).json({ success: false, msg: 'Unsuccessful' })
   } catch (err) {
     res.send(err)
-  }
-}
-
-// Function to fetch user statistics
-const getUserStats = async (req, res) => {
-  try {
-    const totalUsers = await User.countDocuments()
-    const totalIndividuals = await Individual.countDocuments()
-    const totalOrganizations = await Organization.countDocuments()
-
-    res.status(200).json({
-      totalUsers,
-      totalIndividuals,
-      totalOrganizations,
-    })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Error fetching user stats', error })
   }
 }
 
@@ -260,6 +503,17 @@ const deleteOrganization = async (req, res) => {
     res.status(500).json({ message: 'Error deleting organization', error: err })
   }
 }
+
+// //Deleta a user
+// const deleteAUser = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const deleteUser = await User.findByIdAndDelete(id);
+//     res.json(deleteUser);
+//   } catch (err) {
+//     res.send(err);
+//   }
+// };
 
 // //Update a User
 // const updateUser = async (req, res) => {
@@ -412,8 +666,53 @@ const sendAdoptionDetails = async (req, res) => {
   }
 }
 
+// Function to fetch user statistics
+const getUserStats = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments()
+    const totalIndividuals = await Individual.countDocuments()
+    const totalOrganizations = await Organization.countDocuments()
+
+    res.status(200).json({
+      totalUsers,
+      totalIndividuals,
+      totalOrganizations,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error fetching user stats', error })
+  }
+}
+
+const getDashboardStats = async (req, res) => {
+  try {
+    const userId = req.user.userId
+
+    const totalPets = await Pet.countDocuments({ owner: userId })
+    const pendingAdoptionRequests = await Adoption.countDocuments({
+      status: 'Pending',
+      pet: { $in: await Pet.find({ owner: userId }).distinct('_id') },
+    })
+
+    res.status(200).json({
+      totalPets,
+      pendingAdoptionRequests,
+    })
+  } catch (error) {
+    console.error('Dashboard stats error:', error)
+    res.status(500).json({
+      message: 'Error fetching dashboard statistics',
+      error: error.message,
+    })
+  }
+}
+
 module.exports = {
   register,
+  verifyEmail,
+  resendVerification,
+  forgetPassword,
+  resetPassword,
   loginUserCtrl,
   getAUser,
   getUserStats,
@@ -423,4 +722,5 @@ module.exports = {
   deleteOrganization,
   updatePreferences,
   sendAdoptionDetails,
+  getDashboardStats,
 }

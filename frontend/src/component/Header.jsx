@@ -111,7 +111,7 @@ const Header = () => {
         <Link to="/" className="hover:text-black">
           Home
         </Link>
-        <Link to="/contact" className="hover:text-black">
+        <Link to="/about" className="hover:text-black">
           About
         </Link>
         <Link to="/adopt" className="hover:text-black">
@@ -120,6 +120,13 @@ const Header = () => {
         <Link to="/shops" className="hover:text-black">
           Shop
         </Link>
+        {isLoggedIn ? (
+          <Link to="/cart" className="hover:text-black">
+            Cart
+          </Link>
+        ) : (
+          ''
+        )}
       </nav>
 
       {/* Mobile Menu */}
@@ -139,20 +146,7 @@ const Header = () => {
           >
             About
           </Link>
-          <Link
-            to="/blog"
-            className="py-2 text-gray-700 hover:text-gray-900"
-            onClick={() => setMenuOpen(false)}
-          >
-            Blog
-          </Link>
-          <Link
-            to="/contact"
-            className="py-2 text-gray-700 hover:text-gray-900"
-            onClick={() => setMenuOpen(false)}
-          >
-            Contact
-          </Link>
+
           <Link
             to="/shop"
             className="py-2 text-gray-700 hover:text-gray-900"
@@ -160,6 +154,19 @@ const Header = () => {
           >
             Shop
           </Link>
+
+          {isLoggedIn ? (
+            <Link
+              to="/cart"
+              className="py-2 text-gray-700 hover:text-gray-900"
+              onClick={() => setMenuOpen(false)}
+            >
+              Cart
+            </Link>
+          ) : (
+            ''
+          )}
+
           {isLoggedIn ? (
             <div
               className="py-2 text-gray-700 hover:text-gray-900"
