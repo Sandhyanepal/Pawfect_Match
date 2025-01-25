@@ -16,6 +16,18 @@ var userSchema = new mongoose.Schema({
     required: true,
     enum: ["Individual", "Organization", "Admin"], // Only these roles are allowed
   },
+  // fullName: {
+  //   type: String,
+  //   required: function () {
+  //     return this.role === "Individual" || this.role === "Organization";
+  //   },
+  // },
+  // phoneNumber: {
+  //   type: String,
+  //   required: function () {
+  //     return this.role === "Individual" || this.role === "Organization";
+  //   },
+  // },
   preferences: {
     age: {
       type: Number,

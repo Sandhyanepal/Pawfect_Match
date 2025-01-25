@@ -15,7 +15,7 @@ const {
 const validateUser = require('../middleware/authToken')
 const { suggestPets } = require('../controller/petcontrol')
 const { userCheck, validation } = require("../validation");
-
+const { handleAdoptionResponse, updateAdoptionStatus } = require('../controller/meetformController');
 const router = express.Router()
 
 router.post('/login', loginUserCtrl)
@@ -30,5 +30,7 @@ router.post('/updatepreferences', updatePreferences)
 // router.patch('/update-name', updateFullName)
 router.post("/register", userCheck, validation, register);
 router.post("/send-adoption-email", sendAdoptionDetails);
+router.post('/handle-adoption-response', handleAdoptionResponse);
+// router.patch('/:id', updateAdoptionStatus);
 
 module.exports = router;

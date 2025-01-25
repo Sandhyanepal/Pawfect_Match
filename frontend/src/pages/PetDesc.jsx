@@ -44,20 +44,6 @@ const PetDesc = () => {
     fetchPetDesc()
   }, [id])
 
-  // const [openDetail, setOpenDetail] = useState(false);
-  // const handleToggle = () => {
-  //   setOpenDetail((prev) => !prev);
-  // };
-
-  // const toggleMeetModal = () => {
-  //   if (!isLoggedIn) {
-  //     toast.error('Please Login to Continue!')
-  //     navigate('/login')
-  //   } else {
-  //     showMeet((prev) => !prev)
-  //   }
-  // }
-
   if (!petDetail) return <div>Loading...</div>
 
   return (
