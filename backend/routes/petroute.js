@@ -1,20 +1,22 @@
-const express = require("express");
-const upload = require("../middleware/fileUpload");
+const express = require('express')
+const upload = require('../middleware/fileUpload')
 const {
   getAllPets,
   addPet,
   getSinglePet,
   deletePet,
   editPet,
-} = require("../controller/petcontrol");
+  suggestPets,
+} = require('../controller/petcontrol')
 // const validateUser = require("../middleware/authToken");
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/addpet", upload.single("image"), addPet);
-router.get("/getallpets", getAllPets);
-router.get("/pets/:id", getSinglePet);
-router.delete("/pet/:id", deletePet);
-router.put("/pet/:id", upload.single("image"), editPet);
+router.post('/addpet', upload.single('image'), addPet)
+router.get('/getallpets', getAllPets)
+router.get('/pets/:id', getSinglePet)
+router.delete('/pet/:id', deletePet)
+router.put('/pet/:id', upload.single('image'), editPet)
+router.get('/suggestedpets/:id', suggestPets)
 
-module.exports = router;
+module.exports = router
