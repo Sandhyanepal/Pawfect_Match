@@ -20,6 +20,7 @@ const register = async (req, res) => {
   } = req.body
 
   try {
+    console.log(email,password,role,fullName,address,phone,orgName,licenseNumber)
     // Check if the email is already registered
     const existingUser = await User.findOne({ email })
     if (existingUser) {
@@ -269,9 +270,9 @@ const loginUserCtrl = async (req, res) => {
     }
 
     // Then check if user is verified
-    if (!findUser.isVerified) {
-      return res.status(400).json({ error: 'User Not Verified' })
-    }
+    // if (!findUser.isVerified) {
+    //   return res.status(400).json({ error: 'User Not Verified' })
+    // }
 
     // Verify password using bcrypt
     const isPasswordCorrect = await bcrypt.compare(password, findUser.password)

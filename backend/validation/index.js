@@ -5,7 +5,7 @@ const userCheck = [
 
   // Full Name Validation (for Individual)
   check('fullName', "Full name is required")
-    .if((value, { req }) => req.body.role === 'Individual')  // Only validate for Individual role
+    .if((value, { req }) => req.body.role === 'Individual') // Only validate for Individual role
     .notEmpty()
     .isLength({ min: 3 }).withMessage("Full name must be at least 3 characters"),
 
@@ -58,12 +58,17 @@ const userCheck = [
 ];
 
 const validation = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorMessages = errors.array().map(error => error.msg);
-      return res.status(400).json({ error: errorMessages });
-    }
-    next();
-  };
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // Format errors into an object where the key is the field name and the value is the error message
+    const formattedErrors = errors.array().reduce((acc, error) => {
+      acc[error.path] = error.msg; // Use the field name as the key
+      return acc;
+    }, {});
+
+    return res.status(400).json({ errors: formattedErrors });
+  }
+  next();
+};
 
 module.exports = { userCheck, validation };

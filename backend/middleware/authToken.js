@@ -8,9 +8,11 @@ const validateUser = async (req, res, next) => {
     try {
       jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
         if (err) {
+          console.log(err)
           res.send({ message: 'Authentication Failed', success: false })
         } else {
-          req.body.userId = decoded.userId
+          console.log(decoded)
+          req.body.userId = decoded.id
           req.body.role = decoded.role
           next()
         }

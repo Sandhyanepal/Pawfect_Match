@@ -68,7 +68,7 @@ const MyRoutes = () => {
 
         // Check if the user needs to set preferences
         if (!preferences || !preferences.breed || !preferences.category) {
-          setShowPreferencesModal(true) // Show preferences modal
+          setShowPreferencesModal(false) // Show preferences modal
         }
       } else {
         dispatch(setLoggedIn(false))
@@ -103,10 +103,14 @@ const MyRoutes = () => {
       }
 
       const fetchCartItems = async () => {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/get-cart/${userId}`
-        )
-        dispatch(setCart(response.data.cart.items))
+        try {
+
+          const response = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/get-cart/${userId}`
+          )
+          dispatch(setCart(response.data.cart.items))
+        } catch (error) {
+        }
       }
       fetchCartItems()
       fetchAllBreed()
