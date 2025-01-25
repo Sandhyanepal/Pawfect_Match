@@ -16,6 +16,7 @@ const {
   forgetPassword,
   resetPassword,
   getDashboardStats,
+  getAllUsers
 } = require('../controller/usercontrol')
 const validateUser = require('../middleware/authToken')
 const { userCheck, validation } = require('../validation')
@@ -24,6 +25,7 @@ const { handleAdoptionResponse } = require('../controller/meetformController')
 
 const router = express.Router()
 
+router.get('/allusers',getAllUsers)
 router.post('/login', loginUserCtrl)
 router.get('/verify/:token', verifyEmail)
 router.post('/resendverification', resendVerification)

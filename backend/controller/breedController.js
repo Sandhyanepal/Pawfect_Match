@@ -128,7 +128,7 @@ exports.getSingleBreed = async (req, res) => {
     // Fetch the breed by ID and populate the category field
     const breed = await Breed.findById(breedId).populate(
       "category",
-      "category_name"
+      "category_name",
     );
 
     if (!breed) {

@@ -48,7 +48,7 @@ const UserProfile = () => {
             }
         }
         fetchForms();
-    }, [])
+    }, [userDetail?._id])
 
     return (
         <div>
@@ -149,19 +149,68 @@ const UserProfile = () => {
                         <h2 className="text-2xl font-bold mb-4">Meet Forms</h2>
                         {requestForm && requestForm.length > 0 ? (
                             <div className="space-y-4">
-                                {requestForm.map((form, index) => (
-                                    <div key={form._id} className="p-4 border rounded-md bg-gray-50">
-                                        <p className="text-sm font-medium">Full Name: <span className="text-gray-600">{form.fullName}</span></p>
-                                        <p className="text-sm font-medium">Status: <span className="text-gray-600">{form?.status}</span></p>
-                                        <p className="text-sm font-medium">Submission Date: <span className="text-gray-600">{new Date(form.submissionDate).toLocaleString()}</span></p>
+                                {requestForm.map((form, index) => {
+                                    if (form.status !== 'Accept') return (
+                                        <div key={form._id} className="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+                                            <div className=''>
+                                                <p className="text-sm font-medium">Full Name: <span className="text-gray-600">{form.fullName}</span></p>
+                                                <p className="text-sm font-medium">Status: <span className="text-gray-600">{form?.status}</span></p>
+                                                <p className="text-sm font-medium">Submission Date: <span className="text-gray-600">{new Date(form.submissionDate).toLocaleString()}</span></p>
 
-                                        <p className="text-sm font-medium flex items-center gap-2">View Pet :
-                                            <NavLink to={`/pet/${form.petId}`}>
-                                                <Eye />
-                                            </NavLink>
-                                        </p>
-                                    </div>
-                                ))}
+                                                <p className="text-sm font-medium flex items-center gap-2">View Pet :
+                                                    <NavLink to={`/pet/${form.petId}`}>
+                                                        <Eye />
+                                                    </NavLink>
+                                                </p>
+                                            </div>
+                                            <img
+                                                src={`${import.meta.env.VITE_BACKEND_URL}/${form?.currentPets[0]?.image?.slice(
+                                                    6
+                                                )}`}
+                                                className='w-40 h-40 object-cover'
+                                            />
+                                        </div>
+                                    )
+                                    else {
+                                        return <p key={index} className="text-gray-500">No forms found.</p>
+                                    }
+                                })}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">No forms found.</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+            <div className="w-full max-w-2xl mx-auto p-4">
+                <div className="bg-white rounded-lg shadow-md">
+                    <div className="p-6">
+                        <h2 className="text-2xl font-bold mb-4">Adopted Pets</h2>
+                        {requestForm && requestForm.length > 0 ? (
+                            <div className="space-y-4">
+                                {requestForm.map((form, index) => {
+                                    if (form.status === 'Accept') return (
+                                        <div key={form._id} className="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+                                            <div className=''>
+                                                <p className="text-sm font-medium">Full Name: <span className="text-gray-600">{form.fullName}</span></p>
+                                                <p className="text-sm font-medium">Status: <span className="text-gray-600">{form?.status}</span></p>
+                                                <p className="text-sm font-medium">Submission Date: <span className="text-gray-600">{new Date(form.submissionDate).toLocaleString()}</span></p>
+
+                                                <p className="text-sm font-medium flex items-center gap-2">View Pet :
+                                                    <NavLink to={`/pet/${form.petId}`}>
+                                                        <Eye />
+                                                    </NavLink>
+                                                </p>
+                                            </div>
+                                            <img
+                                                src={`${import.meta.env.VITE_BACKEND_URL}/${form?.currentPets[0]?.image?.slice(
+                                                    6
+                                                )}`}
+                                                className='w-40 h-40 object-cover'
+                                            />
+                                        </div>
+                                    )
+                                })}
                             </div>
                         ) : (
                             <p className="text-gray-500">No forms found.</p>

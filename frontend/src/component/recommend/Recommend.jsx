@@ -99,11 +99,6 @@ const PetCard = ({ pet }) => {
                   {pet.category.category_name}
                 </span>
               )}
-              {pet?.breed && (
-                <span className="px-2 py-1 text-sm bg-gray-100 rounded-full">
-                  {pet.breed}
-                </span>
-              )}
               {pet?.vaccination_status && (
                 <span
                   className={`px-2 py-1 text-sm rounded-full ${pet.vaccination_status === 'vaccinated'

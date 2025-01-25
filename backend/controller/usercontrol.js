@@ -6,6 +6,17 @@ const { sendEmail } = require('../middleware/emailSender')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
+const getAllUsers = async(req,res)=>{
+  try {
+    const users = await User.findOne();
+    return res.status(200).json({success:true,data:users})
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'An error occurred during Fetching Users', error })
+  }
+}
+
 // Register User
 const register = async (req, res) => {
   const {
@@ -98,8 +109,6 @@ const register = async (req, res) => {
       html: `<a href='${URL}'><button>Verify Email</button></a>`,
     })
   } catch (error) {
-    console.error(error)
-    console.error('Registration Error:', error)
     res
       .status(500)
       .json({ message: 'An error occurred during registration', error })
@@ -724,4 +733,5 @@ module.exports = {
   updatePreferences,
   sendAdoptionDetails,
   getDashboardStats,
+  getAllUsers
 }

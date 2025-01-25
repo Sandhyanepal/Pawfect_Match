@@ -130,7 +130,6 @@ exports.getSinglePet = async (req, res) => {
     const pet = await Pet.findById(petId)
       .populate("owner", "orgName")
       .populate("category", "category_name")
-      .populate("breed", "breed_name"); // Populate breed if needed
 
     if (!pet) {
       return res.status(404).json({
@@ -339,16 +338,17 @@ exports.getSinglePet = async (req, res) => {
 exports.suggestPets = async (req, res) => {
   try {
     // Step 1: Fetch the single pet using the id provided
-    const pet = await Pet.findOne({id:req.params.id,petStatus:true})
+    const pet = await Pet.findById({_id:req.params.id,petStatus:true})
       .populate('category', 'category_name')
       .populate('owner', 'orgName')
+
+      console.log(pet)
 
     if (!pet) {
       throw new Error('Pet not found')
     }
 
     console.log('Target Pet:', pet)
-
     // Step 2: Extract the breed name and category from the single pet
     const petBreedName = pet.breed
     const petCategoryName = pet.category?.category_name

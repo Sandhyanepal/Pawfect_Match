@@ -123,7 +123,16 @@ exports.getAllFormRequest = async (req, res) => {
   try {
     const allRequest = await MeetForm.find({ owner: userId }).populate('petId') 
     .exec();;
-    console.log(allRequest)
+    return res.status(200).json({ success: true, data: allRequest });
+  } catch (error) {
+    return res
+      .status(404)
+      .json({ success: false, msg: "No Forms found for the User." });
+  }
+};
+exports.getAllFormRequestAll = async (req, res) => {
+  try {
+    const allRequest = await MeetForm.find();
     return res.status(200).json({ success: true, data: allRequest });
   } catch (error) {
     return res

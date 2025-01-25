@@ -13,6 +13,7 @@ const PetDesc = () => {
   const [petDetail, setPetDetail] = useState(null)
   const [owner, setOwner] = useState(null)
   const navigate = useNavigate()
+  const [breed, setBreed] = useState([])
 
   const { isLoggedIn } = useSelector((state) => state.loginStatus)
 
@@ -25,24 +26,6 @@ const PetDesc = () => {
     showMeet((prev) => !prev)
   }
 
-  // useEffect(() => {
-  //   const fetchPetDesc = async () => {
-  //     const response = await axios.get(
-  //       `${import.meta.env.VITE_BACKEND_URL}/pets/${id}`
-  //     )
-  //     if (response.status === 200) {
-  //       setPetDetail(response.data.data)
-  //       const ownerResponse = await axios.post(
-  //         `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner`,
-  //         {
-  //           id: response?.data?.data?.owner,
-  //         }
-  //       )
-  //       setOwner(ownerResponse.data.data)
-  //     }
-  //   }
-  //   fetchPetDesc()
-  // }, [id])
 
   useEffect(() => {
     const fetchPetDesc = async () => {
@@ -54,13 +37,9 @@ const PetDesc = () => {
         if (response.status === 200) {
           setPetDetail(response.data.data)
 
-          // Log the owner ID before making the request
-          console.log('Owner ID:', response.data.data.owner)
-
           // Fetch owner details using GET request with URL parameters
           const ownerResponse = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner/${
-              response.data.data.owner
+            `${import.meta.env.VITE_BACKEND_URL}/get-individual-owner/${response.data.data.owner
             }`
           )
 
@@ -78,6 +57,15 @@ const PetDesc = () => {
     fetchPetDesc()
   }, [id])
 
+  useEffect(() => {
+    const fetchBreedDetail = async () => {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/breed/${petDetail?.breed}`)
+      setBreed(response.data.data)
+      console.log(response.data.data)
+    }
+    fetchBreedDetail();
+  }, [petDetail])
+
   if (!petDetail) return <div>Loading...</div>
 
   return (
@@ -91,9 +79,8 @@ const PetDesc = () => {
           <div className="flex-1 min-w-[300px]">
             <div className="w-full h-72 bg-gray-300 flex items-center justify-center rounded-lg overflow-hidden">
               <img
-                src={`${
-                  import.meta.env.VITE_BACKEND_URL
-                }/${petDetail.image?.slice(6)}`}
+                src={`${import.meta.env.VITE_BACKEND_URL
+                  }/${petDetail.image?.slice(6)}`}
                 alt={petDetail.name}
                 className="object-cover w-full h-full"
               />
@@ -106,7 +93,7 @@ const PetDesc = () => {
             <div className="mb-4">
               <p>
                 <span className="font-semibold text-lg">Breed: </span>
-                {petDetail.breed}
+                {breed?.breed_name}
               </p>
             </div>
             <div className="mb-4">
