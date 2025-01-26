@@ -394,11 +394,10 @@ const Adopt = () => {
                         {allCategories.map((category, index) => (
                           <li
                             key={index}
-                            className={`p-2 cursor-pointer ${
-                              selectedCategory === category.category_name
+                            className={`p-2 cursor-pointer ${selectedCategory === category.category_name
                                 ? 'font-bold text-blue-500'
                                 : ''
-                            } hover:bg-gray-200`}
+                              } hover:bg-gray-200`}
                             onClick={() =>
                               handleCategorySelect(category.category_name)
                             }
